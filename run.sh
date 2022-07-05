@@ -6,7 +6,7 @@
 # ----- Setup Solid Community server -----
 
 # Ensure the user is running from the projects root directory
-basedir=$(dirname $(realpath -s "$0"))  # Set working directory to the script directory, implemented from https://stackoverflow.com/a/11114547
+basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )  # Set working directory to the script directory. https://stackoverflow.com/a/246128
 cd $basedir
 mkdir -p app/solid  # Directory to keep solid community server data
 
