@@ -1,5 +1,5 @@
 #!/bin/bash
-basedir=$(dirname $(realpath -s "$0"))/../../  # Set working directory to the script directory, implemented from https://stackoverflow.com/a/11114547
+basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )  # Set working directory to the script directory. https://stackoverflow.com/a/246128
 bashlib="$basedir/tools/Bashlib/bashlib/css/bin"
 blcss="node $bashlib/css.js"
 blsolid="node $bashlib/solid.js"
