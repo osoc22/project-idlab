@@ -6,7 +6,7 @@
 # ----- Setup Solid Community server -----
 
 # Ensure the user is running from the projects root directory
-basedir="$(dirname $0)"  # Set working directory to the script directory
+basedir=$(dirname $(realpath -s "$0"))  # Set working directory to the script directory, implemented from https://stackoverflow.com/a/11114547
 cd $basedir
 mkdir -p app/solid  # Directory to keep solid community server data
 
@@ -31,28 +31,29 @@ function devsetup {
     # Prompt solution implemented from https://stackoverflow.com/a/1885670
     read -p "Setup for testing? (y/n) [n]: " dev
     case "$dev" in
-    y|Y ) ./app/setup/setup-credentials.sh & ;;
+    y|Y ) "$basedir/app/setup/setup-credentials.sh" & ;;
     * ) echo "No credentials will be set up!" ;;
     esac
 }
 
 if [ ! -e "tools/Bashlib/bashlib/css/bin/" ] ; then
     echo "Setting up bashlib..."
-    git clone https://github.com/SolidLabResearch/Bashlib.git tools/Bashlib
+    git clone https://github.com/Denperidge/Bashlib.git tools/Bashlib
     cd tools/bashlib
     ./setup.sh
-    cd $basedir
     echo "Bashlib set up!"
+    cd $basedir
 
     # If Bashlib has not been set up, it can be assumed this is first run 
-    # Thus, check whether there should be automated pod & credential creation    
+    # Thus, check whether there should be automated pod & credential creation  
+    devsetup
 fi
 
 # If the script gets launched with the "dev" argument, run the credential setup
-if $1 == "dev"; then
-    devsetup()
-done;
+if [[ "$1" == "dev" ]]; then
+    devsetup
+fi
 
-
+cd $basedir
 $css --config @css:config/file.json --rootFilePath app/solid
 
