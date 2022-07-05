@@ -31,7 +31,7 @@ function devsetup {
     # Prompt solution implemented from https://stackoverflow.com/a/1885670
     read -p "Setup for testing? (y/n) [n]: " dev
     case "$dev" in
-    y|Y ) "$basedir/app/setup/setup-credentials.sh" & ;;
+    y|Y ) chmod +x "$basedir/app/setup/setup-credentials.sh" && "$basedir/app/setup/setup-credentials.sh" & ;;
     * ) echo "No credentials will be set up!" ;;
     esac
 }
