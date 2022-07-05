@@ -55,5 +55,5 @@ if [[ "$1" == "dev" ]]; then
 fi
 
 cd $basedir
-$css --config @css:config/file.json --rootFilePath app/solid
+$css --config @css:config/file-no-setup.json --rootFilePath app/solid
 
