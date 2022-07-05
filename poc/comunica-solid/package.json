@@ -1,0 +1,12 @@
+{
+  "name": "comunica-ts",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@comunica/query-sparql-solid": "^2.1.0"
+  }
+}
