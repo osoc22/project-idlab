@@ -6,6 +6,15 @@ Prerequisites:
 - [Node.js](https://nodejs.org/en/)
 - [Git](https://git-scm.com/downloads) (In case you're using Windows, make sure to tick `install Git Bash`, so you can use run.sh!)
 
+To set up the project:
+```bash
+git clone https://github.com/osoc22/project-idlab.git
+chmod +x run.sh
+./run.sh
+```
+
+run.sh will install and setup any currently missing things, and can later simply be re-used to start your existing install! 
+
 ## Demo/test/dev credentials
 These credentials will be set when either saying yes to the dev-setup dialogue on install,
 or when running `./setup.sh dev`.
