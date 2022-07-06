@@ -66,7 +66,7 @@ if [ ! -e "node_modules/parcel/" ]; then
     npm install --location=project parcel @inrupt/solid-client @inrupt/solid-client-authn-browser @inrupt/vocab-common-rdf @inrupt/vocab-solid
 fi
 
-newterminal "npx parcel app/web/"
+newterminal "npx parcel app/web/index.html"
 
 cd $basedir
 $css --config @css:config/file-no-setup.json --rootFilePath app/solid

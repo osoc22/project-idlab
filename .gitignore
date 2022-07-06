@@ -2,3 +2,4 @@ tools/
 app/solid/
 **/node_modules
 .parcel-cache/
+dist/
