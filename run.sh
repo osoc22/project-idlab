@@ -36,6 +36,11 @@ function devsetup {
     esac
 }
 
+function newterminal {
+    # Implemented based on https://askubuntu.com/a/46630
+    gnome-terminal -- "$@" || xterm -e "$@" || konsole -e "$@" || terminal -e "$@" || start "" "cmd /C $@"
+}
+
 if [ ! -e "tools/Bashlib/bashlib/css/bin/" ] ; then
     echo "Setting up bashlib..."
     git clone https://github.com/Denperidge/Bashlib.git tools/Bashlib
@@ -53,6 +58,15 @@ fi
 if [[ "$1" == "dev" ]]; then
     devsetup
 fi
+
+# ----- Setup Web Interface -----
+# Solid libraries: https://docs.inrupt.com/developer-tools/javascript/client-libraries/installation/
+echo "Setting up web interface..."
+if [ ! -e "node_modules/parcel/" ]; then
+    npm install --location=project parcel @inrupt/solid-client @inrupt/solid-client-authn-browser @inrupt/vocab-common-rdf @inrupt/vocab-solid
+fi
+
+newterminal "npx parcel app/web/index.html"
 
 cd $basedir
 $css --config @css:config/file-no-setup.json --rootFilePath app/solid
