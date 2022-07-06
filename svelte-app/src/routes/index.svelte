@@ -1,11 +1,12 @@
 <script lang="ts">
-	import Profile from '$lib/components/Profile.svelte';
+	import Button from '$lib/components/Button.svelte';
 	import Calendar from '$lib/components/Calendar.svelte';
+	import Profile from '$lib/components/Profile.svelte';
 </script>
 
 <div class="header">
-	<h1 class="title">Your calendar</h1>
-	<div id="createEvent">+ Create new event</div>
+	<h1 id="title">Your calendar</h1>
+	<Button>+ Create new event</Button>
 	<Profile firstname="Abel" lastname="de Bruijn" />
 </div>
 
@@ -21,8 +22,7 @@
 		padding-inline: 2rem;
 	}
 
-	#createEvent {
-		margin-left: auto;
-		cursor: pointer;
+	#title {
+		margin-right: auto;
 	}
 </style>

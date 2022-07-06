@@ -33,6 +33,7 @@
 		border-radius: 1rem;
 		padding: 1rem;
 		background-color: #6f9dbf;
+		user-select: none;
 	}
 
 	.weatherIcon {
