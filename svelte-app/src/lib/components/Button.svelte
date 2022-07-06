@@ -8,7 +8,7 @@
 
 <style>
 	.button {
-		background: white;
+		background: var(--bg, white);
 		border-radius: 0.5rem;
 		padding: 0.5rem 1rem;
 		cursor: pointer;

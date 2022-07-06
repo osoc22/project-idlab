@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { Temporal, Intl } from '@js-temporal/polyfill';
 
+	import events from '$lib/hardcoded/events';
 	import Button from '$lib/components/Button.svelte';
+	import Event from '$lib/components/Event.svelte';
 	import Weather from '$lib/components/Weather.svelte';
 
 	const today = Temporal.Now.plainDateISO();
@@ -26,8 +28,13 @@
 					<Weather {day} />
 				{/if}
 
-				<!-- TODO add events or button to add event -->
-				<Button filled>Create event</Button>
+				{#if day.toString() in events}
+					{#each events[day.toString()] as event}
+						<Event {event} />
+					{/each}
+				{:else}
+					<Button filled>Create event</Button>
+				{/if}
 			</div>
 		</div>
 	{/each}
@@ -44,6 +51,7 @@
 
 	.day {
 		flex-grow: 1;
+		max-width: calc(100% / 5);
 	}
 
 	.date {
