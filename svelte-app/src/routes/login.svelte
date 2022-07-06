@@ -1,19 +1,15 @@
 <div class="login">
 	<h1>Welcome to your calendar pod</h1>
 	<div class="actions">
-		<button class="login">Login</button>
-		<button class="register">Register</button>
+		<button class="signin" on:click={() => console.log('sign in')}>Sign in</button>
+		<button class="register" on:click={() => console.log('register')}>Register</button>
 	</div>
 </div>
 
 <style>
-	h1 {
-		font-size: 3em;
-		margin: 0.5em 0;
-	}
-
 	.login {
 		margin: 10rem auto;
+		width: min-content;
 	}
 
 	.actions {
@@ -27,7 +23,8 @@
 		border-radius: 3px;
 		color: #333;
 		font-size: 1.2em;
-		padding: 0.5em 1em;
-		margin: 0.5em 0;
+		padding: 1em 2em;
+		margin: 1rem 4rem;
+		cursor: pointer;
 	}
 </style>

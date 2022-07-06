@@ -54,6 +54,14 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@js-temporal/polyfill@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@js-temporal/polyfill/-/polyfill-0.4.1.tgz#efca927fe7eb92f71bee1486c160ddf7f9c6723c"
+  integrity sha512-q45ecIocpa2TLem2jNOsCrDwP/sgKZdSkt+C1Rx07OkdKsdbvVfHcD1iDiK9scxBZrBQ38uJ8VQISXBS70ql1w==
+  dependencies:
+    jsbi "^4.1.0"
+    tslib "^2.3.1"
+
 "@mapbox/node-pre-gyp@^1.0.5":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.9.tgz#09a8781a3a036151cdebbe8719d6f8b25d4058bc"
@@ -1042,6 +1050,11 @@ js-yaml@^4.1.0:
   integrity sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
   dependencies:
     argparse "^2.0.1"
+
+jsbi@^4.1.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-4.3.0.tgz#b54ee074fb6fcbc00619559305c8f7e912b04741"
+  integrity sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==
 
 json-schema-traverse@^0.4.1:
   version "0.4.1"
