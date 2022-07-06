@@ -1,6 +1,6 @@
 import type { Weather } from '$lib/types/weather';
 
-const weatherData: Weather = {
+const data: Weather = {
 	location: {
 		name: 'Brussels',
 		region: '',
@@ -8,14 +8,14 @@ const weatherData: Weather = {
 		lat: 50.83,
 		lon: 4.33,
 		tz_id: 'Europe/Brussels',
-		localtime_epoch: 1657100714,
-		localtime: '2022-07-06 11:45'
+		localtime_epoch: 1657108178,
+		localtime: '2022-07-06 13:49'
 	},
 	current: {
-		last_updated_epoch: 1657100700,
-		last_updated: '2022-07-06 11:45',
-		temp_c: 18.0,
-		temp_f: 64.4,
+		last_updated_epoch: 1657107900,
+		last_updated: '2022-07-06 13:45',
+		temp_c: 19.0,
+		temp_f: 66.2,
 		is_day: 1,
 		condition: {
 			text: 'Partly cloudy',
@@ -24,21 +24,21 @@ const weatherData: Weather = {
 		},
 		wind_mph: 3.8,
 		wind_kph: 6.1,
-		wind_degree: 280,
-		wind_dir: 'W',
-		pressure_mb: 1027.0,
-		pressure_in: 30.33,
+		wind_degree: 10,
+		wind_dir: 'N',
+		pressure_mb: 1026.0,
+		pressure_in: 30.3,
 		precip_mm: 0.0,
 		precip_in: 0.0,
 		humidity: 56,
-		cloud: 25,
-		feelslike_c: 18.0,
-		feelslike_f: 64.4,
+		cloud: 75,
+		feelslike_c: 19.0,
+		feelslike_f: 66.2,
 		vis_km: 10.0,
 		vis_miles: 6.0,
 		uv: 5.0,
-		gust_mph: 6.0,
-		gust_kph: 9.7
+		gust_mph: 7.8,
+		gust_kph: 12.6
 	},
 	forecast: {
 		forecastday: [
@@ -2971,4 +2971,17 @@ const weatherData: Weather = {
 	}
 };
 
-export default weatherData;
+export default class WeatherData {
+	static getCurrentWeather() {
+		return data.current;
+	}
+
+	static getForecast(forDay = 0) {
+		console.log(forDay, data.forecast.forecastday.length);
+		if (forDay > data.forecast.forecastday.length) {
+			return;
+		}
+
+		return data.forecast.forecastday[forDay];
+	}
+}
