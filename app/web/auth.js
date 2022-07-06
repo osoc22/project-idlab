@@ -5,13 +5,19 @@ import {
     fetch
   } from "@inrupt/solid-client-authn-browser";
 
-var podUrl = "http://localhost:3000";
-var interfaceUrl = "http://localhost:1234"
-  
-document.getElementById("login").addEventListener("click", function () {
-    login({
-        oidcIssuer: podUrl,
-        clientName: "Project-IDLab",
-        redirectUrl: interfaceUrl + "/calendar.html"
-    });
-});
+
+// Implementation based on https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/authenticate-browser/
+async function handleLogin() {
+    // If being redirected from login
+    await handleIncomingRedirect();
+
+    if (!getDefaultSession().info.isLoggedIn) {
+        await login({
+            oidcIssuer: podUrl,
+            clientName: "Project-IDLab",
+            redirectUrl: interfaceUrl
+        });
+    }
+}
+
+handleLogin();
