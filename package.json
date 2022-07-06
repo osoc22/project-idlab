@@ -13,5 +13,9 @@
     "last 3 ios_saf versions",
     "last 3 safari versions",
     "last 3 firefox versions"
-  ]
+  ],
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "process": "^0.11.10"
+  }
 }
