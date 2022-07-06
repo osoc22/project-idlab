@@ -5,12 +5,13 @@ import {
     fetch
   } from "@inrupt/solid-client-authn-browser";
 
+var podUrl = "http://localhost:3000";
+var interfaceUrl = "http://localhost:1234"
   
-document.getElementsByTagName("form")[0].onsubmit = function () {
+document.getElementById("login").addEventListener("click", function () {
     login({
-        oidcIssuer: "http://localhost:3000",
-        clientId: "johndoe@localhost.be",
-        clientSecret: "johndoe"
-    })
-    return false;  // Don't attempt to send the form
-}
+        oidcIssuer: podUrl,
+        clientName: "Project-IDLab",
+        redirectUrl: interfaceUrl + "/calendar.html"
+    });
+});
