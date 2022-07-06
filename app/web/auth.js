@@ -9,7 +9,9 @@ import {
 // Implementation based on https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/authenticate-browser/
 async function handleLogin() {
     // If being redirected from login
-    await handleIncomingRedirect();
+    await handleIncomingRedirect({
+        restorePreviousSession: true
+    });
 
     if (!getDefaultSession().info.isLoggedIn) {
         await login({
