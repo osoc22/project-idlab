@@ -19,10 +19,10 @@ run.sh will install and setup any currently missing things, and can later simply
 These credentials will be set when either saying yes to the dev-setup dialogue on install,
 or when running `./setup.sh dev`.
 
-base url: http://localhost:3000/
-name: johndoe
-email: johndoe@test.edu
-password: johndoe
+- base url: http://localhost:3000/
+- name: johndoe
+- email: johndoe@localhost.be
+- password: johndoe
 
 ## Production
 It should be noted that in run.sh, the file-no-setup config is used.
@@ -30,8 +30,7 @@ For production, there's probably better options! Check out the available configs
 https://github.com/CommunitySolidServer/CommunitySolidServer/tree/main/config
 
 ## Notice
-- CommunityServer
-- Bashlib
+- CommunitySolidServer is licensed under the MIT License. The copyright notice is included [in this repository](NOTICE#CommunitySolidServer) or [on their repository](https://github.com/CommunitySolidServer/CommunitySolidServer/blob/main/LICENSE.md).
 
 ## License
-
+This software is licensed under the [MIT license](LICENSE).
