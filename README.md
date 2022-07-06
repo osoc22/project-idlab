@@ -27,7 +27,6 @@ or when running `./setup.sh dev`.
 ## Production
 It should be noted that in run.sh, the file-no-setup config is used.
 For production, there's probably better options! Check out the available configs [here](https://github.com/CommunitySolidServer/CommunitySolidServer/tree/main/config).
-https://github.com/CommunitySolidServer/CommunitySolidServer/tree/main/config
 
 ## Notice
 - CommunitySolidServer is licensed under the MIT License. The copyright notice is included [in this repository](NOTICE#CommunitySolidServer) or [on their repository](https://github.com/CommunitySolidServer/CommunitySolidServer/blob/main/LICENSE.md).
