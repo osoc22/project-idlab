@@ -17,8 +17,9 @@ run.sh will install and setup any currently missing things, and can later simply
 
 ## Project structure
 - [app/](app/)
-  - [setup/](setup/)
+  - [setup/](app/setup/) --> scripts to be used during setup, currently only dev credentials
   - solid/ --> build artifact, stores solidpod data
+  - [web/](app/web/) --> unbundled files for the web interface
 - dist/ --> build artifact, web interface after parcel bundling
 - [docs/](docs/) --> documentation
 - node_modules/ --> build artifact, installation location for node modules
