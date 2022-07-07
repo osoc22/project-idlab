@@ -15,6 +15,22 @@ chmod +x run.sh
 
 run.sh will install and setup any currently missing things, and can later simply be re-used to start your existing install! 
 
+## Project structure
+- [app/](app/)
+  - [setup/](setup/)
+  - solid/ --> build artifact, stores solidpod data
+- dist/ --> build artifact, web interface after parcel bundling
+- [docs/](docs/) --> documentation
+- node_modules/ --> build artifact, installation location for node modules
+- [poc](poc/) --> proof of concept comunica
+- [prototypes-Matei/] --> prototypes using JSON-LD
+- tools/ --> build artifact, installation location for external tools (currently only Bashlib)
+- [LICENSE](LICENSE) --> License used by this project
+- [NOTICE](NOTICE) --> Licenses used by projects used by this project
+- [package.json](package.json) && [package-lock.json](package-lock.json) --> information about (installed) npm (modules)
+- [README.md](README.md) --> this
+- [run.sh](run.sh) --> bash script to setup & run the project
+
 ## Demo/test/dev credentials
 These credentials will be set when either saying yes to the dev-setup dialogue on install,
 or when running `./setup.sh dev`.
