@@ -1,6 +1,6 @@
 # Copyright Notice
 
-\- CommunitySolidServer is licensed under the MIT License. The copyright notice is included [in this repository](NOTICE#CommunitySolidServer) or [on their repository](https://github.com/CommunitySolidServer/CommunitySolidServer/blob/main/LICENSE.md).
+\- CommunitySolidServer is licensed under the MIT License. The copyright notice is included [in this repository](NOTICE.md#CommunitySolidServer) or [on their repository](https://github.com/CommunitySolidServer/CommunitySolidServer/blob/main/LICENSE.md).
 
 ====================
 
