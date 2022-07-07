@@ -22,9 +22,9 @@ run.sh will install and setup any currently missing things, and can later simply
   - [web/](app/web/) --> unbundled files for the web interface
 - *dist/ --> build artifact, web interface after parcel bundling*
 - [docs/](docs/) --> documentation
-- *node_modules/ --> build artifact, installation location for node modules$
+- *node_modules/ --> build artifact, installation location for node modules*
 - [poc](poc/) --> proof of concept comunica
-- [prototypes-Matei/] --> prototypes using JSON-LD
+- [prototypes-Matei/](protoypes-Matei/) --> prototypes using JSON-LD
 - *tools/ --> build artifact, installation location for external tools (currently only Bashlib)*
 - [LICENSE](LICENSE) --> License used by this project
 - [NOTICE](NOTICE) --> Licenses used by projects used by this project
