@@ -27,7 +27,7 @@ run.sh will install and setup any currently missing things, and can later simply
 - [prototypes-Matei/](protoypes-Matei/) --> prototypes using JSON-LD
 - *tools/ --> build artifact, installation location for external tools (currently only Bashlib)*
 - [LICENSE](LICENSE) --> License used by this project
-- [NOTICE](NOTICE) --> Licenses used by projects used by this project
+- [NOTICE.md](NOTICE) --> Licenses used by projects used by this project
 - [package.json](package.json) && [package-lock.json](package-lock.json) --> information about (installed) npm (modules)
 - [README.md](README.md) --> this
 - [run.sh](run.sh) --> bash script to setup & run the project
@@ -46,7 +46,7 @@ It should be noted that in run.sh, the file-no-setup config is used.
 For production, there's probably better options! Check out the available configs [here](https://github.com/CommunitySolidServer/CommunitySolidServer/tree/main/config).
 
 ## Notice
-- CommunitySolidServer is licensed under the MIT License. The copyright notice is included [in this repository](NOTICE#CommunitySolidServer) or [on their repository](https://github.com/CommunitySolidServer/CommunitySolidServer/blob/main/LICENSE.md).
+- CommunitySolidServer is licensed under the MIT License. The copyright notice is included [in this repository](NOTICE.md#CommunitySolidServer) or [on their repository](https://github.com/CommunitySolidServer/CommunitySolidServer/blob/main/LICENSE.md).
 
 ## License
 This software is licensed under the [MIT license](LICENSE).
