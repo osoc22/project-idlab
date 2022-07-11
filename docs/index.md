@@ -1,16 +1,5 @@
-<style>
-    button {
-        
-    }
-</style>
+a.k.a. Powerful Personal Data, by Solid Concepts.
 
-# Solid Concepts
-## A.k.a. Powerful Personal Data & Project IDLab
+<a href="app/">Try the app/web interface</a> ||
 
-<a href="app/">
-    <button>Try the app/web interface</button>
-</a>
-
-<a href="web/">
-    <button>Open the documentation</button>
-</a>
+<a href="docs/">Open the documentation</a>
