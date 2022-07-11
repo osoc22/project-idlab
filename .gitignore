@@ -2,3 +2,5 @@ tools/
 app/solid/
 **/node_modules
 .vercel
+.parcel-cache/
+dist/

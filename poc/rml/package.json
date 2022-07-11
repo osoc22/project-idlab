@@ -1,0 +1,10 @@
+{
+  "name": "rml",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "@rmlio/rmlmapper-java-wrapper": "^2.0.3"
+  }
+}
