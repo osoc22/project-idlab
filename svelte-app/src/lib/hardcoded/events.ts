@@ -1,18 +1,5 @@
 import { Temporal } from '@js-temporal/polyfill';
-
-export class CalendarEvent {
-	from: Temporal.Instant;
-	to: Temporal.Instant;
-	title: string;
-	description: string;
-
-	constructor(from: Temporal.Instant, to: Temporal.Instant, title: string, description: string) {
-		this.from = from;
-		this.to = to;
-		this.title = title;
-		this.description = description;
-	}
-}
+import { CalendarEvent } from '$lib/types/calendarEvents';
 
 const events: { [key: string]: CalendarEvent[] } = {
 	'2022-07-06': [

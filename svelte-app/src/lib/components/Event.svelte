@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { CalendarEvent } from '$lib/hardcoded/events';
-	import { Temporal } from '@js-temporal/polyfill';
+	import type { CalendarEvent } from '$lib/types/calendarEvents';
 	import Button from './Button.svelte';
 
 	export let event: CalendarEvent;

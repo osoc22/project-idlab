@@ -2,7 +2,7 @@
 	"name": "svelte-app",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "vite dev --port 3333",
 		"build": "vite build",
 		"package": "svelte-kit package",
 		"preview": "vite preview",
