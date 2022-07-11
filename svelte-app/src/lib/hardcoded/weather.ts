@@ -2977,9 +2977,9 @@ export default class WeatherData {
 	}
 
 	static getForecast(forDay = 0) {
-		console.log(forDay, data.forecast.forecastday.length);
-		if (forDay > data.forecast.forecastday.length) {
-			return;
+		// console.log(forDay, data.forecast.forecastday.length);
+		if (forDay >= data.forecast.forecastday.length) {
+			return data.forecast.forecastday[data.forecast.forecastday.length - 1];
 		}
 
 		return data.forecast.forecastday[forDay];

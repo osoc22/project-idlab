@@ -1,5 +1,7 @@
+import { dev } from '$app/env';
 import events from '$lib/hardcoded/events';
-import type { CalendarEvent } from '$lib/types/calendarEvents';
+import { CalendarEvent } from '$lib/types/calendarEvents';
+import { Temporal } from '@js-temporal/polyfill';
 import { writable } from 'svelte/store';
 
 function createEvents() {
@@ -9,8 +11,8 @@ function createEvents() {
 		subscribe,
 		add: (event: CalendarEvent) =>
 			update((es) => {
-				// TODO - Test this it will probably fail
-				const eventDateString = event.from.toString();
+				// Only take the date of the event - not the time
+				const eventDateString = event.from.toString().split('T')[0];
 
 				if (eventDateString in es) {
 					es[eventDateString].push(event);
@@ -25,3 +27,16 @@ function createEvents() {
 }
 
 export const calendarEvents = createEvents();
+
+// IF Dev mode, console.log the store
+if (dev) {
+	const start = Temporal.Now.instant();
+
+	const testEvent: CalendarEvent = new CalendarEvent(
+		start,
+		start.add({ hours: 1 }),
+		'Test',
+		'Test'
+	);
+	calendarEvents.add(testEvent);
+}
