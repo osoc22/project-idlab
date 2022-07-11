@@ -10,7 +10,7 @@ import { SCHEMA_INRUPT, RDF } from "@inrupt/vocab-common-rdf" // == https://sche
 
 /* var declaration and consts */
 let podUrl; let webID;
-const interfaceUrl = window.location.origin;
+const interfaceUrl = window.location.href;
 
 /* functions */
 function PodInfo(e) {
