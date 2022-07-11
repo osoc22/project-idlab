@@ -1,4 +1,46 @@
 {
+  "name": "powerful-personal-data",
+  "description": "",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "run.sh",
+    "build": "npx parcel build app/web/index.html --dist-dir docs/app/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/osoc22/project-idlab"
+  },
+  "keywords": [],
+  "contributors": [
+    {
+      "name": "Abel de Bruijn",
+      "url": "https://github.com/yustarandomname"
+    },
+    {
+      "name": "Denperidge",
+      "url": "https://github.com"
+    },
+    {
+      "name": "Matei Penca",
+      "url": "https://github.com/Matei9721"
+    }, 
+    {
+      "name": "Open Summer Of Code",
+      "url": "https://osoc.be/"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/osoc22/project-idlab/issues"
+  },
+  "homepage": "",
+  "browserlist": [
+    "last 3 and_chr versions",
+    "last 3 chrome versions",
+    "last 3 ios_saf versions",
+    "last 3 safari versions",
+    "last 3 firefox versions"
+  ],
   "dependencies": {
     "@inrupt/solid-client": "^1.23.1",
     "@inrupt/solid-client-authn-browser": "^1.12.1",
@@ -7,13 +49,6 @@
     "@solid/community-server": "^4.0.1",
     "parcel": "^2.6.2"
   },
-  "browserlist": [
-    "last 3 and_chr versions",
-    "last 3 chrome versions",
-    "last 3 ios_saf versions",
-    "last 3 safari versions",
-    "last 3 firefox versions"
-  ],
   "devDependencies": {
     "buffer": "^6.0.3",
     "process": "^0.11.10"
