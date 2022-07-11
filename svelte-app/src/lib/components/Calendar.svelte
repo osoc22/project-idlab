@@ -10,13 +10,27 @@
 	import { calendarEvents, editEvent } from '$lib/stores/eventStore';
 
 	const today = Temporal.Now.plainDateISO();
+	let startOfWeek = today.subtract({ days: today.dayOfWeek - 1 });
+
+	console.log(startOfWeek);
 	const dayOfWeekString = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 	let week: Temporal.PlainDate[] = [];
 
-	for (let i = 1 - today.dayOfWeek; i <= 7 - today.dayOfWeek; i++) {
-		week.push(today.add({ days: i }));
+	$: {
+		startOfWeek && (week = dayOfWeekString.map((_, index) => startOfWeek.add({ days: index })));
+	}
+
+	function gotoToday() {
+		// TODO
 	}
 </script>
+
+<Button filled on:click={() => (startOfWeek = startOfWeek.subtract({ weeks: 1 }))}>
+	Go to last week
+</Button>
+<Button filled on:click={() => (startOfWeek = startOfWeek.add({ weeks: 1 }))}>
+	Go to next week
+</Button>
 
 <div class="calendar">
 	{#each week as day}
