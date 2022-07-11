@@ -1,3 +1,4 @@
 tools/
 app/solid/
 **/node_modules
+.vercel

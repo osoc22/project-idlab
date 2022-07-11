@@ -35,4 +35,7 @@ npm run build
 
 You can preview the production build with `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Deploy to Vercel
+Download the Vercel cli with `npm -g install vercel` or `yarn global add vercel`.
+
+Then run `vercel` in this directory to deploy your app to Vercel.

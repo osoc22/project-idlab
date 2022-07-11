@@ -4,11 +4,12 @@
 
 	export let event: CalendarEvent;
 
-	$: fromHour = event.from.toZonedDateTimeISO('Europe/London').hour;
-	$: toHour = event.to.toZonedDateTimeISO('Europe/London').hour;
+	// TODO: change to correct timezone
+	$: fromHour = event.from.toZonedDateTimeISO('Europe/Brussels').hour;
+	$: toHour = event.to.toZonedDateTimeISO('Europe/Brussels').hour;
 </script>
 
-<Button --bg="aliceblue">
+<Button --bg="aliceblue" on:click>
 	<div class="title">{event.title} <span class="time">{fromHour}:00-{toHour}:00</span></div>
 	<div class="description">{event.description}</div>
 </Button>

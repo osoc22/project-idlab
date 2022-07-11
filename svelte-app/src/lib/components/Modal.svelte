@@ -1,9 +1,17 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	export let visible = false;
+
+	const dispatch = createEventDispatcher();
+
+	function closeModal() {
+		dispatch('close');
+		visible = false;
+	}
 </script>
 
 {#if visible}
-	<div class="backdrop" on:click={() => (visible = false)}>
+	<div class="backdrop" on:click={closeModal}>
 		<div class="modal" on:click|stopPropagation>
 			<slot />
 		</div>
@@ -29,7 +37,7 @@
 		transform: translate(-50%, -50%);
 		width: 80%;
 		max-width: 30rem;
-		height: 10rem;
+		min-height: 10rem;
 		max-height: calc(100vh - 10rem);
 		overflow: auto;
 		background-color: #fff;

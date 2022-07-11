@@ -3,18 +3,15 @@
 
 	import Button from '$lib/components/Button.svelte';
 	import Event from '$lib/components/Event.svelte';
+	import UpdateEvent from '$lib/components/UpdateEvent.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import Weather from '$lib/components/Weather.svelte';
 
-	import { calendarEvents } from '$lib/stores/eventStore';
-	import type { CalendarEvent } from '$lib/types/calendarEvents';
+	import { calendarEvents, editEvent } from '$lib/stores/eventStore';
 
 	const today = Temporal.Now.plainDateISO();
 	const dayOfWeekString = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 	let week: Temporal.PlainDate[] = [];
-
-	let newEventVisible = false;
-	let editEvent: CalendarEvent;
 
 	for (let i = 1 - today.dayOfWeek; i <= 7 - today.dayOfWeek; i++) {
 		week.push(today.add({ days: i }));
@@ -37,23 +34,27 @@
 
 				{#if day.toString() in $calendarEvents}
 					{#each $calendarEvents[day.toString()] as event}
-						<Event {event} />
+						<Event {event} on:click={() => editEvent.edit(event)} />
 					{/each}
 				{:else}
-					<Button filled>Create event</Button>
+					<Button filled on:click={editEvent.new}>Create event</Button>
 				{/if}
 			</div>
 		</div>
 	{/each}
 </div>
 
-{#if newEventVisible}
-	<Modal><h3>TODO</h3></Modal>
-{/if}
-
-{#if editEvent}
-	<Modal><h3>TODO</h3></Modal>
-{/if}
+<Modal visible={$editEvent.visible} on:close={editEvent.reset}>
+	<UpdateEvent let:submit>
+		{#if $editEvent.editMode}
+			<Button filled on:click={() => submit(calendarEvents.deleteEvent)}>Delete Event</Button>
+			<Button filled on:click={() => submit(calendarEvents.updateEvent)}>Update Event</Button>
+		{:else}
+			<Button filled on:click={editEvent.reset}>Cancel</Button>
+			<Button filled on:click={() => submit(calendarEvents.addEvent)}>Create Event</Button>
+		{/if}
+	</UpdateEvent>
+</Modal>
 
 <style>
 	.calendar {
