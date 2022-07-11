@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "run.sh",
-    "build": "npx parcel build app/web/index.html --dist-dir docs/app/"
+    "build": "npx parcel build app/web/index.html --dist-dir docs/app/ --public-url ./"
   },
   "repository": {
     "type": "git",
