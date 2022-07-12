@@ -8,7 +8,6 @@
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"sourceMap": true,
-		"strict": true,
-		"module": "ES6"
+		"strict": true
 	}
 }

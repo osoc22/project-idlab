@@ -5,7 +5,7 @@
 	$: lastnameSplit = lastname.split(' ');
 </script>
 
-<div class="profile" on:click>
+<div class="profile">
 	<span>{firstname[0]} {lastnameSplit[lastnameSplit.length - 1][0]}</span>
 </div>
 

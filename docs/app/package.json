@@ -13,8 +13,6 @@
 		"format": "prettier --write --plugin-search-dir=. ."
 	},
 	"devDependencies": {
-		"@esbuild-plugins/node-globals-polyfill": "^0.1.1",
-		"@esbuild-plugins/node-modules-polyfill": "^0.1.4",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
@@ -24,8 +22,6 @@
 		"eslint-plugin-svelte3": "^4.0.0",
 		"prettier": "^2.6.2",
 		"prettier-plugin-svelte": "^2.7.0",
-		"rollup-plugin-node-builtins": "^2.1.2",
-		"rollup-plugin-node-polyfills": "^0.2.1",
 		"svelte": "^3.44.0",
 		"svelte-check": "^2.7.1",
 		"svelte-preprocess": "^4.10.6",
@@ -35,8 +31,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@js-temporal/polyfill": "^0.4.1",
-		"@sveltejs/adapter-static": "^1.0.0-next.35"
+		"@js-temporal/polyfill": "^0.4.1"
 	},
 	"license": "MIT"
 }
