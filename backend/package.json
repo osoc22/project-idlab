@@ -1,0 +1,17 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Fastify backend for the linked data calendar",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "start dev": "node src/server.js"
+  },
+  "author": "Matei",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "fastify": "^4.2.1"
+  }
+}
