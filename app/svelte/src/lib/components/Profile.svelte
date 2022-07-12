@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let firstname: string;
 	export let lastname: string;
-	export let func: function;
+	export let func: any;
 
 	$: lastnameSplit = lastname.split(' ');
 </script>

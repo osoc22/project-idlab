@@ -1,5 +1,7 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-static';
 import preprocess from 'svelte-preprocess';
+
+const dev = process.env.NODE_ENV === 'development';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -8,7 +10,23 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter()
+		adapter: adapter({
+			pages: "build",
+			assets: "build"
+		}),
+
+		// Based of https://github.com/sveltejs/kit/tree/master/packages/adapter-static#github-pages
+		appDir: "internal",
+
+		paths: { 
+			assets: "",
+			base: dev ? "" : "/project-idlab/app"
+		},
+
+		prerender: {
+			default: true
+		}
+		
 	}
 };
 
