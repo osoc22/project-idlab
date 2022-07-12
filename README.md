@@ -1,5 +1,9 @@
 # Project IDLab - Powerful Personal Data
 
+<div align="center">
+  <img src="./docs/powerful-personal-data-crest.svg" width="250px" />
+</div>
+
 ## Getting started
 
 Prerequisites:
