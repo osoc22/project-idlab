@@ -16,17 +16,35 @@
 	import { onMount } from 'svelte';
 
 	let podUrl; let webID; let interfaceUrl;
+	// On load, 
 	onMount(async () => {
+		// If trying to log in: do that. Or if a previous session can still be used to log in: do that instead
+		await handleIncomingRedirect({
+			restorePreviousSession: true
+		});
+		var session = getDefaultSession();
+
 		interfaceUrl = window.location.href;
+		podUrl = localStorage.getItem("podUrl") || "http://localhost:3000";
+		webID = localStorage.getItem("webID") || "johndoe";
+
+		// On load, if the user is logged in, try getting data
+		if (session.info.isLoggedIn) {
+			getData();
+		}
 	});
 
 	// Implementation based on https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/authenticate-browser/
 	async function handleLogin() {
-		console.log("yeet")
-		// If being redirected from login
-		await handleIncomingRedirect({
-			restorePreviousSession: true
-		});
+		podUrl = prompt("URL to identity provider/pod host:", podUrl);
+		webID = prompt("WebID: ", webID);
+
+		if (podUrl.indexOf("//") < 0) {
+        	podUrl = "http://" + podUrl;
+    	}
+
+		localStorage.setItem("podUrl", podUrl);
+		localStorage.setItem("webID", webID);
 
 		if (!getDefaultSession().info.isLoggedIn) {
 			await login({
@@ -35,14 +53,17 @@
 				redirectUrl: interfaceUrl
 			});
 		}
+		getData();
 	}
-
 	async function getData() {
 		// https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/read-write-data/#write-a-new-soliddataset
 		var dataset;
+		console.log("ytest")
 		var datasetname = "test2";
 		var thingname = "thingname";
 		var thing;
+		console.log(`${podUrl}/${webID}/${datasetname}`)
+
 		try {
 			dataset = await getSolidDataset(`${podUrl}/${webID}/${datasetname}`, {fetch: fetch})
 			thing = getThingAll(dataset);
