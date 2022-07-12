@@ -5,7 +5,7 @@
 </script>
 
 <div class="header">
-	<h1 id="title">Your calendar</h1>
+	<h1 class="text-3xl font-bold underline">Your calendar</h1>
 	<Button>+ Create new event</Button>
 	<Profile firstname="Abel" lastname="de Bruijn" />
 </div>
