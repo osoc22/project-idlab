@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "run.sh",
-    "build": "npx parcel build app/web/index.html --dist-dir docs/app/ --public-url ./"
+    "build": "npx parcel build index.html --dist-dir ../../docs/app/ --public-url ./"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     {
       "name": "Matei Penca",
       "url": "https://github.com/Matei9721"
-    }, 
+    },
     {
       "name": "Open Summer Of Code",
       "url": "https://osoc.be/"
