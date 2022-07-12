@@ -24,13 +24,15 @@ jobs:
         run: |
           npm install
           npm run build
-      
+
+      - name: Move the Svelte build to the docs folder
+        run: mv ./app/svelte/build ./docs/app
       
       # Based of https://josecelano.github.io/svelte-deploy-with-github-actions/
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: ./app/svelte/build/
+          folder: ./docs
           branch: gh-pages
-          target-folder: ./docs/app/
+          target-folder: ./docs
           
