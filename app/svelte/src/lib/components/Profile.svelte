@@ -5,24 +5,9 @@
 	$: lastnameSplit = lastname.split(' ');
 </script>
 
-<div class="profile">
-	<span>{firstname[0]} {lastnameSplit[lastnameSplit.length - 1][0]}</span>
+<div class="rounded-full bg-green-600 text-green-100 h-12 w-12 flex items-center cursor-pointer">
+	<span class="w-full text-center">
+		{firstname[0]}
+		{lastnameSplit[lastnameSplit.length - 1][0]}
+	</span>
 </div>
-
-<style>
-	.profile {
-		height: 3rem;
-		width: 3rem;
-		background: var(--primary-color);
-		color: var(--primary-text);
-		display: flex;
-		align-items: center;
-		border-radius: 50%;
-		cursor: pointer;
-	}
-
-	span {
-		width: 100%;
-		text-align: center;
-	}
-</style>

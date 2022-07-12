@@ -1,6 +1,7 @@
 import { Temporal } from '@js-temporal/polyfill';
 
 /**
+ * TODO: place in util folder
  * Generate a random id
  * @returns Random uuid
  */

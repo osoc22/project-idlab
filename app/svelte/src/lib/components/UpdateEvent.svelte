@@ -2,6 +2,7 @@
 	import { editEvent } from '$lib/stores/eventStore';
 	import type { CalendarEvent } from '$lib/types/calendarEvents';
 	import { Temporal } from '@js-temporal/polyfill';
+	import Input from './input/Input.svelte';
 
 	let calendarEvent = $editEvent.event;
 
@@ -42,7 +43,9 @@
 {#if calendarEvent}
 	<!-- TODO listen to form submit -->
 	<form class="editEvent">
-		<h3>{$editEvent.editMode ? 'Edit' : 'Create'} event</h3>
+		<h3 class="text-xl border-b border-b-black/50 border-solid mb-4 pb-2">
+			{$editEvent.editMode ? 'Edit' : 'Create'} event
+		</h3>
 
 		<label for="datetime-from">
 			Date time from:
@@ -66,11 +69,13 @@
 		</label>
 		<br />
 
-		<input type="text" placeholder="title" bind:value={calendarEvent.title} />
-		<br />
-		<input type="text" placeholder="description" bind:value={calendarEvent.description} />
+		<Input label="title" bind:value={calendarEvent.title} error={calendarEvent.title} />
 
-		<slot submit={submitEvent} />
+		<Input label="description" bind:value={calendarEvent.description} />
+
+		<div class="flex gap-2 justify-end">
+			<slot submit={submitEvent} />
+		</div>
 	</form>
 {/if}
 

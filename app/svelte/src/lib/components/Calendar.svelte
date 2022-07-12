@@ -9,28 +9,16 @@
 
 	import { calendarEvents, editEvent } from '$lib/stores/eventStore';
 
+	export let startOfWeek: Temporal.PlainDate;
 	const today = Temporal.Now.plainDateISO();
-	let startOfWeek = today.subtract({ days: today.dayOfWeek - 1 });
 
-	console.log(startOfWeek);
 	const dayOfWeekString = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 	let week: Temporal.PlainDate[] = [];
 
 	$: {
 		startOfWeek && (week = dayOfWeekString.map((_, index) => startOfWeek.add({ days: index })));
 	}
-
-	function gotoToday() {
-		// TODO
-	}
 </script>
-
-<Button filled on:click={() => (startOfWeek = startOfWeek.subtract({ weeks: 1 }))}>
-	Go to last week
-</Button>
-<Button filled on:click={() => (startOfWeek = startOfWeek.add({ weeks: 1 }))}>
-	Go to next week
-</Button>
 
 <div class="calendar">
 	{#each week as day}
@@ -61,11 +49,15 @@
 <Modal visible={$editEvent.visible} on:close={editEvent.reset}>
 	<UpdateEvent let:submit>
 		{#if $editEvent.editMode}
-			<Button filled on:click={() => submit(calendarEvents.deleteEvent)}>Delete Event</Button>
-			<Button filled on:click={() => submit(calendarEvents.updateEvent)}>Update Event</Button>
+			<Button filled destructive on:click={() => submit(calendarEvents.deleteEvent)}>
+				Delete Event
+			</Button>
+			<Button filled focused on:click={() => submit(calendarEvents.updateEvent)}>
+				Update Event
+			</Button>
 		{:else}
-			<Button filled on:click={editEvent.reset}>Cancel</Button>
-			<Button filled on:click={() => submit(calendarEvents.addEvent)}>Create Event</Button>
+			<Button filled destructive on:click={editEvent.reset}>Cancel</Button>
+			<Button filled focused on:click={() => submit(calendarEvents.addEvent)}>Create Event</Button>
 		{/if}
 	</UpdateEvent>
 </Modal>
