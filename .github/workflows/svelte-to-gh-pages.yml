@@ -31,6 +31,6 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: ./app/svelte/build/
-          branch: master
+          branch: gh-pages
           target-folder: ./docs/app/
           

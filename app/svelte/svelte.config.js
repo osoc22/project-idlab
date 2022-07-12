@@ -11,22 +11,24 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			pages: "build",
-			assets: "build"
+			pages: 'build',
+			assets: 'build',
+			fallback: null,
+			precompress: false
 		}),
 
 		// Based of https://github.com/sveltejs/kit/tree/master/packages/adapter-static#github-pages
-		appDir: "internal",
+		appDir: 'internal',
 
-		paths: { 
-			assets: "",
-			base: dev ? "" : "/project-idlab/app"
+		paths: {
+			assets: '',
+			base: dev ? '' : '/project-idlab/app'
 		},
 
 		prerender: {
+			// This can be false if you're using a fallback (i.e. SPA mode)
 			default: true
 		}
-		
 	}
 };
 
