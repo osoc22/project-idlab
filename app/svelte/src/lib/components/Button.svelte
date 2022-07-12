@@ -5,13 +5,18 @@
 </script>
 
 <div
-	class="rounded-md py-2 px-4 cursor-pointer bg-slate-100 hover:bg-slate-300 transition-colors"
+	class="rounded-md py-2 px-4 cursor-pointer bg-slate-100 hover:bg-slate-300 transition-colors flex items-center gap-2"
 	class:filled
 	class:focused
 	class:destructive
 	on:click
 >
-	<slot />
+	{#if $$slots.icon}
+		<slot name="icon" />
+	{/if}
+	<div class="div">
+		<slot />
+	</div>
 </div>
 
 <style lang="postcss">

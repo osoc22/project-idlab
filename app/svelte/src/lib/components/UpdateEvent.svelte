@@ -24,15 +24,17 @@
 		if (!calendarEvent) return;
 
 		const v = (event.target as HTMLInputElement).value;
+		const d = new Date(v)
 
-		calendarEvent[key] = toTemporalInstant(new Date(v));
+		const temporalDate = toTemporalInstant(d);
+
+		 calendarEvent[key] = temporalDate
 	}
 
-	const setFromCalendarValue = (e: Event) => setCalendarValue(e, 'from');
+	const setFromCalendarValue = (e: Event) => {setCalendarValue(e, 'from')};
 	const setToCalendarValue = (e: Event) => setCalendarValue(e, 'to');
 
 	function submitEvent(callback: (event: CalendarEvent) => void) {
-		console.log('SUBMIT');
 
 		editEvent.reset(); // close modal
 
@@ -69,7 +71,7 @@
 		</label>
 		<br />
 
-		<Input label="title" bind:value={calendarEvent.title} error={calendarEvent.title} />
+		<Input label="title" bind:value={calendarEvent.title} />
 
 		<Input label="description" bind:value={calendarEvent.description} />
 

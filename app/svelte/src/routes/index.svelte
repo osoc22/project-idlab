@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Temporal } from '@js-temporal/polyfill';
 
-	import { Icon, ArrowRight, ArrowLeft } from 'svelte-hero-icons';
+	import { Temporal } from '@js-temporal/polyfill';
+	import { Icon, ArrowRight, ArrowLeft, Plus } from 'svelte-hero-icons';
 
 	import Button from '$lib/components/Button.svelte';
 	import Calendar from '$lib/components/Calendar.svelte';
 	import Profile from '$lib/components/Profile.svelte';
 	import RoundButton from '$lib/components/RoundButton.svelte';
+	import { editEvent } from '$lib/stores/eventStore';
 
 	const today = Temporal.Now.plainDateISO();
 	let startOfWeek: Temporal.PlainDate;
@@ -34,7 +35,10 @@
 
 	<div class="m-auto" />
 
-	<Button>+ Create new event</Button>
+	<Button on:click={editEvent.new}>
+		<Icon slot="icon" src={Plus} size="16" />
+		Create new event
+	</Button>
 	<Profile firstname="Abel" lastname="de Bruijn" />
 </div>
 
