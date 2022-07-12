@@ -20,7 +20,7 @@
 		font-size: 1.1rem;
 		display: flex;
 		justify-content: space-between;
-		align-items: end;
+		align-items: flex-end;
 		gap: 0.5rem;
 		margin-bottom: 0.5rem;
 	}
