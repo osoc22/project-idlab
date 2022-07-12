@@ -1,5 +1,7 @@
 FROM node:18
 
+ENV PORT 3000
+ENV HOST 0.0.0.0
 ENV NODE_ENV production
 ENV CI true
 

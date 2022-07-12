@@ -12,6 +12,8 @@ const start = async () => {
 
     await fastify.register(cors, { origin: '*' });
 
+    fastify.get('/health', (_, reply) => reply.status(200).send('ok'));
+
     // Declare a route
     fastify.get('/weather/:city', {
         schema: {
