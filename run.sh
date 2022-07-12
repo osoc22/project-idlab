@@ -10,14 +10,11 @@ basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )  # 
 cd $basedir
 mkdir -p app/solid  # Directory to keep solid community server data
 
-css=node_modules/.bin/community-solid-server
+# Install all the dependencies of the web app project
+npm install --prefix ./app/web
 
-# Install solid-community-server if needed
-echo "Setting up solid-community-server..."
-if ! command -v $css ; then
-    npm install --location=project @solid/community-server
-fi
-echo "Solid community server set up!"
+# Path to the bin executable of the communicaty solid server
+css=app/web/node_modules/.bin/community-solid-server
 
 function devsetup {
     echo ""
@@ -59,15 +56,9 @@ if [[ "$1" == "dev" ]]; then
     devsetup
 fi
 
-# ----- Setup Web Interface -----
-# Solid libraries: https://docs.inrupt.com/developer-tools/javascript/client-libraries/installation/
-echo "Setting up web interface..."
-if [ ! -e "node_modules/parcel/" ]; then
-    npm install --location=project parcel @inrupt/solid-client @inrupt/solid-client-authn-browser @inrupt/vocab-common-rdf @inrupt/vocab-solid
-fi
-
 newterminal "npx parcel app/web/index.html"
 
 cd $basedir
-$css --config @css:config/file-no-setup.json --rootFilePath app/solid
 
+echo "Starting the solid community server..."
+$css --config @css:config/file-no-setup.json --rootFilePath app/solid
