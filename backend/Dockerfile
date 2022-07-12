@@ -7,10 +7,11 @@ ENV CI true
 
 WORKDIR /api
 
+# Just copy the package* files first, so we can cache the 'npm ci' layer
 COPY ./package*.json ./
 RUN npm ci
 
-COPY --chown=node:node . ./
+COPY . ./
 
 EXPOSE 3000
 
