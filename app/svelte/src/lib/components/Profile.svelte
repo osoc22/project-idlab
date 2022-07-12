@@ -1,11 +1,12 @@
 <script lang="ts">
 	export let firstname: string;
 	export let lastname: string;
+	export let func: function;
 
 	$: lastnameSplit = lastname.split(' ');
 </script>
 
-<div class="profile">
+<div class="profile" on:click={func}>
 	<span>{firstname[0]} {lastnameSplit[lastnameSplit.length - 1][0]}</span>
 </div>
 
