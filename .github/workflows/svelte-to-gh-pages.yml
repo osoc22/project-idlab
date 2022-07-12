@@ -30,7 +30,7 @@ jobs:
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: ./app/svelte
+          folder: ./app/svelte/build/
           branch: master
           target-folder: ./docs/app/
           
