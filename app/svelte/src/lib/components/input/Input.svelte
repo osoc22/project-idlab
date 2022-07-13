@@ -33,7 +33,7 @@
 	{:else if type == 'time'}
 		<input
 			{id}
-			class="rounded-md p-2 w-full bg-slate-500 hover:ring transition-all"
+			class="rounded-md p-2 w-full bg-slate-100 hover:ring transition-all"
 			class:ring={error}
 			class:ring-red-500={error}
 			type="time"
