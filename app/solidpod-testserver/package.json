@@ -34,13 +34,6 @@
     "url": "https://github.com/osoc22/project-idlab/issues"
   },
   "homepage": "",
-  "browserlist": [
-    "last 3 and_chr versions",
-    "last 3 chrome versions",
-    "last 3 ios_saf versions",
-    "last 3 safari versions",
-    "last 3 firefox versions"
-  ],
   "dependencies": {
     "@solid/community-server": "^4.0.1"
   }
