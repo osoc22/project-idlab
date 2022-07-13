@@ -14,7 +14,7 @@ You can find info about...
 <a href="getting-started">
 
 Not sure where to begin? Click here!
-![App icon](../assets/icons/Entrance-Duotone.svg) 
+![Icon of an entrance to link to getting started](../assets/icons/Entrance-Duotone.svg) 
 </a>
 </div>
 
@@ -25,7 +25,7 @@ Not sure where to begin? Click here!
 <a href="development/">
 
 Not sure where to begin? Click here!
-![App icon](../assets/icons/Diskette-Duotone.svg) 
+![Icon of a floppy disk to link to development](../assets/icons/Diskette-Duotone.svg) 
 </a>
 </div>
 
@@ -33,7 +33,7 @@ Not sure where to begin? Click here!
 <div>
 
 ### Repository
-![App icon](../assets/icons/Group-Duotone.svg) 
+![Icon of multiple people to link to repository](../assets/icons/Group-Duotone.svg) 
 Looking for source code, License, contributors? View the [repo on GitHub](https://github.com/osoc22/project-idlab).
 </div>
 

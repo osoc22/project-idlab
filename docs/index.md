@@ -7,7 +7,7 @@
 <a href="app/">
 <div>
 
-![App icon](assets/icons/Apps-Duotone.svg) 
+![Icon of squares in a grid to link to the web interface](assets/icons/Apps-Duotone.svg) 
 
 Go to the app/web interface
 
@@ -17,7 +17,7 @@ Go to the app/web interface
 <a href="docs/">
 <div>
 
-![App icon](assets/icons/Document-Duotone.svg) 
+![Icon of a paper to link to documentation](assets/icons/Document-Duotone.svg) 
 
 Open the documentation
                                   
