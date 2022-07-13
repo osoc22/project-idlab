@@ -1,18 +1,13 @@
 {
-  "name": "powerful-personal-data",
+  "name": "ppd-solidpod-testserver",
   "description": "",
   "version": "0.0.1",
   "scripts": {
-    "start": "run.sh",
-    "build": "npx parcel build index.html --dist-dir ../../docs/app/ --public-url ./"
+    "start": "run.sh"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/osoc22/project-idlab"
-  },
-  "engines": {
-    "node": "^16",
-    "npm": ">=8"
   },
   "keywords": [],
   "contributors": [
@@ -46,15 +41,6 @@
     "last 3 firefox versions"
   ],
   "dependencies": {
-    "@inrupt/solid-client": "^1.23.1",
-    "@inrupt/solid-client-authn-browser": "^1.12.1",
-    "@inrupt/vocab-common-rdf": "^1.0.5",
-    "@inrupt/vocab-solid": "^1.0.4",
-    "@solid/community-server": "^4.0.1",
-    "parcel": "^2.6.2"
-  },
-  "devDependencies": {
-    "buffer": "^6.0.3",
-    "process": "^0.11.10"
+    "@solid/community-server": "^4.0.1"
   }
 }
