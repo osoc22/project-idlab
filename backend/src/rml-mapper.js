@@ -1,13 +1,14 @@
 import RMLMapper from "@rmlio/rmlmapper-java-wrapper";
 import fs from "fs/promises";
 
-const rml = await fs.readFile("../mappings/black.ttl", "utf-8");
-const wrapper = new RMLMapper("./rmlmapper-5.0.0-r362-all.jar", "./tmp", true);
+const wrapper = new RMLMapper("./rmlmapper.jar", "./tmp", true);
+const rml = await fs.readFile("mappings/map3.ttl", "utf-8");
+
 
 export async function convertData(weatherJson) {
 
     const sources = {
-        "weather.json": weatherJson,
+        "data.json": JSON.stringify(weatherJson),
     };
 
     return await wrapper.execute(rml, {
