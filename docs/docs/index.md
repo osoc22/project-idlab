@@ -22,7 +22,7 @@ Not sure where to begin? Click here!
 <div>
 
 ### Development
-<a href="development/">
+<a href="dev/">
 
 Not sure where to begin? Click here!
 ![Icon of a floppy disk to link to development](../assets/icons/Diskette-Duotone.svg) 
