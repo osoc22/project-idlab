@@ -1,9 +1,13 @@
 # Project IDLab - Powerful Personal Data
 
+<div align="center">
+  <img src="./docs/powerful-personal-data-crest.svg" width="250px" />
+</div>
+
 ## Getting started
 
 Prerequisites:
-- [Node.js](https://nodejs.org/en/)
+- [Node.js](https://nodejs.org/en/), version 16 is recommended. Consider using [nvm](https://github.com/nvm-sh/nvm) if you want to use multiple node versions on your system.
 - [Git](https://git-scm.com/downloads) (In case you're using Windows, make sure to tick `install Git Bash`, so you can use run.sh!)
 
 To set up the project:
