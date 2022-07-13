@@ -1,6 +1,8 @@
 ## Solidpod-testserver: technical info
 
-Note: [not meant for production!](../../../README.md#production) 
+### Production warning
+It should be noted that in solidpod-testserver the file-no-setup config is used.
+For production, there's probably better options! Check out the available configs [here](https://github.com/CommunitySolidServer/CommunitySolidServer/tree/main/config).
 
 ### Getting started
 
@@ -19,4 +21,3 @@ If you select `y` on the post install script, the following credentials will be 
 - email: johndoe@localhost.be
 - password: johndoe
 ```
-
