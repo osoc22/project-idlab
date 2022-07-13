@@ -1,41 +1,11 @@
 <script lang="ts">
 	import { editEvent } from '$lib/stores/eventStore';
 	import type { CalendarEvent } from '$lib/types/calendarEvents';
-	import { Temporal } from '@js-temporal/polyfill';
 	import Input from './input/Input.svelte';
 
 	let calendarEvent = $editEvent.event;
 
-	// Convert Temporal date to datetime-local string
-	function toDatetimeString(date: Temporal.Instant): string {
-		const d = new Date(date.toString() || '');
-		return `${d.toLocaleDateString().split('/').reverse().join('-')} ${d.toLocaleTimeString()}`;
-	}
-
-	// Convert javascrip Date object to temporal date
-	function toTemporalInstant(date: Date): Temporal.Instant {
-		const dateMilliseconds = date.getTime();
-
-		return Temporal.Instant.fromEpochMilliseconds(dateMilliseconds);
-	}
-
-	// Set calendarEvent[key] to value
-	function setCalendarValue(event: Event, key: 'from' | 'to'): void {
-		if (!calendarEvent) return;
-
-		const v = (event.target as HTMLInputElement).value;
-		const d = new Date(v)
-
-		const temporalDate = toTemporalInstant(d);
-
-		 calendarEvent[key] = temporalDate
-	}
-
-	const setFromCalendarValue = (e: Event) => {setCalendarValue(e, 'from')};
-	const setToCalendarValue = (e: Event) => setCalendarValue(e, 'to');
-
-	function submitEvent(callback: (event: CalendarEvent) => void) {
-
+	function submitEvent(callback: (e: CalendarEvent) => void) {
 		editEvent.reset(); // close modal
 
 		callback(calendarEvent);
@@ -49,27 +19,26 @@
 			{$editEvent.editMode ? 'Edit' : 'Create'} event
 		</h3>
 
-		<label for="datetime-from">
-			Date time from:
-			<input
-				id="datetime-from"
-				type="datetime-local"
-				value={toDatetimeString(calendarEvent.from)}
-				on:change={setFromCalendarValue}
-			/>
-		</label>
-		<br />
+		<Input
+			type="date"
+			label="date"
+			value={calendarEvent.date.toString()}
+			on:change={(e) => calendarEvent.setDate(e)}
+		/>
 
-		<label for="datetime-to">
-			Date time to:
-			<input
-				id="datetime-to"
-				type="datetime-local"
-				value={toDatetimeString(calendarEvent.to)}
-				on:change={setToCalendarValue}
-			/>
-		</label>
-		<br />
+		<Input
+			type="time"
+			label="from"
+			value={calendarEvent.time.from.toString({ smallestUnit: 'minute' })}
+			on:change={(e) => calendarEvent.setFromTime(e)}
+		/>
+
+		<Input
+			type="time"
+			label="to"
+			value={calendarEvent.time.to.toString({ smallestUnit: 'minute' })}
+			on:change={(e) => calendarEvent.setToTime(e)}
+		/>
 
 		<Input label="title" bind:value={calendarEvent.title} />
 
@@ -80,9 +49,3 @@
 		</div>
 	</form>
 {/if}
-
-<style>
-	input {
-		display: block;
-	}
-</style>
