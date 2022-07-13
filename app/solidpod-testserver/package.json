@@ -3,7 +3,8 @@
   "description": "",
   "version": "0.0.1",
   "scripts": {
-    "start": "run.sh"
+    "start": "npx community-solid-server --config @css:config/file-no-setup.json --rootFilePath data/",
+    "postinstall": "setup-credentials.sh"
   },
   "repository": {
     "type": "git",
