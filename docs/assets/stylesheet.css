@@ -1,0 +1,17 @@
+img {
+    width: 30%;
+    margin: auto;
+    display: block;
+    
+}
+#menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#menu div {
+    
+    text-align: center;
+    float: left;
+}
