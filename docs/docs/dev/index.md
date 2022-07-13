@@ -10,7 +10,7 @@ The project consists out of three parts!
 <div>
 
 ### Svelte: front-end
-<a href="svelte-frontend">
+<a href="svelte-frontend/">
 
 The client-side calendar and link between weather and your solid pod.
 ![Icon of a calendar to link to Svelte](../../assets/icons/Calendar-Duotone.svg) 
