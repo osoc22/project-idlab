@@ -10,6 +10,7 @@ The project consists out of three parts!
 <div>
 
 ### Svelte: front-end
+
 <a href="svelte-frontend/" markdown=1>
 
 The client-side calendar and link between weather and your solid pod.
@@ -22,6 +23,7 @@ The client-side calendar and link between weather and your solid pod.
 <div>
 
 ### Back-end
+
 <a href="backend" markdown=1>
 
 The weather API interface and linked data source.
@@ -33,6 +35,7 @@ The weather API interface and linked data source.
 <div>
 
 ### Solidpod-testserver
+
 <a href="solidpod-testserver" markdown=1>
 
 A quick way to set up a solidpod community server with a test user built in.
