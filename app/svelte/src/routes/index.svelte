@@ -28,7 +28,6 @@
 
 	let podUrl: string;
 	let webID: string;
-	let interfaceUrl: string;
 
 	function gotoToday() {
 		startOfWeek = today.subtract({ days: today.dayOfWeek - 1 });
