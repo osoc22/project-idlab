@@ -9,7 +9,7 @@ npm install
 ```
 
 The web interface is the client-side thing that connects all the... things.
-- Show the interactable calendar interface to the user: see the [framework.md](framework) docs.
-- Read data from & write data to the solid pod (thus also allowing the user to log into their pod/grant permissions): see the [solid-integration docs](solid-integration).
+- Show the interactable calendar interface to the user: see the [framework.md](framework.md) docs.
+- Read data from & write data to the solid pod (thus also allowing the user to log into their pod/grant permissions): see the [solid-integration docs](solid-integration.md).
 - Grab the data from external API's (weather and the like) and integrate them into the pod, thus also integrating them into the calendar: that's under development sorry.
 
