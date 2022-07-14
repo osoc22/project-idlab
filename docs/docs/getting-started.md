@@ -1,4 +1,4 @@
-## Getting started with powerful personal data
+# Getting started with powerful personal data
 
 This project is a calendar app that uses linked data for weather info on your own calendar, all stored in your personal solid pod.
 
