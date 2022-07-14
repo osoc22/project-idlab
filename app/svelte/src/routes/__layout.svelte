@@ -17,7 +17,9 @@
 	let interfaceUrl: string;
 
 	let podUrl = 'http://localhost:3000';
+	let podError = '';
 	let webID = 'johndoe';
+	let idError = '';
 
 	onMount(async () => {
 		// If trying to log in: do that. Or if a previous session can still be used to log in: do that instead
@@ -36,6 +38,12 @@
 	 * Implementation based on https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/authenticate-browser/
 	 */
 	async function handleLogin() {
+		idError = '';
+		podError = '';
+
+		if (!podUrl) return (podError = 'Please enter a pod URL');
+		if (!webID) return (idError = 'Please enter a web ID');
+
 		if (podUrl.indexOf('//') < 0) {
 			podUrl = 'http://' + podUrl;
 		}
@@ -60,8 +68,8 @@
 {:else}
 	<div class="max-w-lg my-16 mx-auto">
 		<h1 class="text-2xl">Welcome to the pod</h1>
-		<Input label="pod url" bind:value={podUrl} />
-		<Input label="webId" bind:value={webID} />
+		<Input label="pod url" error={podError} bind:value={podUrl} />
+		<Input label="webId" error={idError} bind:value={webID} />
 		<Button focused on:click={handleLogin}>Login with pod</Button>
 	</div>
 {/if}
