@@ -4,3 +4,4 @@ app/solidpod-testserver/data/
 .vercel
 .parcel-cache/
 dist/
+app/solid/
