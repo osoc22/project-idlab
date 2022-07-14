@@ -1,3 +1,10 @@
+---
+title: Svelte (Frontend)
+parent: Docs
+nav_order: 1
+has_children: true
+---
+
 ## Svelte/front-end development docmunentation
 
 It all gets set up at once though!

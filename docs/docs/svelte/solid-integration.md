@@ -1,3 +1,7 @@
+---
+parent: Svelte (Front-End)
+---
+
 ## Interacting with solid pods from a client-side/static/javascript web interface
 
 ### Authenticated requests
