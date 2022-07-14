@@ -1,5 +1,8 @@
 ---
-parent: Svelte (Front-End)
+title: JavaScript Solid API
+parent: Svelte (Frontend)
+grand_parent: Docs
+nav_order: 2
 ---
 
 ## Interacting with solid pods from a client-side/static/javascript web interface
