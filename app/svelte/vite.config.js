@@ -7,6 +7,9 @@ import builtins from "rollup-plugin-node-builtins";
 /** @type {import('vite').UserConfig} */
 const config = {
 	plugins: [sveltekit()],
+	ssr: {
+		noExternal: ['svelte-hero-icons']
+	},
 	optimizeDeps: {
 		esbuildOptions: {
 		  plugins: [

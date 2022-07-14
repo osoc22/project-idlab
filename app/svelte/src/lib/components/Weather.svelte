@@ -18,29 +18,13 @@
 </script>
 
 {#if forecast}
-	<div class="weather">
-		{forecast.day.mintemp_c}-{forecast.day.maxtemp_c}°C
+	<div class="bg-blue-200 rounded-md min-h-4 p-3 select-none relative">
+		<span class="text-lg">
+			{forecast.day.mintemp_c}-{forecast.day.maxtemp_c}°C
+		</span>
 
-		<div class="weatherIcon">🌤</div>
+		<div class="absolute h-6 aspect-square rounded-full bg-blue-700 -right-1 -top-1">
+			<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">🌤</div>
+		</div>
 	</div>
 {/if}
-
-<style>
-	.weather {
-		position: relative;
-		font-size: 1.2rem;
-		height: 4rem;
-		border-radius: 1rem;
-		padding: 1rem;
-		background-color: #6f9dbf;
-		user-select: none;
-	}
-
-	.weatherIcon {
-		position: absolute;
-		top: 50%;
-		right: 1rem;
-		transform: translateY(-50%);
-		font-size: 2rem;
-	}
-</style>
