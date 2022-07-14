@@ -7,7 +7,7 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import Weather from '$lib/components/Weather.svelte';
 
-	import { calendarEvents, editEvent } from '$lib/stores/eventStore';
+	import { calendarEvents, editEvent, eventsPerDay } from '$lib/stores/eventStore';
 
 	export let startOfWeek: Temporal.PlainDate;
 	const today = Temporal.Now.plainDateISO();
@@ -34,8 +34,8 @@
 					<Weather {day} />
 				{/if}
 
-				{#if day.toString() in $calendarEvents}
-					{#each $calendarEvents[day.toString()] as event}
+				{#if day.toString() in $eventsPerDay}
+					{#each $eventsPerDay[day.toString()] as event}
 						<Event {event} on:click={() => editEvent.edit(event)} />
 					{/each}
 				{:else}

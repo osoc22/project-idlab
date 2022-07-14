@@ -1,62 +1,37 @@
-import events from '$lib/hardcoded/events';
 import { CalendarEvent } from '$lib/types/calendarEvents';
 import { derived, writable } from 'svelte/store';
 
 function createEvents() {
 	// Structure of events: {[date]: CalendarEvent[]}
 	// TODO: fetch real events from server
-	const { subscribe, set, update } = writable<{ [key: string]: CalendarEvent[] }>(events);
+	const { subscribe, set, update } = writable<CalendarEvent[]>([]);
 
 	return {
 		subscribe,
 		addEvent: (event: CalendarEvent) =>
 			update((es) => {
-				// Only take the date of the event - not the time
-				const eventDateString = event.date.toString();
-
-				// Add event to the correct day
-				if (eventDateString in es) {
-					es[eventDateString].push(event);
-				} else {
-					es[eventDateString] = [event];
-				}
-
-				console.log({ ADDED: es });
+				es.push(event);
 
 				return es;
 			}),
-		deleteEvent: (event: CalendarEvent) => {
-			update((es) => {
-				for (const eventKeys of Object.keys(es)) {
-					// Filter for all event that are not the same as the event to delete
-					const remainingEvents = es[eventKeys].filter((e) => !e.equals(event));
-
-					if (remainingEvents.length == es[eventKeys].length) {
-						continue; // continue if no events were removed
-					} else if (remainingEvents.length > 0) {
-						// Set the remaining events for the date
-						es[eventKeys] = remainingEvents;
-					} else {
-						// delete key if no events are left
-						delete es[eventKeys];
-					}
-				}
-
-				console.log({ DELETED: es });
-
-				return es;
-			});
-		},
-		updateEvent: (event: CalendarEvent) => {
-			// Remove event to make sure it is not inserted on wrong day
-			calendarEvents.deleteEvent(event);
-			calendarEvents.addEvent(event);
-		},
-		reset: () => set({})
+		deleteEvent: (event: CalendarEvent) => update((es) => es.filter((e) => !e.equals(event))),
+		updateEvent: (event: CalendarEvent) => update((es) => es.map((e) => (e == event ? event : e))),
+		reset: () => set([])
 	};
 }
 
 export const calendarEvents = createEvents();
+export const eventsPerDay = derived(calendarEvents, ($calendarEvents) => {
+	return $calendarEvents.reduce((acc, ev) => {
+		const dateString = ev.date.toString();
+		if (dateString in acc) {
+			acc[dateString].push(ev);
+		} else {
+			acc[dateString] = [ev];
+		}
+		return acc;
+	}, {} as { [key: string]: CalendarEvent[] });
+});
 
 derived(calendarEvents, ($calendarEvents) => console.log($calendarEvents));
 
