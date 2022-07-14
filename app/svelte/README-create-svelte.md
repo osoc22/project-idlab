@@ -36,6 +36,7 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 ## Deploy to Vercel
+
 Download the Vercel cli with `npm -g install vercel` or `yarn global add vercel`.
 
 Then run `vercel` in this directory to deploy your app to Vercel.

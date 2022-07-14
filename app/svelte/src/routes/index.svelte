@@ -46,16 +46,18 @@
 	 */
 	async function getData() {
 		// https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/read-write-data/#write-a-new-soliddataset
-		let dataset: any;
+		let dataset: any; // eslint-disable-line
 		console.log('ytest');
 		let datasetname = 'test2';
-		let thing: any;
+		let thing: any; // eslint-disable-line
 		console.log(`${podUrl}/${webID}/${datasetname}`);
 
 		try {
 			dataset = await getSolidDataset(`${podUrl}/${webID}/${datasetname}`, { fetch: fetch });
 			thing = getThingAll(dataset);
 			console.log(thing);
+
+			// eslint-disable-next-line
 		} catch (e: any) {
 			console.log(e);
 			if (e.response.status == 404) {
