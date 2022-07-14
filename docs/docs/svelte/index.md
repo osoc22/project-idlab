@@ -5,15 +5,9 @@ nav_order: 1
 has_children: true
 ---
 
-## Svelte/front-end development docmunentation
+# Svelte/front-end docs
 
-It all gets set up at once though!
-
-```bash
-git clone https://github.com/osoc22/project-idlab.git
-cd project-idlab/app/svelte/
-npm install
-```
+To set up and run locally, [click here](setup-and-run)
 
 The web interface is the client-side thing that connects all the... things.
 - Show the interactable calendar interface to the user: see the [framework.md](framework) docs.
