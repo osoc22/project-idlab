@@ -1,0 +1,40 @@
+{
+  "name": "ppd-solidpod-testserver",
+  "description": "",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "npx community-solid-server --config @css:config/file-no-setup.json --rootFilePath data/",
+    "postinstall": "setup-credentials.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/osoc22/project-idlab"
+  },
+  "keywords": [],
+  "contributors": [
+    {
+      "name": "Abel de Bruijn",
+      "url": "https://github.com/yustarandomname"
+    },
+    {
+      "name": "Denperidge",
+      "url": "https://github.com"
+    },
+    {
+      "name": "Matei Penca",
+      "url": "https://github.com/Matei9721"
+    },
+    {
+      "name": "Open Summer Of Code",
+      "url": "https://osoc.be/"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/osoc22/project-idlab/issues"
+  },
+  "homepage": "",
+  "dependencies": {
+    "@solid/community-server": "^4.0.1"
+  }
+}

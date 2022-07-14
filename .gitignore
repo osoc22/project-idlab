@@ -1,5 +1,5 @@
 tools/
-app/solid/
+app/solidpod-testserver/data/
 **/node_modules
 .vercel
 .parcel-cache/
