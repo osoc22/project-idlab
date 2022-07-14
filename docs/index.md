@@ -2,30 +2,29 @@
 
 *a.k.a. Powerful Personal Data, by Solid Concepts.*
 
-<div id="menu" markdown=1>
+---
 
-<a href="app/">
-<div markdown=1>
+### Getting started/using PPD
+[
+    ![Icon of an entrance to link to getting started](assets/icons/Entrance-Duotone.svg)
+    Not sure where to begin? Click here!
+](getting-started)
 
-![Icon of squares in a grid to link to the web interface](assets/icons/Apps-Duotone.svg) 
+---
 
-Go to the app/web interface
+### Open the app
+[
+    ![Icon of squares in a grid to link to the web interface](assets/icons/Apps-Duotone.svg)
+    Go straight to the app!
+](app/)
 
-</div>
-</a>
+---
 
-<a href="docs/" markdown=1>
-<div>
-
-![Icon of a paper to link to documentation](assets/icons/Document-Duotone.svg) 
-
-Open the documentation
-                                  
-</div>
-</a>
-
-</div>
-
+### Documentation
+[
+    ![Icon of a paper to link to documentation](assets/icons/Document-Duotone.svg) 
+    Open the docs!
+](docs/)
 
 
 
