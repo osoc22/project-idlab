@@ -1,6 +1,7 @@
 ---
 title: Install, run & build
-parent: Svelte (Front-End)
+nav_order: 1
+parent: Svelte (Frontend)
 grand_parent: Docs
 ---
 
