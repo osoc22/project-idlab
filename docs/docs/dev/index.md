@@ -14,6 +14,7 @@ The project consists out of three parts!
 
 The client-side calendar and link between weather and your solid pod.
 ![Icon of a calendar to link to Svelte](../../assets/icons/Calendar-Duotone.svg) 
+
 </a>
 </div>
 
