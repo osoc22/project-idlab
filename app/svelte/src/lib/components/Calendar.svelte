@@ -20,16 +20,16 @@
 	}
 </script>
 
-<div class="calendar">
+<div class="m-4 flex gap-3 container mx-auto">
 	{#each week as day}
-		<div class="day">
+		<div class="grow max-w-xs">
 			<!-- Date title with name of day (i.e Mon), the date as [dd::MM:YYYY] and a plus button to add a new event -->
-			<div class="date" class:today={day.equals(today)}>
-				<span class="dateOfWeekString">{dayOfWeekString[day.dayOfWeek - 1]}</span>
+			<div class="py-2" class:today={day.equals(today)}>
+				<span class="font-lg">{dayOfWeekString[day.dayOfWeek - 1]}</span>
 				{Intl.DateTimeFormat('gb-GB').format(day)}
 			</div>
 
-			<div class="events">
+			<div class="flex flex-col gap-4 my-4">
 				{#if day.until(today).days <= 0}
 					<Weather {day} />
 				{/if}
@@ -62,38 +62,8 @@
 	</UpdateEvent>
 </Modal>
 
-<style>
-	.calendar {
-		margin: 1rem 2rem;
-		width: calc(100% - 8rem);
-		display: flex;
-		gap: 1rem;
-		padding-inline: 2rem;
-	}
-
-	.day {
-		flex-grow: 1;
-		max-width: calc(100% / 5);
-	}
-
-	.date {
-		padding-block: 0.5rem;
-	}
-
+<style lang="postcss">
 	.today {
-		font-weight: bold;
-		border-bottom: 2px solid black;
-	}
-
-	.dateOfWeekString {
-		font-size: 1.2rem;
-	}
-
-	/* EVENTS */
-	.events {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		margin-block: 1rem;
+		@apply font-bold border-b-2 text-blue-900 border-blue-900;
 	}
 </style>
