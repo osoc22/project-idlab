@@ -1,4 +1,10 @@
-## Svelte/front-end: technical info
+---
+title: Install, run & build
+parent: Svelte (Front-End)
+grand_parent: Docs
+---
+
+# Svelte: Install, run & build the front-end
 
 The front-end is a Svelte project that generates into static files. It's based on create-svelte, which is viewable [on the repo](https://github.com/osoc22/project-idlab/blob/master/app/svelte/README-create-svelte.md).
 
