@@ -7,15 +7,6 @@ You can find info about...
 
 ---
 
-<!-- Getting started -->
-### Getting started/how to use PPD
-[
-    ![Icon of an entrance to link to getting started](../assets/icons/Entrance-Duotone.svg)
-    Not sure where to begin? Click here!
-](getting-started)
-
----
-
 <!-- Development -->
 ### Development
 [
