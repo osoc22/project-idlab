@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "npx community-solid-server --config @css:config/file-no-setup.json --rootFilePath data/",
-    "postinstall": "setup-credentials.sh"
+    "postinstall": "./setup-credentials.sh"
   },
   "repository": {
     "type": "git",
