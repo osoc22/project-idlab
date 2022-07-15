@@ -1,31 +1,22 @@
----
-title: Docs
-has_children: true
-nav_order: 2
----
+<link rel="stylesheet" href="../assets/stylesheet.css">
 
-# Powerful Personal Data docs
+## Powerful Personal Data docs
+
 
 You can find info about...
 
-## Repository
-{% include repo.md %}
+---
 
-## Svelte: frontend
+<!-- Development -->
+### Development
 [
-    The client-side calendar and link between weather and your solid pod.
-    ![Icon of a calendar to link to Svelte](../assets/icons/Calendar-Duotone.svg) 
-](svelte-frontend/)
+    ![Icon of a floppy disk to link to development](../assets/icons/Diskette-Duotone.svg)
+    Want info on building from source, developing, or the inner workings of the project? Click here!
+](dev/)
 
-<!-- Back-end -->
-## Weather info: backend
-[
-    The weather API interface and linked data source.
-    ![Icon of a folder to link to back-end](../assets/icons/Folder-Duotone.svg) 
-](backend)
+---
 
-<!-- Solidpod testserver -->
-## Solidpod-testserver
-A quick way to set up a solidpod community server with a test user built in.
-![Icon of a cloud to link to solidpod-testserver](../assets/icons/Cloud-Duotone.svg)
-
+<!-- Repository -->
+### Repository
+![Icon of multiple people to link to repository](../assets/icons/Group-Duotone.svg) 
+Looking for source code, License, contributors? View the [repo on GitHub](https://github.com/osoc22/project-idlab).
