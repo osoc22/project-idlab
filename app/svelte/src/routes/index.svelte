@@ -84,13 +84,19 @@
 		return `${podUrl}/${webID}/${datasetName}`;
 	}
 
+	// Function to consistently use the same id generation scheme
+	function NewThing() {
+		return buildThing(createThing({ "name": (Date.now().toString()) }))
+	}
+
 	async function SaveData(datasetName : string, thing: any) {
 		let datasetUrl = DatasetUrl("calendar");
 		let dataset : any;
 		try {
 			dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 			dataset = setThing(dataset, thing);
-			await saveSolidDatasetAt
+			console.log("yteeterdfst")
+			await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 
 		} catch (e: any) {
 			// If dataset doesn't exist yet, repeat functions
@@ -104,13 +110,13 @@
 			}
 		}
 	}
+
+
 	window.SaveData = SaveData;
 
 	// Save event to 
-	// Tester: SaveEvent(Date.now())
 	async function SaveEvent(startDate: Date, endDate: Date) {
-		let thingEvent = buildThing(
-			createThing({ "name": DatasetUrl("calendar")}))
+		let thingEvent = NewThing()
 			.addDatetime(ICAL.dtstart, startDate)
 			.addDatetime(ICAL.dtend, endDate)
 			.build();
@@ -118,6 +124,14 @@
 		SaveData("calendar", thingEvent);
 	}
 	window.SaveEvent = SaveEvent;
+
+	async function Tester() {
+		// Save an event that starts now and ends in two hours
+		var start = new Date();
+		var end = new Date(start.setHours(start.getHours() + 2));
+		await SaveEvent(start, end);
+	} 
+	window.Tester = Tester
 </script>
 
 <div class="flex py-5 px-4 justify-between items-center gap-4">
