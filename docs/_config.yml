@@ -35,6 +35,9 @@ collections:
     label: app
     files: [app/*]
 
+include:
+  - app/*__*
+
 
 # Exclude from processing.
 # The following items will not be processed, by default.
