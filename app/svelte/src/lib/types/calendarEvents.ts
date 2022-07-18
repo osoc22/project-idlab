@@ -1,15 +1,11 @@
 import { Temporal } from '@js-temporal/polyfill';
-import UUID from '$lib/utils/uuid';
 import Identifiable from '$lib/types/identifiable';
 
 export const TIME_ZONE = 'Europe/Brussels';
 
 export class CalendarEvent extends Identifiable {
-	id: string = UUID();
-
 	date: Temporal.PlainDate;
 	time: { from: Temporal.PlainTime; to: Temporal.PlainTime };
-
 	title: string;
 	description: string;
 
