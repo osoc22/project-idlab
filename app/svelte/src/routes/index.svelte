@@ -81,22 +81,27 @@ getThing
 	}
 	window.getData = getData;
 
+	// Function that generates an absolute url from a dataset name
 	function DatasetUrl(datasetName : string) {
 		return `${podUrl}/${webID}/${datasetName}`;
 	}
 
-	// Function to consistently use the same id generation scheme
-	function NewThing(id = (Date.now().toString())) {
+	// Function to be used when creating a new THing
+	// If an id is provided to be used as name, use that.
+	// If there isn't, use the current full Datetime, which will be unique!
+	// (unless the same user uses two devices and makes two updates at the EXACT same millisecond
+	// but look if they try that they're trying to break it so they get what the want)
+	function newThing(id = (Date.now().toString())) {
 		return buildThing(createThing({ "name": id }))
 	}
 
-	async function SaveData(datasetName : string, thing: any) {
+	//
+	async function saveNewThing(datasetName : string, thing: any) {
 		let datasetUrl = DatasetUrl(datasetName);
 		let dataset : any;
 		try {
 			dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 			dataset = setThing(dataset, thing);
-			console.log("yteeterdfst")
 			await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 
 		} catch (e: any) {
@@ -104,15 +109,16 @@ getThing
 			if (e.response.status == 404) {
 				dataset = createSolidDataset();
 				await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
-				SaveData(datasetName, thing);
+				saveNewThing(datasetName, thing);
 			}
 			else {
 				console.error(e);
 			}
 		}
 	}
+	window.saveNewThing = saveNewThing;
 
-	async function UpdateSavedThing(datasetName : string, thingId: any, returnModifiedThing: any) {
+	async function updateSavedThing(datasetName : string, thingId: any, returnModifiedThing: any) {
 		let datasetUrl = DatasetUrl(datasetName);
 
 		let dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
@@ -121,52 +127,53 @@ getThing
 
 		await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 	}
+	window.updateSavedThing = updateSavedThing;
 
-	window.SaveData = SaveData;
+
 
 	// Save event to 
-	async function SaveEvent(startDate: Date, endDate: Date) {
-		let thingEvent = NewThing()
+	async function saveNewEvent(startDate: Date, endDate: Date) {
+		let thingEvent = newThing()
 			.addDatetime(ICAL.dtstart, startDate)
 			.addDatetime(ICAL.dtend, endDate)
 			.build();
 
-		SaveData("calendar", thingEvent);
+		saveNewThing("calendar", thingEvent);
 	}
-	window.SaveEvent = SaveEvent;
+	window.saveNewEvent = saveNewEvent;
 
-	async function UpdateSavedEvent(eventId: string, startDate: Date, endDate: Date) {
-		await UpdateSavedThing("calendar", eventId, (thing: any) => {
+	async function updateSavedEvent(eventId: string, startDate: Date, endDate: Date) {
+		await updateSavedThing("calendar", eventId, (thing: any) => {
 			console.log(thing)
 			return thing
 				.setDatetime(ICAL.dtstart, startDate)
 				.setDatetime(ICAL.dtend, endDate)
 		});
 	}
-	window.UpdateSavedEvent = UpdateSavedEvent;
+	window.updateSavedEvent = updateSavedEvent;
 
 
-	async function ListFromDataset(datasetName: string) {
+	async function listThingsFromDataset(datasetName: string) {
 		let things = getThingAll(await getSolidDataset(DatasetUrl(datasetName), {fetch: fetch}), {});
-		console.log(things)
 		things.forEach((thing) => {
 			console.log(thing.url.split("#")[1]);
+			console.dir(thing);
+			console.log("-----")
 		});
 
 	}
-	window.ListFromDataset = ListFromDataset;
+	window.listThingsFromDataset = listThingsFromDataset;
 	
-	async function Tester() {
+	async function tester() {
 		// Save an event that starts now and ends in two hours
 		var start = new Date();
 		var end = new Date(start.setHours(start.getHours() + 2));
-		await SaveEvent(start, end);
+		await saveNewEvent(start, end);
 
 
 	} 
 
-
-	window.Tester = Tester
+	window.tester = tester;
 </script>
 
 <div class="flex py-5 px-4 justify-between items-center gap-4">
