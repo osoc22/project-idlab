@@ -191,21 +191,34 @@ getThing
 	
 	// A function that can be called that tests out the code above!
 	async function tester() {
+		/* This testerProgress code doesn't work properly, but might be useful for later maybe
+		async function testerProgress(datasetName : string, change : string) {
+			console.log("==========")
+			console.log(`${datasetName} dataset: ${change}`);
+			console.log(await listThingsFromDataset(datasetName, true));
+			console.log("==========")
+		}
+		*/
+
+		//await testerProgress("calendar", "before new Event");
 		// Save an event that starts now and ends in two hours
 		var start = new Date();
 		var end = new Date();
 		end.setHours(end.getHours() + 2)
 		await saveNewEvent(start, end);
 
+		//await testerProgress("calendar", "after new Event (startdate now, enddate now + 2h), before update");
+
 		// Set the first events start and end to now
 		// NOTE: don't forget to () your await because otherwise it doesn't work!
 		try {
 			let firstEvent = (await listThingsFromDataset("calendar", true))[3];
-			updateSavedEvent(firstEvent.url.split("#")[1], new Date(), new Date());
+			await updateSavedEvent(firstEvent.url.split("#")[1], new Date(), new Date());
 		} catch (e) {
 			console.error(e);
 		}
 
+		//await testerProgress("calendar", "after updating the event[3]'s start & end datetime to now");
 	} 
 
 	window.tester = tester;
