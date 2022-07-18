@@ -85,8 +85,8 @@
 	}
 
 	// Function to consistently use the same id generation scheme
-	function NewThing() {
-		return buildThing(createThing({ "name": (Date.now().toString()) }))
+	function NewThing(id = (Date.now().toString())) {
+		return buildThing(createThing({ "name": id }))
 	}
 
 	async function SaveData(datasetName : string, thing: any) {
@@ -125,12 +125,25 @@
 	}
 	window.SaveEvent = SaveEvent;
 
+	async function UpdateSavedEvent(startDate: Date, endDate: Date) {
+
+	}
+
+	async function ListFromDataset(datasetName: string) {
+		let things = getThingAll(await getSolidDataset(DatasetUrl(datasetName), {fetch: fetch}), {});
+		console.log(things)
+
+	}
+	window.ListFromDataset = ListFromDataset;
+	
 	async function Tester() {
 		// Save an event that starts now and ends in two hours
 		var start = new Date();
 		var end = new Date(start.setHours(start.getHours() + 2));
 		await SaveEvent(start, end);
 	} 
+
+
 	window.Tester = Tester
 </script>
 
