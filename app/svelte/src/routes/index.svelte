@@ -86,7 +86,7 @@ getThing
 		return `${podUrl}/${webID}/${datasetName}`;
 	}
 
-	// Function to be used when creating a new THing
+	// Function to be used when creating a new Thing
 	// If an id is provided to be used as name, use that.
 	// If there isn't, use the current full Datetime, which will be unique!
 	// (unless the same user uses two devices and makes two updates at the EXACT same millisecond
@@ -95,8 +95,9 @@ getThing
 		return buildThing(createThing({ "name": id }))
 	}
 
-	//
-	async function saveNewThing(datasetName : string, thing: any) {
+	// Function that saves a passed Thing to the dataset with the passed name
+	// Oh and it'll create the dataset if it doesn't already exist!
+	async function saveThing(datasetName : string, thing: any) {
 		let datasetUrl = DatasetUrl(datasetName);
 		let dataset : any;
 		try {
@@ -109,39 +110,50 @@ getThing
 			if (e.response.status == 404) {
 				dataset = createSolidDataset();
 				await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
-				saveNewThing(datasetName, thing);
+				saveThing(datasetName, thing);
 			}
 			else {
 				console.error(e);
 			}
 		}
 	}
-	window.saveNewThing = saveNewThing;
+	window.saveThing = saveThing;
 
+	/*	This function is a bit funky
+	   	1: Finds the dataset with the specified dataSetname 
+	   	2: In that dataset, find the thing with the specified thingId
+	   	3: Then, pass a function that returns that same thing
+	/*  	Example usage:
+	    		await updateSavedThing("calendar", 654096854465, (thing: any) => {
+					return thing
+						.setDatetime(ICAL.dtstart, startDate)
+						.setDatetime(ICAL.dtend, endDate)
+				});
+	*/
+	// 	And then your thing will automatically get updated!
 	async function updateSavedThing(datasetName : string, thingId: any, returnModifiedThing: any) {
 		let datasetUrl = DatasetUrl(datasetName);
-
 		let dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 		let thing = await returnModifiedThing(buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))).build();
-		dataset = setThing(dataset, thing);
-
-		await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+		
+		saveThing(datasetName, thing);
 	}
 	window.updateSavedThing = updateSavedThing;
 
 
 
-	// Save event to 
+	// Create a new event, save it to calendar dataset
 	async function saveNewEvent(startDate: Date, endDate: Date) {
 		let thingEvent = newThing()
 			.addDatetime(ICAL.dtstart, startDate)
 			.addDatetime(ICAL.dtend, endDate)
 			.build();
 
-		saveNewThing("calendar", thingEvent);
+		saveThing("calendar", thingEvent);
 	}
 	window.saveNewEvent = saveNewEvent;
 
+	// Update an existing event
 	async function updateSavedEvent(eventId: string, startDate: Date, endDate: Date) {
 		await updateSavedThing("calendar", eventId, (thing: any) => {
 			console.log(thing)
@@ -153,6 +165,15 @@ getThing
 	window.updateSavedEvent = updateSavedEvent;
 
 
+	// Get all things from dataset with name datasetName, mostly useful for debugging
+	/* Output:
+		thing-id-as-string
+		|> thing as object
+		-----
+		other-thing-id-as-string
+		|> other-thing as object
+		-----
+	*/
 	async function listThingsFromDataset(datasetName: string) {
 		let things = getThingAll(await getSolidDataset(DatasetUrl(datasetName), {fetch: fetch}), {});
 		things.forEach((thing) => {
@@ -164,13 +185,12 @@ getThing
 	}
 	window.listThingsFromDataset = listThingsFromDataset;
 	
+	// A function that can be called that tests out the code above!
 	async function tester() {
 		// Save an event that starts now and ends in two hours
 		var start = new Date();
 		var end = new Date(start.setHours(start.getHours() + 2));
 		await saveNewEvent(start, end);
-
-
 	} 
 
 	window.tester = tester;
