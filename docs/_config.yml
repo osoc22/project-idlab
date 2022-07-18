@@ -55,7 +55,7 @@ exclude:
   - vendor/gems/
   - vendor/ruby/
 
-include:
+include:  # Thanks to https://stackoverflow.com/a/66573634
   - "_*.js"
   - "_*.css"
 
