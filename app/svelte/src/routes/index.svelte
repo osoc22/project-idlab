@@ -132,6 +132,9 @@
 	async function ListFromDataset(datasetName: string) {
 		let things = getThingAll(await getSolidDataset(DatasetUrl(datasetName), {fetch: fetch}), {});
 		console.log(things)
+		things.forEach((thing) => {
+			console.log(thing.url.split("#")[1]);
+		});
 
 	}
 	window.ListFromDataset = ListFromDataset;
