@@ -133,8 +133,8 @@ getThing
 	// 	And then your thing will automatically get updated!
 	async function updateSavedThing(datasetName : string, thingId: any, returnModifiedThing: any) {
 		let datasetUrl = DatasetUrl(datasetName);
-		let dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
-		let thing = await returnModifiedThing(buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))).build();
+		let dataset = (await getSolidDataset(datasetUrl, { fetch: fetch }));
+		let thing = (await returnModifiedThing(buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))).build());
 		
 		saveThing(datasetName, thing);
 	}
@@ -165,7 +165,9 @@ getThing
 	window.updateSavedEvent = updateSavedEvent;
 
 
-	// Get all things from dataset with name datasetName, mostly useful for debugging
+	// Get all things from dataset with name datasetName
+	// If returnAsArray is true, do a clean return (mostly for use in code)
+	// if returnAsArray is false (default), log to ocnsole (mostly for use in debugging)
 	/* Output:
 		thing-id-as-string
 		|> thing as object
@@ -174,14 +176,16 @@ getThing
 		|> other-thing as object
 		-----
 	*/
-	async function listThingsFromDataset(datasetName: string) {
+	async function listThingsFromDataset(datasetName: string, returnAsArray = false) {
 		let things = getThingAll(await getSolidDataset(DatasetUrl(datasetName), {fetch: fetch}), {});
-		things.forEach((thing) => {
-			console.log(thing.url.split("#")[1]);
-			console.dir(thing);
-			console.log("-----")
-		});
-
+		if (returnAsArray) return things;
+		else {
+			things.forEach((thing) => {
+				console.log(thing.url.split("#")[1]);
+				console.dir(thing);
+				console.log("-----")
+			});
+		}
 	}
 	window.listThingsFromDataset = listThingsFromDataset;
 	
@@ -189,8 +193,19 @@ getThing
 	async function tester() {
 		// Save an event that starts now and ends in two hours
 		var start = new Date();
-		var end = new Date(start.setHours(start.getHours() + 2));
+		var end = new Date();
+		end.setHours(end.getHours() + 2)
 		await saveNewEvent(start, end);
+
+		// Set the first events start and end to now
+		// NOTE: don't forget to () your await because otherwise it doesn't work!
+		try {
+			let firstEvent = (await listThingsFromDataset("calendar", true))[3];
+			updateSavedEvent(firstEvent.url.split("#")[1], new Date(), new Date());
+		} catch (e) {
+			console.error(e);
+		}
+
 	} 
 
 	window.tester = tester;
