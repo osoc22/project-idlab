@@ -21,13 +21,17 @@
 		saveSolidDatasetAt
 	} from '@inrupt/solid-client';
 	import { fetch } from '@inrupt/solid-client-authn-browser';
-	import { SCHEMA_INRUPT, RDF } from '@inrupt/vocab-common-rdf'; // == https://schema.org/name
+	import { SCHEMA_INRUPT, RDF, ICAL} from '@inrupt/vocab-common-rdf'; // == https://schema.org/name
+
 
 	const today = Temporal.Now.plainDateISO();
 	let startOfWeek: Temporal.PlainDate;
 
 	let podUrl: string;
 	let webID: string;
+	podUrl = localStorage.getItem('podUrl') || "localhost:3000";
+	webID = localStorage.getItem('webID') || "johndoe";
+
 
 	function gotoToday() {
 		startOfWeek = today.subtract({ days: today.dayOfWeek - 1 });
@@ -74,6 +78,46 @@
 
 		await saveSolidDatasetAt(`${podUrl}/${webID}/${datasetname}`, dataset, { fetch: fetch });
 	}
+	window.getData = getData;
+
+	function DatasetUrl(datasetName : string) {
+		return `${podUrl}/${webID}/${datasetName}`;
+	}
+
+	async function SaveData(datasetName : string, thing: any) {
+		let datasetUrl = DatasetUrl("calendar");
+		let dataset : any;
+		try {
+			dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
+			dataset = setThing(dataset, thing);
+			await saveSolidDatasetAt
+
+		} catch (e: any) {
+			// If dataset doesn't exist yet, repeat functions
+			if (e.response.status == 404) {
+				dataset = createSolidDataset();
+				await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+				SaveData(datasetName, thing);
+			}
+			else {
+				console.error(e);
+			}
+		}
+	}
+	window.SaveData = SaveData;
+
+	// Save event to 
+	// Tester: SaveEvent(Date.now())
+	async function SaveEvent(startDate: Date, endDate: Date) {
+		let thingEvent = buildThing(
+			createThing({ "name": DatasetUrl("calendar")}))
+			.addDatetime(ICAL.dtstart, startDate)
+			.addDatetime(ICAL.dtend, endDate)
+			.build();
+
+		SaveData("calendar", thingEvent);
+	}
+	window.SaveEvent = SaveEvent;
 </script>
 
 <div class="flex py-5 px-4 justify-between items-center gap-4">
