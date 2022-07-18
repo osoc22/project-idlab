@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 
-	import { plannedActivities } from '$lib/stores/eventStore';
+	import { modifyPlannedActivity, plannedActivities } from '$lib/stores/eventStore';
 	import { PlannedActivity, TIME_ZONE } from '$lib/types/calendarEvents';
 	import { Temporal } from '@js-temporal/polyfill';
 	import { onMount } from 'svelte';
@@ -20,8 +20,8 @@
 		const e1 = new PlannedActivity('Test1', 'Work', new Set(['Windy', 'Rain']), [d1, d2]);
 		const e2 = new PlannedActivity('Test2', 'Fun', new Set(['Windy', 'Rain']), [d1, d3], [t1, t2]);
 
-		plannedActivities.addEvent(e1);
-		plannedActivities.addEvent(e2);
+		plannedActivities.add(e1);
+		plannedActivities.add(e2);
 	});
 </script>
 
@@ -61,7 +61,9 @@
 		</div>
 
 		<div class="flex justify-end">
-			<Button filled icon={Pencil}>Edit</Button>
+			<Button on:click={() => modifyPlannedActivity.edit(plannedActivity)} filled icon={Pencil}>
+				Edit
+			</Button>
 		</div>
 	</div>
 {/each}

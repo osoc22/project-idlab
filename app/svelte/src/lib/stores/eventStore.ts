@@ -8,7 +8,7 @@ function createActivityStore<T extends Activity>() {
 
 	return {
 		subscribe,
-		addEvent: (event: T) =>
+		add: (event: T) =>
 			update((es) => {
 				es.push(event);
 
