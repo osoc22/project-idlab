@@ -9,7 +9,7 @@ nav_order: 2
 You can find info about...
 
 ## Repository
-{% include repo.md %}
+{% include repo-page-content.md %}
 
 ## Svelte: frontend
 [

@@ -6,4 +6,4 @@ parent: Docs
 
 # Repository
 
-{% include repo.md %}
+{% include repo-page-content.md %}
