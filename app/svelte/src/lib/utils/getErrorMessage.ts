@@ -2,9 +2,7 @@ type ErrorWithMessage = {
 	message: string;
 };
 
-export function isErrorWithMessage<T extends ErrorWithMessage>(
-	error: unknown
-): error is ErrorWithMessage {
+export function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
 	return (
 		typeof error === 'object' &&
 		error !== null &&

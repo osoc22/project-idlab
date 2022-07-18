@@ -2,7 +2,14 @@
 module.exports = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
-		extend: {}
+		theme: {
+			extend: {
+				gridTemplateColumns: {
+					// Complex site-specific column configuration
+					table: '1fr 1fr'
+				}
+			}
+		}
 	},
 	plugins: [require('@tailwindcss/line-clamp')]
 };

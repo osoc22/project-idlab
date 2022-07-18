@@ -4,7 +4,6 @@
 	import { Temporal } from '@js-temporal/polyfill';
 	import { Icon, ArrowRight, ArrowLeft } from 'svelte-hero-icons';
 
-	import Calendar from '$lib/components/Calendar.svelte';
 	import RoundButton from '$lib/components/RoundButton.svelte';
 
 	import {
@@ -85,5 +84,3 @@
 
 	<div class="m-auto" />
 </div>
-
-<Calendar {startOfWeek} />

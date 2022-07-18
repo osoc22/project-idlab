@@ -1,27 +1,29 @@
-import { CalendarEvent } from '$lib/types/calendarEvents';
+import { PlannedActivity, UpcommingActivity, type Activity } from '$lib/types/calendarEvents';
 import { derived, writable } from 'svelte/store';
 
-function createEvents() {
+function createActivityStore<T extends Activity>() {
 	// Structure of events: {[date]: CalendarEvent[]}
 	// TODO: fetch real events from server
-	const { subscribe, set, update } = writable<CalendarEvent[]>([]);
+	const { subscribe, set, update } = writable<T[]>([]);
 
 	return {
 		subscribe,
-		addEvent: (event: CalendarEvent) =>
+		addEvent: (event: T) =>
 			update((es) => {
 				es.push(event);
 
 				return es;
 			}),
-		deleteEvent: (event: CalendarEvent) => update((es) => es.filter((e) => !e.equals(event))),
-		updateEvent: (event: CalendarEvent) => update((es) => es.map((e) => (e == event ? event : e))),
+		deleteEvent: (activity: T) => update((as) => as.filter((act) => !act.equals(activity))),
+		updateEvent: (activity: T) =>
+			update((as) => as.map((act) => (act == activity ? activity : act))),
 		reset: () => set([])
 	};
 }
 
-export const calendarEvents = createEvents();
-export const eventsPerDay = derived(calendarEvents, ($calendarEvents) => {
+// Store for all upcomming activities
+export const upcommingActivites = createActivityStore<UpcommingActivity>();
+export const activitiesPerDay = derived(upcommingActivites, ($calendarEvents) => {
 	return $calendarEvents.reduce((acc, ev) => {
 		const dateString = ev.date.toString();
 		if (dateString in acc) {
@@ -30,42 +32,33 @@ export const eventsPerDay = derived(calendarEvents, ($calendarEvents) => {
 			acc[dateString] = [ev];
 		}
 		return acc;
-	}, {} as { [key: string]: CalendarEvent[] });
+	}, {} as { [key: string]: UpcommingActivity[] });
 });
 
-derived(calendarEvents, ($calendarEvents) => console.log($calendarEvents));
+export const pastActivities = createActivityStore<UpcommingActivity>();
+export const plannedActivities = createActivityStore<PlannedActivity>();
 
-interface EditEvent {
-	visible: boolean;
-	editMode: boolean;
-	event: CalendarEvent;
-}
+type ModifyActivity = { editMode: boolean; activity: PlannedActivity };
 
-function creatEditEvent() {
-	const { subscribe, set } = writable<EditEvent>({
-		visible: false,
-		editMode: false,
-		event: CalendarEvent.new()
-	});
+function createPlannedActivityStore() {
+	const { subscribe, set } = writable<ModifyActivity | undefined>();
 
 	return {
 		subscribe,
-		edit: (event: CalendarEvent) => {
+		edit: (activity: PlannedActivity) => {
 			set({
-				visible: true,
 				editMode: true,
-				event
+				activity
 			});
 		},
 		new: () => {
 			set({
-				visible: true,
 				editMode: false,
-				event: CalendarEvent.new()
+				activity: PlannedActivity.new()
 			});
 		},
-		reset: () => set({ visible: false, editMode: false, event: CalendarEvent.new() })
+		reset: () => set(undefined)
 	};
 }
 
-export const editEvent = creatEditEvent();
+export const modifyPlannedActivity = createPlannedActivityStore();

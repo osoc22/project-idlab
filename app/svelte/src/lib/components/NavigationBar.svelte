@@ -1,10 +1,12 @@
 <script>
 	import { Icon, Plus, Calendar } from 'svelte-hero-icons';
 
-	import { editEvent } from '$lib/stores/eventStore';
+	import { modifyPlannedActivity } from '$lib/stores/eventStore';
 
-	import Profile from '$lib/components/Profile.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Profile from '$lib/components/Profile.svelte';
+	import Modal from '$lib/components/Modal.svelte';
+	import ModifyPlannedActivity from '$lib/components/ModifyPlannedActivity.svelte';
 
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
@@ -38,10 +40,7 @@
 	<!-- Main Content -->
 	<main class="grow p-5">
 		<div class=" flex gap-4 justify-end ">
-			<Button on:click={editEvent.new}>
-				<Icon slot="icon" src={Plus} size="16" />
-				Create new event
-			</Button>
+			<Button icon={Plus} on:click={modifyPlannedActivity.new}>Create new event</Button>
 
 			<Profile firstname="Abel" lastname="de Bruijn" />
 		</div>
@@ -49,6 +48,10 @@
 		<slot />
 	</main>
 </div>
+
+<Modal visible={$modifyPlannedActivity !== undefined} on:close={modifyPlannedActivity.reset}>
+	<ModifyPlannedActivity />
+</Modal>
 
 <style lang="postcss">
 	.active {

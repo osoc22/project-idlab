@@ -1,7 +1,11 @@
 <script lang="ts">
+	import { type IconSource, Icon } from 'svelte-hero-icons';
+
 	export let filled = false;
 	export let focused = false;
 	export let destructive = false;
+
+	export let icon: IconSource | undefined = undefined;
 </script>
 
 <div
@@ -13,10 +17,15 @@
 >
 	{#if $$slots.icon}
 		<slot name="icon" />
+	{:else if icon}
+		<Icon src={icon} size="16" />
 	{/if}
-	<div class="div">
-		<slot />
-	</div>
+
+	{#if $$slots.default}
+		<div class="div">
+			<slot />
+		</div>
+	{/if}
 </div>
 
 <style lang="postcss">
