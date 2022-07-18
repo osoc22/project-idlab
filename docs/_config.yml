@@ -30,7 +30,10 @@ url: "https://osoc22.github.io" # the base hostname & protocol for your site, e.
 # Build settings
 remote_theme: just-the-docs/just-the-docs
 
-
+collections:
+  app:
+    label: app
+    files: [app/*]
 
 
 # Exclude from processing.
@@ -52,8 +55,6 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
-  - app/  # Svelte deploy should not be jekylled
-#  - assets/  # Same for the assets folder
 
 
 # Config for just-the-docs: 
