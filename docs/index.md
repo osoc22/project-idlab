@@ -1,4 +1,7 @@
-<link rel="stylesheet" href="assets/stylesheet.css">
+---
+title: Home
+nav_order: 1
+---
 
 *a.k.a. Powerful Personal Data, by Solid Concepts.*
 

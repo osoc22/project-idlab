@@ -1,0 +1,1 @@
+[{{ include.relpath | replace: include.base, "" }}](https://github.com/osoc22/project-idlab/tree/master/{{ include.base }}/{{ include.relpath }})
