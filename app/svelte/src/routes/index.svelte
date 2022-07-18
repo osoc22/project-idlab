@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	import { Temporal } from '@js-temporal/polyfill';
-	import { Icon, ArrowRight, ArrowLeft, Plus } from 'svelte-hero-icons';
+	import { Icon, ArrowRight, ArrowLeft, Plus, TrendingDown } from 'svelte-hero-icons';
 
 	import { editEvent } from '$lib/stores/eventStore';
 
@@ -18,7 +18,8 @@
 		getSolidDataset,
 		createThing,
 		getThingAll,
-		saveSolidDatasetAt
+		saveSolidDatasetAt,
+getThing
 	} from '@inrupt/solid-client';
 	import { fetch } from '@inrupt/solid-client-authn-browser';
 	import { SCHEMA_INRUPT, RDF, ICAL} from '@inrupt/vocab-common-rdf'; // == https://schema.org/name
@@ -90,7 +91,7 @@
 	}
 
 	async function SaveData(datasetName : string, thing: any) {
-		let datasetUrl = DatasetUrl("calendar");
+		let datasetUrl = DatasetUrl(datasetName);
 		let dataset : any;
 		try {
 			dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
@@ -111,6 +112,15 @@
 		}
 	}
 
+	async function UpdateSavedThing(datasetName : string, thingId: any, returnModifiedThing: any) {
+		let datasetUrl = DatasetUrl(datasetName);
+
+		let dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
+		let thing = await returnModifiedThing(buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))).build();
+		dataset = setThing(dataset, thing);
+
+		await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+	}
 
 	window.SaveData = SaveData;
 
@@ -125,9 +135,16 @@
 	}
 	window.SaveEvent = SaveEvent;
 
-	async function UpdateSavedEvent(startDate: Date, endDate: Date) {
-
+	async function UpdateSavedEvent(eventId: string, startDate: Date, endDate: Date) {
+		await UpdateSavedThing("calendar", eventId, (thing: any) => {
+			console.log(thing)
+			return thing
+				.setDatetime(ICAL.dtstart, startDate)
+				.setDatetime(ICAL.dtend, endDate)
+		});
 	}
+	window.UpdateSavedEvent = UpdateSavedEvent;
+
 
 	async function ListFromDataset(datasetName: string) {
 		let things = getThingAll(await getSolidDataset(DatasetUrl(datasetName), {fetch: fetch}), {});
@@ -144,6 +161,8 @@
 		var start = new Date();
 		var end = new Date(start.setHours(start.getHours() + 2));
 		await SaveEvent(start, end);
+
+
 	} 
 
 
