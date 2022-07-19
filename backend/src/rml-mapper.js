@@ -6,7 +6,7 @@ import fs from "fs/promises";
 const wrapper = new RMLMapper("./rmlmapper.jar", "./tmp", true);
 
 // Load the RML configuration file (in turtle format)
-const rml = await fs.readFile("mappings/map3.ttl", "utf-8");
+const rml = await fs.readFile("mappings/final_RML.ttl", "utf-8");
 
 
 export async function convertData(weatherJson) {
