@@ -42,44 +42,7 @@ getThing
 	// On load,
 	onMount(async () => {
 		gotoToday();
-
-		getData();
 	});
-
-	/**
-	 * Get data from pod
-	 */
-	async function getData() {
-		// https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/read-write-data/#write-a-new-soliddataset
-		let dataset: any; // eslint-disable-line
-		console.log('ytest');
-		let datasetname = 'test2';
-		let thing: any; // eslint-disable-line
-		console.log(`${podUrl}/${webID}/${datasetname}`);
-
-		try {
-			dataset = await getSolidDataset(`${podUrl}/${webID}/${datasetname}`, { fetch: fetch });
-			thing = getThingAll(dataset);
-			console.log(thing);
-
-			// eslint-disable-next-line
-		} catch (e: any) {
-			console.log(e);
-			if (e.response.status == 404) {
-				console.log('Dataset not found, creating new one');
-				dataset = createSolidDataset();
-				thing = buildThing(createThing({ name: 'thingname' }))
-					.addStringNoLocale(SCHEMA_INRUPT.name, 'Schema inrupt name')
-					.addUrl(RDF.type, 'https://schema.org/Thing')
-					.build();
-			}
-		}
-		console.log(thing);
-		dataset = setThing(dataset, thing);
-
-		await saveSolidDatasetAt(`${podUrl}/${webID}/${datasetname}`, dataset, { fetch: fetch });
-	}
-	window.getData = getData;
 
 	// Function that generates an absolute url from a dataset name
 	function DatasetUrl(datasetName : string) {
