@@ -27,7 +27,6 @@
 
 	function updateTimes() {
 		const newTimeStrings = JSON.stringify(timeStrings) ?? '';
-		console.log({ newTimeStrings, lastTimeStrings, t: newTimeStrings == lastTimeStrings });
 		if (newTimeStrings == lastTimeStrings) return;
 
 		timeStrings = timeStrings.filter((ts) => ts.from != '' || ts.to != '');

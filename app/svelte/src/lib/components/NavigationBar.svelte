@@ -1,12 +1,13 @@
 <script>
 	import { Icon, Plus, Calendar } from 'svelte-hero-icons';
 
-	import { modifyUnplannedActivity } from '$lib/stores/eventStore';
+	import { modifyPlannedActivity, modifyUnplannedActivity } from '$lib/stores/eventStore';
 
 	import Button from '$lib/components/Button.svelte';
 	import Profile from '$lib/components/Profile.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import ModifyUnplannedActivity from '$lib/components/ModifyUnplannedActivity.svelte';
+	import ModifyPlannedActivity from '$lib/components/ModifyPlannedActivity.svelte';
 
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
@@ -53,6 +54,10 @@
 
 <Modal visible={$modifyUnplannedActivity !== undefined} on:close={modifyUnplannedActivity.reset}>
 	<ModifyUnplannedActivity />
+</Modal>
+
+<Modal visible={$modifyPlannedActivity !== undefined} on:close={modifyPlannedActivity.reset}>
+	<ModifyPlannedActivity />
 </Modal>
 
 <style lang="postcss">

@@ -42,6 +42,7 @@ function createModifyActivityStore<T extends Activity>(newActivity: () => T) {
 
 	return {
 		subscribe,
+		set,
 		edit: (activity: T) => {
 			set({
 				editMode: true,

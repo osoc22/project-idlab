@@ -92,7 +92,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 	}
 
 	get isAllDay() {
-		return this.time !== undefined;
+		return !this.time || !this.time.from || !this.time.to;
 	}
 
 	set isAllDay(value: boolean) {

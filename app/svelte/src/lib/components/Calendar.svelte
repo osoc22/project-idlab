@@ -6,7 +6,7 @@
 	import Weather from '$lib/components/Weather.svelte';
 
 	import { activitiesPerDay, modifyPlannedActivity } from '$lib/stores/eventStore';
-	import { TIME_ZONE } from '$lib/types/calendarEvents';
+	import { PlannedActivity, TIME_ZONE } from '$lib/types/calendarEvents';
 
 	export let startOfWeek: Temporal.PlainDate;
 	const today = Temporal.Now.plainDateISO(TIME_ZONE);
@@ -16,6 +16,13 @@
 
 	$: {
 		startOfWeek && (week = dayOfWeekString.map((_, index) => startOfWeek.add({ days: index })));
+	}
+
+	function newActivityOn(day: Temporal.PlainDate) {
+		modifyPlannedActivity.set({
+			editMode: false,
+			activity: PlannedActivity.new(day)
+		});
 	}
 </script>
 
@@ -38,7 +45,7 @@
 						<Activity {activity} on:click={() => modifyPlannedActivity.edit(activity)} />
 					{/each}
 				{:else}
-					<Button filled on:click={modifyPlannedActivity.new}>Create event</Button>
+					<Button filled on:click={() => newActivityOn(day)}>Create event</Button>
 				{/if}
 			</div>
 		</div>
