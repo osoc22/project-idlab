@@ -67,32 +67,55 @@ removeThing
 		gotoToday();
 	});
 
-	// Function that generates an absolute url from a dataset name
+
+
+
+	/**
+	 * Returns absolute url to dataset
+	 * 
+	 * @param 	{string} datasetName	name of the dataset you're looking for
+	 * @returns	{string} The datasetName prepended with podUrl and webId
+	 * */ 
+	
 	function DatasetUrl(datasetName : string) {
 		return `${podUrl}/${webID}/${datasetName}`;
 	}
+	
 
-	// Function that returns a new Thing's builder, with its RDF type and id set
-	// If an id is provided to be used as name, use that.
-	// If there isn't, use the current full Datetime, which will be unique!
-	// (unless the same user uses two devices and makes two updates at the EXACT same millisecond
-	// but look if they try that they're trying to break it so they get what the want)
-	// Set the type url, unless one is given, in which case make a base Thing
-	// And add any data that's been given!
+	/**
+	 * Returns a newly generated thing, populated with :
+	 * - type, 
+	 * - (optionally randomly generated) an id 
+	 * - (optionally) any other data
+	 * 
+	 * @param 	{string} 	type 	url to the objects scheme. Defaults to Thing (https://schema.org/Thing)
+	 * @param 	{object}	data   	any data that has to be added to the Thing. See @see dataToThing
+	 * @param 	{string}	id		the name/id for the Thing. If an id is provided to be used as name, use that.
+	 * 								(If there isn't, use the current full Datetime, which will be unique,
+	 * 								 unless the same user uses two devices and makes two updates at the EXACT same millisecond
+	 * 								 but look if they try that they're trying to break it so they get what the want)
+	 * @returns	{object}	Thing built with all the provided data
+	 */
 	function newThingBuilder(type = "https://schema.org/Thing", data = {}, id = (Date.now().toString())) {
 		let newThing = buildThing(createThing({ "name": id }))
-			.setUrl(RDF.type, type) ; // Set type
+			.setUrl(RDF.type, type);  // Set type
 		return dataToThing(newThing, data);
 	}
 
-	// This inserts any data from the data object (structured as {rdf_type_url: thing_value_for_this_property}) 
-	// into the passed thing builder, then returns the built thing
-	// Why use this and not manually add everything?
-	/*
-	   	- Automatically skips empty values
-	   	- When changing what function to use to set type (e.g. setDatetime), one change will change it everywhere
-		- Generally less typing work!
-	*/
+	/**
+	 * Inserts data into a Thing builder, overwriting if existing, appending if not.
+	 * Cool things this function achieves:
+	 * - Automatically skips empty values
+	 * - When changing what function to use to set type (e.g. thingBuilder.setDatetime for https://schema.org/startDate), 
+	 * 		one change will change it everywhere
+	 * - Generally less typing work!
+	 * 
+	 * @param 	{object} thingBuilder	Thing builder. You can get this from running buildThing(thingObject)
+	 * 										Thing builder gets used to allow this to work with @see newThingBuilder 
+	 * 										as well as @see updateSavedThing
+	 * @param 	{object} data	 Data to be added to Thing. Structured as {rdf_type_url: thing_value_for_this_property}
+	 * @returns {object} Thing.build(), including any new date.
+	 */
 	function dataToThing(thingBuilder: any, data: object) {
 		var types = Object.keys(data);
 
@@ -117,35 +140,42 @@ removeThing
 		return thingBuilder.build();
 	}
 
-	// Function that saves a passed Thing to the dataset with the passed name
-	// Oh and it'll create the dataset if it doesn't already exist!
+	/**
+	 * Saves a thing object, to a dataset with specified name
+	 * Will also create the dataset if it doesn't exist yet!
+	 * 
+	 * @param {string} datasetName	Name of the dataset to save to
+	 * @param {object} thing	Object of thing to save
+	 * 
+	 * @returns {promise}	Promise of saveSolidDatasetAt
+	 */
 	async function saveThing(datasetName : string, thing: any) {
 		let datasetUrl = DatasetUrl(datasetName);
 		let dataset : any;
 		try {
-			console.log("Trying save")
 			dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 			dataset = setThing(dataset, thing);
-			await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+			return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 
 		} catch (e: any) {
-			console.log("error caughgt")
 			// If dataset doesn't exist yet, repeat functions
-			//e.response.status == 404 || e.response.status == 501) {
+			// TODO, specifcy error codes? e.response.status == 404 || e.response.status == 501
 			dataset = createSolidDataset();
 			await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
-			await saveThing(datasetName, thing);
+			return saveThing(datasetName, thing);
 		}
 	}
 	window.saveThing = saveThing;
 
-	// Function that find a thing by id in dataset by name, and updates  
-		/*
-	   	1: Finds the dataset with the specified dataSetname 
-	   	2: In that dataset, find the thing with the specified thingId
-	   	3: Then, pass an object of {rdf_type_url: thing_value_for_this_property}
-		*/
-	// 	And then your thing will automatically get updated!
+	/**
+	 * Updates data in Thing, Thing selected by id in dataset selected by name
+	 * 
+	 * @param {string} 	datasetName	Name of the dataset to save to
+	 * @param {string}	thingId		Id/name of the Thing to save to
+	 * @param {object}	changes		Data to update in the Thing ( @see dataToThing )
+	 * 
+	 * @returns {promise} Promise of @see saveThing
+	 */
 	async function updateSavedThing(datasetName : string, thingId: any, changes: {}) {
 		let datasetUrl = DatasetUrl(datasetName);
 		let dataset = (await getSolidDataset(datasetUrl, { fetch: fetch }));
@@ -153,23 +183,40 @@ removeThing
 		let existingThing = getThing(dataset, `${datasetUrl}#${thingId}`);
 		let modifiedThing = dataToThing(buildThing(existingThing), changes)
 		
-		await saveThing(datasetName, modifiedThing);
+		return saveThing(datasetName, modifiedThing);
 	}
 	window.updateSavedThing = updateSavedThing;
 
 
-	// This function removes a saved thing with id thingId, from the dataset with the specified datasetName
+	/**
+	 * Removes a saved Thing by id, from dataset found by name
+	 * 
+	 * @param {string} datasetName	Name of the dataset where the thing is in
+	 * @param {string} thingId	Id/name of the Thing to delete
+	 * 
+	 * @returns {promise} promose of @function saveSolidDatasetAt
+	 */
 	async function removeSavedThing(datasetName: string, thingId: any) {
 		let datasetUrl = DatasetUrl(datasetName);
 		let dataset = (await getSolidDataset(datasetUrl, { fetch: fetch }));
 		let thing = getThing(dataset, `${datasetUrl}#${thingId}`);
 
 		dataset = await removeThing(dataset, thing);
-		await saveSolidDatasetAt(datasetUrl, dataset, {fetch: fetch})
+		return saveSolidDatasetAt(datasetUrl, dataset, {fetch: fetch})
 	}
 	window.removeSavedThing = removeSavedThing;
 
-	// Create a new event, save it to calendar dataset
+	/**
+	 * Creates a new Event Thing, saves it to calendar dataset. See https://schema.org/Event for more information.
+	 * 
+	 * @param {string}	description		Optional. User side about/description/text
+	 * @param {Date}	startDate		Start DateTime of event
+	 * @param {Date}	endDate			End DateTime of event
+	 * @param {string}	location		Optional. Location of the event
+	 * @param {string}	activityType	Optional. Custom field
+	 * 
+	 * @returns	{promise} Promise of @function saveThing
+	 */
 	async function saveNewEvent(description: string = "", startDate: Date, endDate: Date, location: string = "", activityType: string = "") {
 		let thingEvent = newThingBuilder(
 			schema.event.self, 
@@ -181,34 +228,55 @@ removeThing
 				[schema.event.activityType]:  activityType
 			});
 
-		await saveThing("calendar", thingEvent);
+		return saveThing("calendar", thingEvent);
 	}
 	window.saveNewEvent = saveNewEvent;
 
-	// Update an existing event
+
+	/**
+	 * Updates existing Event Thing
+	 * 
+	 * @param {string} eventId	Thing id/name of Event Thing to change
+	 * @param {object} changes	Data to change. @see dataToThing
+	 * 
+	 * @returns {promise} Promise of @see updateSavedThing
+	 */
 	async function updateSavedEvent(eventId: string, changes: {}) {
-		await updateSavedThing("calendar", eventId, changes);
+		return updateSavedThing("calendar", eventId, changes);
 	}
 	window.updateSavedEvent = updateSavedEvent;
 
+	/**
+	 * Removes existing Event Thing
+	 * 
+	 * @param {string} eventId	Thing id/name of Event Thing to remove
+	 * 
+	 * @returns {promise} Promise of @see removeSavedThing
+	 */
 	async function removeSavedEvent(eventId: string) {
-		await removeSavedThing("calendar", eventId);
+		return removeSavedThing("calendar", eventId);
 	}
 	window.removeSavedEvent = removeSavedEvent;
 
-	// Get all things from dataset with name datasetName
-	// If returnAsArray is true, do a clean return (mostly for use in code)
-	// if returnAsArray is false (default), log to ocnsole (mostly for use in debugging)
-	/* Output:
-		thing-id-as-string
-		|> thing as object
-		-----
-		other-thing-id-as-string
-		|> other-thing as object
-		-----
-	*/
+	/**
+	 * List all Things in a dataset (specified by name)
+	 * 
+	 * @param {string} datasetName 	Name of the dataset of which to list contents
+	 * @param {bool} returnAsArray	Set as false for output A (default), set as true for output B
+	 * 
+	 * @returns {console log} output A (returnAsArray false), logs Dataset contents to console, mostly for use in debugging
+	 * 		Structure:
+	 *	 		thing-id-as-string
+	 *	 		|> thing as object
+	 *	 		-----
+	 *	 	  	thing-id-as-string
+	 *	 		|> thing as object
+	 *	 		-----
+	 * 
+	 * @returns {array} output B (returnAsArray true), returns array of Thing objects, mostly for use in code
+	 */
 	async function listThingsFromDataset(datasetName: string, returnAsArray = false) {
-		let things = getThingAll(await getSolidDataset(DatasetUrl(datasetName), {fetch: fetch}), {});
+		let things = await getThingAll(await getSolidDataset(DatasetUrl(datasetName), {fetch: fetch}), {});
 		if (returnAsArray) return things;
 		else {
 			things.forEach((thing) => {
