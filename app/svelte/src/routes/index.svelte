@@ -1,10 +1,13 @@
-<script context="module">
-	import { base } from '$app/paths';
+<script lang="ts">
+import { goto } from "$app/navigation";
+import {base} from "$app/paths"
 
-	export async function load() {
-		return {
-			status: 302,
-			redirect: base + '/upcomming'
-		};
-	}
+import { onMount } from "svelte";
+import user from "$lib/stores/userStore"
+
+	onMount(() => {
+		if ($user.userSession.isLoggedIn) {
+			goto(base + '/upcomming')
+		}
+	}) 
 </script>
