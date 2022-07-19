@@ -72,15 +72,49 @@ removeThing
 		return `${podUrl}/${webID}/${datasetName}`;
 	}
 
-	// Function to be used when creating a new Thing
+	// Function that returns a new Thing's builder, with its RDF type and id set
 	// If an id is provided to be used as name, use that.
 	// If there isn't, use the current full Datetime, which will be unique!
 	// (unless the same user uses two devices and makes two updates at the EXACT same millisecond
 	// but look if they try that they're trying to break it so they get what the want)
 	// Set the type url, unless one is given, in which case make a base Thing
-	function newThing(type = "https://schema.org/Thing", id = (Date.now().toString())) {
-		return buildThing(createThing({ "name": id }))
-			.setUrl(RDF.type, type)
+	// And add any data that's been given!
+	function newThingBuilder(type = "https://schema.org/Thing", data = {}, id = (Date.now().toString())) {
+		let newThing = buildThing(createThing({ "name": id }))
+			.setUrl(RDF.type, type) ; // Set type
+		return dataToThing(newThing, data);
+	}
+
+	// This inserts any data from the data object (structured as {rdf_type_url: thing_value_for_this_property}) 
+	// into the passed thing builder, then returns the built thing
+	// Why use this and not manually add everything?
+	/*
+	   	- Automatically skips empty values
+	   	- When changing what function to use to set type (e.g. setDatetime), one change will change it everywhere
+		- Generally less typing work!
+	*/
+	function dataToThing(thingBuilder: any, data: object) {
+		var types = Object.keys(data);
+
+		types.forEach(type => {
+			let value = data[type];
+			if (!value) return;
+			
+			switch(type) {
+				// Date parser
+				case schema.startDate_type || schema.endDate_type:
+					thingBuilder.setDatetime(type, value);
+				// Text parsers 
+				case schema.text_data_type || schema.about_type || schema.location_type || schema.event.activityType:
+					thingBuilder.setStringNoLocale(type, value);
+				
+				default:
+					thingBuilder.setStringNoLocale(type, value);
+			}
+		});
+		
+		// Return built thing
+		return thingBuilder.build();
 	}
 
 	// Function that saves a passed Thing to the dataset with the passed name
@@ -105,40 +139,21 @@ removeThing
 	}
 	window.saveThing = saveThing;
 
-	/*	This function is a bit funky
+	// Function that find a thing by id in dataset by name, and updates  
+		/*
 	   	1: Finds the dataset with the specified dataSetname 
 	   	2: In that dataset, find the thing with the specified thingId
-	   	3: Then, pass an array of [[type, value]]
+	   	3: Then, pass an object of {rdf_type_url: thing_value_for_this_property}
 		*/
 	// 	And then your thing will automatically get updated!
 	async function updateSavedThing(datasetName : string, thingId: any, changes: {}) {
 		let datasetUrl = DatasetUrl(datasetName);
 		let dataset = (await getSolidDataset(datasetUrl, { fetch: fetch }));
-		let thingBuilder = buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))
-
-
-		var types = Object.keys(changes);
-
-		types.forEach(type => {
-			let value = changes[type];
-			
-			switch(type) {
-				// Date parser
-				case schema.startDate_type || schema.endDate_type:
-					thingBuilder.setDatetime(type, value);
-				// Text parsers 
-				case schema.text_data_type || schema.about_type || schema.location_type || schema.event.activityType:
-					thingBuilder.setStringNoLocale(type, value);
-				
-				default:
-					thingBuilder.setStringNoLocale(type, value);
-			}
-		});
 		
-		let thing = thingBuilder.build();
-		//let thing = (await returnModifiedThing(buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))).build());
+		let existingThing = getThing(dataset, `${datasetUrl}#${thingId}`);
+		let modifiedThing = dataToThing(buildThing(existingThing), changes)
 		
-		await saveThing(datasetName, thing);
+		await saveThing(datasetName, modifiedThing);
 	}
 	window.updateSavedThing = updateSavedThing;
 
@@ -154,32 +169,17 @@ removeThing
 	}
 	window.removeSavedThing = removeSavedThing;
 
-	// [[thing, type, value], []...]
-	function setThingIfPassed(values: any[]) {
-		
-		for (var i = 0; i < values.length; i++) {
-			var value = values[i];
-
-			var thing = value[0];
-			var type = value[1];
-			var value = value[2];
-			/*
-		switch(type):
-			case schema.startDate_type || schema.¨
-			}*/
-		} 
-	}
-
-
 	// Create a new event, save it to calendar dataset
 	async function saveNewEvent(description: string = "", startDate: Date, endDate: Date, location: string = "", activityType: string = "") {
-		let thingEvent = newThing(schema.event.self)
-			.addStringNoLocale(schema.event.about, description)
-			.addDatetime(schema.event.startDate, startDate)
-			.addDatetime(schema.event.endDate, endDate)
-			.addStringNoLocale(schema.event.location, location)
-			.addStringNoLocale(schema.event.activityType, activityType)
-			.build();
+		let thingEvent = newThingBuilder(
+			schema.event.self, 
+			{
+				[schema.event.about]: description,
+				[schema.event.startDate]: startDate,
+				[schema.event.endDate]: endDate,
+				[schema.event.location]: location,
+				[schema.event.activityType]:  activityType
+			});
 
 		await saveThing("calendar", thingEvent);
 	}
