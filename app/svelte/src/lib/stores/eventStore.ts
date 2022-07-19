@@ -1,9 +1,7 @@
-import { PlannedActivity, UpcommingActivity, type Activity } from '$lib/types/calendarEvents';
+import { UnplannedActivity, PlannedActivity, type Activity } from '$lib/types/calendarEvents';
 import { derived, writable } from 'svelte/store';
 
 function createActivityStore<T extends Activity>() {
-	// Structure of events: {[date]: CalendarEvent[]}
-	// TODO: fetch real events from server
 	const { subscribe, set, update } = writable<T[]>([]);
 
 	return {
@@ -22,8 +20,8 @@ function createActivityStore<T extends Activity>() {
 }
 
 // Store for all upcomming activities
-export const upcommingActivites = createActivityStore<UpcommingActivity>();
-export const activitiesPerDay = derived(upcommingActivites, ($calendarEvents) => {
+export const plannedActivities = createActivityStore<PlannedActivity>();
+export const activitiesPerDay = derived(plannedActivities, ($calendarEvents) => {
 	return $calendarEvents.reduce((acc, ev) => {
 		const dateString = ev.date.toString();
 		if (dateString in acc) {
@@ -32,20 +30,19 @@ export const activitiesPerDay = derived(upcommingActivites, ($calendarEvents) =>
 			acc[dateString] = [ev];
 		}
 		return acc;
-	}, {} as { [key: string]: UpcommingActivity[] });
+	}, {} as { [key: string]: PlannedActivity[] });
 });
 
-export const pastActivities = createActivityStore<UpcommingActivity>();
-export const plannedActivities = createActivityStore<PlannedActivity>();
+export const unplannedActivities = createActivityStore<UnplannedActivity>();
 
-type ModifyActivity = { editMode: boolean; activity: PlannedActivity };
+type ModifyActivity<T extends Activity> = { editMode: boolean; activity: T };
 
-function createPlannedActivityStore() {
-	const { subscribe, set } = writable<ModifyActivity | undefined>();
+function createModifyActivityStore<T extends Activity>(newActivity: () => T) {
+	const { subscribe, set } = writable<ModifyActivity<T> | undefined>();
 
 	return {
 		subscribe,
-		edit: (activity: PlannedActivity) => {
+		edit: (activity: T) => {
 			set({
 				editMode: true,
 				activity
@@ -54,11 +51,12 @@ function createPlannedActivityStore() {
 		new: () => {
 			set({
 				editMode: false,
-				activity: PlannedActivity.new()
+				activity: newActivity()
 			});
 		},
 		reset: () => set(undefined)
 	};
 }
 
-export const modifyPlannedActivity = createPlannedActivityStore();
+export const modifyUnplannedActivity = createModifyActivityStore(UnplannedActivity.new);
+export const modifyPlannedActivity = createModifyActivityStore(PlannedActivity.new);

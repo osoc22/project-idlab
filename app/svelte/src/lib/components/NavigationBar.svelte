@@ -1,12 +1,12 @@
 <script>
 	import { Icon, Plus, Calendar } from 'svelte-hero-icons';
 
-	import { modifyPlannedActivity } from '$lib/stores/eventStore';
+	import { modifyUnplannedActivity } from '$lib/stores/eventStore';
 
 	import Button from '$lib/components/Button.svelte';
 	import Profile from '$lib/components/Profile.svelte';
 	import Modal from '$lib/components/Modal.svelte';
-	import ModifyPlannedActivity from '$lib/components/ModifyPlannedActivity.svelte';
+	import ModifyUnplannedActivity from '$lib/components/ModifyUnplannedActivity.svelte';
 
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
@@ -42,7 +42,7 @@
 	<!-- Main Content -->
 	<main class="grow p-5">
 		<div class=" flex gap-4 justify-end ">
-			<Button icon={Plus} on:click={modifyPlannedActivity.new}>Create new event</Button>
+			<Button icon={Plus} on:click={modifyUnplannedActivity.new}>Create new event</Button>
 
 			<Profile firstname="Abel" lastname="de Bruijn" />
 		</div>
@@ -51,8 +51,8 @@
 	</main>
 </div>
 
-<Modal visible={$modifyPlannedActivity !== undefined} on:close={modifyPlannedActivity.reset}>
-	<ModifyPlannedActivity />
+<Modal visible={$modifyUnplannedActivity !== undefined} on:close={modifyUnplannedActivity.reset}>
+	<ModifyUnplannedActivity />
 </Modal>
 
 <style lang="postcss">

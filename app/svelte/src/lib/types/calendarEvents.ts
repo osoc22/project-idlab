@@ -18,7 +18,7 @@ export interface Activity extends Identifiable {
 	setToAllDay(): void;
 }
 
-export class PlannedActivity extends Identifiable implements Activity {
+export class UnplannedActivity extends Identifiable implements Activity {
 	title: string;
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
@@ -64,11 +64,11 @@ export class PlannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(dates: Temporal.PlainDate[] = [], times: TimeFromTo[] = []) {
-		return new PlannedActivity('', 'Work', new Set(['Sun']), dates, times);
+		return new UnplannedActivity('', 'Work', new Set(['Sun']), dates, times);
 	}
 }
 
-export class UpcommingActivity extends Identifiable implements Activity {
+export class PlannedActivity extends Identifiable implements Activity {
 	title: string;
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
@@ -143,5 +143,9 @@ export class UpcommingActivity extends Identifiable implements Activity {
 
 	setToTime(event: Event) {
 		this.toZonedTime(event, 'to');
+	}
+
+	static new(date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE), time?: TimeFromTo) {
+		return new PlannedActivity('', 'Work', new Set(['Sun']), date, time);
 	}
 }

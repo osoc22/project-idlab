@@ -1,31 +1,11 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 
-	import { modifyPlannedActivity, plannedActivities } from '$lib/stores/eventStore';
-	import { PlannedActivity, TIME_ZONE } from '$lib/types/calendarEvents';
-	import { Temporal } from '@js-temporal/polyfill';
-	import { onMount } from 'svelte';
+	import { modifyUnplannedActivity, unplannedActivities } from '$lib/stores/eventStore';
 	import { Pencil } from 'svelte-hero-icons';
-
-	onMount(() => {
-		if ($plannedActivities.length) return;
-
-		const d1 = Temporal.Now.plainDateISO(TIME_ZONE);
-		const d2 = d1.add({ days: 1 });
-		const d3 = d1.add({ days: 2 });
-
-		const t = Temporal.Now.plainTimeISO(TIME_ZONE);
-		const t1 = { from: t, to: t.add({ minutes: 30 }) };
-		const t2 = { from: t.add({ minutes: 90 }), to: t.add({ minutes: 180 }) };
-		const e1 = new PlannedActivity('Test1', 'Work', new Set(['Windy', 'Rain']), [d1, d2]);
-		const e2 = new PlannedActivity('Test2', 'Fun', new Set(['Windy', 'Rain']), [d1, d3], [t1, t2]);
-
-		plannedActivities.add(e1);
-		plannedActivities.add(e2);
-	});
 </script>
 
-{#each $plannedActivities as plannedActivity}
+{#each $unplannedActivities as plannedActivity}
 	<div
 		class="max-w-3xl mx-auto rounded-md bg-blue-50 border-blue-700 text-blue-900 border-2 mb-2 p-4"
 	>
@@ -63,7 +43,7 @@
 		</div>
 
 		<div class="flex justify-end">
-			<Button on:click={() => modifyPlannedActivity.edit(plannedActivity)} filled icon={Pencil}>
+			<Button on:click={() => modifyUnplannedActivity.edit(plannedActivity)} filled icon={Pencil}>
 				Edit
 			</Button>
 		</div>

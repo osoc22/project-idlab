@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { modifyPlannedActivity, plannedActivities } from '$lib/stores/eventStore';
+	import { modifyUnplannedActivity, unplannedActivities } from '$lib/stores/eventStore';
 
 	import Button from './Button.svelte';
 	import Input from './input/Input.svelte';
@@ -10,7 +10,7 @@
 
 	import { Sun, LightningBolt, Briefcase } from 'svelte-hero-icons';
 
-	let newActivity = $modifyPlannedActivity;
+	let newActivity = $modifyUnplannedActivity;
 	$: dateStrings = newActivity?.activity.dates.map((act) => act.toString());
 	$: timeStrings = newActivity?.activity.times.map(({ from, to }) => {
 		return {
@@ -23,24 +23,24 @@
 		if (!newActivity) return;
 
 		if (newActivity.editMode) {
-			plannedActivities.updateActivity(newActivity.activity);
+			unplannedActivities.updateActivity(newActivity.activity);
 		} else {
-			plannedActivities.add(newActivity.activity);
+			unplannedActivities.add(newActivity.activity);
 		}
 
-		modifyPlannedActivity.reset();
+		modifyUnplannedActivity.reset();
 	}
 
 	function destroyActivity() {
 		if (newActivity?.editMode) {
-			plannedActivities.deleteActivity(newActivity.activity);
+			unplannedActivities.deleteActivity(newActivity.activity);
 		}
 
-		modifyPlannedActivity.reset();
+		modifyUnplannedActivity.reset();
 	}
 </script>
 
-{#if newActivity && $modifyPlannedActivity}
+{#if newActivity && $modifyUnplannedActivity}
 	<form on:submit|preventDefault={handleSubmit}>
 		<h3 class="text-xl border-b border-b-black/50 border-solid mb-4 pb-2 capitalize">
 			{newActivity.editMode ? 'Edit' : 'Create New'} activity
