@@ -184,32 +184,23 @@ removeThing
 		var start = new Date();
 		var end = new Date();
 		end.setHours(end.getHours() + 2);
-		let createEvents = [];
 
-		createEvents.push(saveNewEvent(start, end));  // To be updated
-		createEvents.push(saveNewEvent(start, end));  // This one just stays
-		createEvents.push(saveNewEvent(start, end));  // To be removed
+		await saveNewEvent(start, end);  // To be updated
+		await saveNewEvent(start, end);  // This one just stays
+		await saveNewEvent(start, end);  // To be removed
 
-		Promise.all(createEvents).then(async (values) => {
-			// Set the first events start and end to now
-			// NOTE: don't forget to () your await because otherwise it doesn't work!
-			try {
-				listThingsFromDataset("calendar", true).then(async (events) => {
-					console.log(events)
-					let firstEventUrl = events[0].url.split("#")[1];
-					let thirdEventUrl = events[2].url.split("#")[1];
-					
-					updateSavedEvent(firstEventUrl, new Date(), new Date()).then(() => {
-						removeSavedEvent(thirdEventUrl);
 
-					});
-					
-				});
-				
-			} catch (e) {
-				console.error(e);
-			}
-		});
+		// Set the first events start and end to now
+		// NOTE: don't forget to () your await because otherwise it doesn't work!
+
+		let events = listThingsFromDataset("calendar", true)
+		console.log(events)
+		let firstEventUrl = events[0].url.split("#")[1];
+		let thirdEventUrl = events[2].url.split("#")[1];
+		
+		await updateSavedEvent(firstEventUrl, new Date(), new Date());
+		await removeSavedEvent(thirdEventUrl);
+		
 
 		//await testerProgress("calendar", "after new Event (startdate now, enddate now + 2h), before update");
 
