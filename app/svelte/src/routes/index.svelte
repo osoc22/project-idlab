@@ -80,7 +80,7 @@ removeThing
 	// Set the type url, unless one is given, in which case make a base Thing
 	function newThing(type = "https://schema.org/Thing", id = (Date.now().toString())) {
 		return buildThing(createThing({ "name": id }))
-			.addUrl(RDF.type, type)
+			.setUrl(RDF.type, type)
 	}
 
 	// Function that saves a passed Thing to the dataset with the passed name
@@ -140,13 +140,25 @@ removeThing
 	}
 	window.removeSavedThing = removeSavedThing;
 
-	function addOrSetToThingIfPassed() {
+	// [[thing, type, value], []...]
+	function setThingIfPassed(values: any[]) {
 		
+		for (var i = 0; i < values.length; i++) {
+			var value = values[i];
+
+			var thing = value[0];
+			var type = value[1];
+			var value = value[2];
+			/*
+		switch(type):
+			case schema.startDate_type || schema.¨
+			}*/
+		} 
 	}
 
 
 	// Create a new event, save it to calendar dataset
-	async function saveNewEvent(description: string = "", startDate: Date = new Date(), endDate: Date = new Date(), location: string = "", activityType: string) {
+	async function saveNewEvent(description: string = "", startDate: Date, endDate: Date, location: string = "", activityType: string = "") {
 		let thingEvent = newThing(schema.event.self)
 			.addStringNoLocale(schema.event.about, description)
 			.addDatetime(schema.event.startDate, startDate)
@@ -206,9 +218,9 @@ removeThing
 		var end = new Date();
 		end.setHours(end.getHours() + 2);
 
-		await saveNewEvent(start, end);  // To be updated
-		await saveNewEvent(start, end);  // This one just stays
-		await saveNewEvent(start, end);  // To be removed
+		await saveNewEvent("2 hours, starting now!", start, end, "here", "random");  // To be updated
+		await saveNewEvent("2 hours, starting now!",  start, end, "here");  // This one just stays
+		await saveNewEvent("2 hours, starting now!", start, end);  // To be removed
 
 
 		// Set the first events start and end to now
