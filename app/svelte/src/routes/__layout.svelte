@@ -1,13 +1,23 @@
 <script lang="ts">
 	import '../app.css';
+	import { onMount } from 'svelte';
+
+	import setupActivities from '$lib/hardcoded/setupActivities';
 
 	import Login from '$lib/components/Login.svelte';
 	import NavigationBar from '$lib/components/NavigationBar.svelte';
 
-	import { getDefaultSession } from '@inrupt/solid-client-authn-browser';
+	import user from '$lib/stores/userStore';
+
+	onMount(() => {
+		user.init();
+		setupActivities();
+	});
 </script>
 
-{#if getDefaultSession()?.info.isLoggedIn || true}
+{#if $user.loading}
+	<p>We are Loading</p>
+{:else if $user.userSession.isLoggedIn}
 	<NavigationBar>
 		<slot />
 	</NavigationBar>

@@ -1,28 +1,34 @@
-import { CalendarEvent } from '$lib/types/calendarEvents';
+import {
+	UnplannedActivity,
+	PlannedActivity,
+	type Activity,
+	TIME_ZONE
+} from '$lib/types/calendarEvents';
+import { Temporal } from '@js-temporal/polyfill';
 import { derived, writable } from 'svelte/store';
 
-function createEvents() {
-	// Structure of events: {[date]: CalendarEvent[]}
-	// TODO: fetch real events from server
-	const { subscribe, set, update } = writable<CalendarEvent[]>([]);
+function createActivityStore<T extends Activity>() {
+	const { subscribe, set, update } = writable<T[]>([]);
 
 	return {
 		subscribe,
-		addEvent: (event: CalendarEvent) =>
+		add: (event: T) =>
 			update((es) => {
 				es.push(event);
 
 				return es;
 			}),
-		deleteEvent: (event: CalendarEvent) => update((es) => es.filter((e) => !e.equals(event))),
-		updateEvent: (event: CalendarEvent) => update((es) => es.map((e) => (e == event ? event : e))),
+		deleteActivity: (activity: T) => update((as) => as.filter((act) => !act.equals(activity))),
+		updateActivity: (activity: T) =>
+			update((as) => as.map((act) => (act == activity ? activity : act))),
 		reset: () => set([])
 	};
 }
 
-export const calendarEvents = createEvents();
-export const eventsPerDay = derived(calendarEvents, ($calendarEvents) => {
-	return $calendarEvents.reduce((acc, ev) => {
+// Store for all planned activities
+export const plannedActivities = createActivityStore<PlannedActivity>();
+export const activitiesPerDay = derived(plannedActivities, ($activities) => {
+	return $activities.reduce((acc, ev) => {
 		const dateString = ev.date.toString();
 		if (dateString in acc) {
 			acc[dateString].push(ev);
@@ -30,42 +36,39 @@ export const eventsPerDay = derived(calendarEvents, ($calendarEvents) => {
 			acc[dateString] = [ev];
 		}
 		return acc;
-	}, {} as { [key: string]: CalendarEvent[] });
+	}, {} as { [key: string]: PlannedActivity[] });
+});
+export const pastActivities = derived(plannedActivities, ($activities) => {
+	return $activities.filter(
+		($activity) => Temporal.Now.plainDateISO(TIME_ZONE).until($activity.date).days <= 0
+	);
 });
 
-derived(calendarEvents, ($calendarEvents) => console.log($calendarEvents));
+export const unplannedActivities = createActivityStore<UnplannedActivity>();
 
-interface EditEvent {
-	visible: boolean;
-	editMode: boolean;
-	event: CalendarEvent;
-}
+type ModifyActivity<T extends Activity> = { editMode: boolean; activity: T };
 
-function creatEditEvent() {
-	const { subscribe, set } = writable<EditEvent>({
-		visible: false,
-		editMode: false,
-		event: CalendarEvent.new()
-	});
+function createModifyActivityStore<T extends Activity>(newActivity: () => T) {
+	const { subscribe, set } = writable<ModifyActivity<T> | undefined>();
 
 	return {
 		subscribe,
-		edit: (event: CalendarEvent) => {
+		set,
+		edit: (activity: T) => {
 			set({
-				visible: true,
 				editMode: true,
-				event
+				activity
 			});
 		},
 		new: () => {
 			set({
-				visible: true,
 				editMode: false,
-				event: CalendarEvent.new()
+				activity: newActivity()
 			});
 		},
-		reset: () => set({ visible: false, editMode: false, event: CalendarEvent.new() })
+		reset: () => set(undefined)
 	};
 }
 
-export const editEvent = creatEditEvent();
+export const modifyUnplannedActivity = createModifyActivityStore(UnplannedActivity.new);
+export const modifyPlannedActivity = createModifyActivityStore(PlannedActivity.new);

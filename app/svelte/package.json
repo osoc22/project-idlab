@@ -21,6 +21,7 @@
 		"@typescript-eslint/parser": "^5.27.0",
 		"autoprefixer": "^10.4.7",
 		"buffer": "^6.0.3",
+		"esbuild": "^0.14.49",
 		"eslint": "^8.16.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^4.0.0",
@@ -43,8 +44,8 @@
 		"@inrupt/solid-client": "^1.23.1",
 		"@inrupt/solid-client-authn-browser": "^1.12.1",
 		"@inrupt/vocab-common-rdf": "^1.0.5",
-		"@sveltejs/adapter-static": "^1.0.0-next.35",
 		"@js-temporal/polyfill": "^0.4.1",
+		"@sveltejs/adapter-static": "^1.0.0-next.35",
 		"@tailwindcss/line-clamp": "^0.4.0",
 		"svelte-hero-icons": "^4.1.3"
 	},
