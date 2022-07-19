@@ -40,7 +40,29 @@ removeThing
 		return startOfWeek;
 	}
 
+	// Links to types
+	let schema = {
+		event_type: "https://schema.org/Event",
+		startDate_type: "https://schema.org/startDate",
+		endDate_type: "https://schema.org/endDate",
+		about_type: "https://schema.org/about",
+		location_type: "https://schema.org/location",
+		text_data_type: "https://schema.org/Text"
+	}
+
+	schema.event = {
+		self: schema.event_type,
+		startDate: schema.startDate_type,
+		endDate: schema.endDate_type,
+		about: schema.about_type,
+		location: schema.location_type,
+		activityType: schema.text_data_type // this can be replaced by a self-defined type
+	} 
+	window.schema = schema;
+
+
 	// On load,
+	// - adapt the schema to be more programming friendly
 	onMount(async () => {
 		gotoToday();
 	});
@@ -55,8 +77,10 @@ removeThing
 	// If there isn't, use the current full Datetime, which will be unique!
 	// (unless the same user uses two devices and makes two updates at the EXACT same millisecond
 	// but look if they try that they're trying to break it so they get what the want)
-	function newThing(id = (Date.now().toString())) {
+	// Set the type url, unless one is given, in which case make a base Thing
+	function newThing(type = "https://schema.org/Thing", id = (Date.now().toString())) {
 		return buildThing(createThing({ "name": id }))
+			.addUrl(RDF.type, type)
 	}
 
 	// Function that saves a passed Thing to the dataset with the passed name
@@ -116,12 +140,19 @@ removeThing
 	}
 	window.removeSavedThing = removeSavedThing;
 
+	function addOrSetToThingIfPassed() {
+		
+	}
+
 
 	// Create a new event, save it to calendar dataset
-	async function saveNewEvent(startDate: Date, endDate: Date) {
-		let thingEvent = newThing()
-			.addDatetime(ICAL.dtstart, startDate)
-			.addDatetime(ICAL.dtend, endDate)
+	async function saveNewEvent(description: string = "", startDate: Date = new Date(), endDate: Date = new Date(), location: string = "", activityType: string) {
+		let thingEvent = newThing(schema.event.self)
+			.addStringNoLocale(schema.event.about, description)
+			.addDatetime(schema.event.startDate, startDate)
+			.addDatetime(schema.event.endDate, endDate)
+			.addStringNoLocale(schema.event.location, location)
+			.addStringNoLocale(schema.event.activityType, activityType)
 			.build();
 
 		saveThing("calendar", thingEvent);
@@ -131,7 +162,7 @@ removeThing
 	// Update an existing event
 	async function updateSavedEvent(eventId: string, startDate: Date, endDate: Date) {
 		await updateSavedThing("calendar", eventId, (thing: any) => {
-			console.log(thing)
+			
 			return thing
 				.setDatetime(ICAL.dtstart, startDate)
 				.setDatetime(ICAL.dtend, endDate)
