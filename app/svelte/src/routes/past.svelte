@@ -1,18 +1,6 @@
 <script>
 	import { pastActivities } from '$lib/stores/eventStore';
-	import { TIME_ZONE } from '$lib/types/calendarEvents';
-	import { Temporal } from '@js-temporal/polyfill';
 </script>
-
-<h1>Past activities</h1>
-<pre>{JSON.stringify($pastActivities, null, 2)}</pre>
-
-{#each $pastActivities as $activity}
-	<div>
-		<h2>{$activity.title}</h2>
-		{$activity.date.until(Temporal.Now.plainDateISO(TIME_ZONE)).days}
-	</div>
-{/each}
 
 {#each $pastActivities as activity}
 	<div
