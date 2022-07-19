@@ -13,6 +13,9 @@ interface UserStore {
 	userSession: ISessionInfo;
 }
 
+/***
+ * User store will hold info about the user session, and if the user data is loaded
+ */
 function createUserStore() {
 	const { subscribe, set } = writable<UserStore>({
 		loading: true,
@@ -23,6 +26,7 @@ function createUserStore() {
 		subscribe,
 		set,
 		init: async () => {
+			// Check if there is a session in the browser
 			await handleIncomingRedirect({
 				restorePreviousSession: true
 			});
@@ -62,6 +66,9 @@ function createUserStore() {
 			} catch (e) {
 				throw new Error(getErrorMessage(e).message);
 			}
+		},
+		signOut: () => {
+			// TODO: Make sure a user can log out
 		}
 	};
 }
