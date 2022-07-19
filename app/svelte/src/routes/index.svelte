@@ -108,19 +108,33 @@ removeThing
 	/*	This function is a bit funky
 	   	1: Finds the dataset with the specified dataSetname 
 	   	2: In that dataset, find the thing with the specified thingId
-	   	3: Then, pass a function that returns that same thing
-	/*  	Example usage:
-	    		await updateSavedThing("calendar", 654096854465, (thing: any) => {
-					return thing
-						.setDatetime(ICAL.dtstart, startDate)
-						.setDatetime(ICAL.dtend, endDate)
-				});
-	*/
+	   	3: Then, pass an array of [[type, value]]
+		*/
 	// 	And then your thing will automatically get updated!
-	async function updateSavedThing(datasetName : string, thingId: any, returnModifiedThing: any) {
+	async function updateSavedThing(datasetName : string, thingId: any, ...changes: any[]) {
 		let datasetUrl = DatasetUrl(datasetName);
 		let dataset = (await getSolidDataset(datasetUrl, { fetch: fetch }));
-		let thing = (await returnModifiedThing(buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))).build());
+		let thingBuilder = buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))
+
+
+		changes.forEach(change => {
+			let type = change[0];
+			let value = change[1];
+			switch(type) {
+				// Date parser
+				case schema.startDate_type || schema.endDate_type:
+					thingBuilder.setDatetime(type, value);
+				// Text parsers 
+				case schema.text_data_type || schema.about_type || schema.location_type || schema.event.activityType:
+					thingBuilder.setStringNoLocale(type, value);
+				
+				default:
+					thingBuilder.setStringNoLocale(type, value);
+			}
+		});
+		
+		let thing = thingBuilder.build();
+		//let thing = (await returnModifiedThing(buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))).build());
 		
 		await saveThing(datasetName, thing);
 	}
@@ -170,13 +184,18 @@ removeThing
 	window.saveNewEvent = saveNewEvent;
 
 	// Update an existing event
-	async function updateSavedEvent(eventId: string, startDate: Date, endDate: Date) {
-		await updateSavedThing("calendar", eventId, (thing: any) => {
-			
-			return thing
-				.setDatetime(ICAL.dtstart, startDate)
-				.setDatetime(ICAL.dtend, endDate)
-		});
+	async function updateSavedEvent(eventId: string, description=null, startDate=null, endDate=null, location=null, activityType=null) {
+		// Set to 
+		const schemaOrder = [schema.event.about, schema.event.startDate, schema.event.endDate, schema.event.location, schema.event.activityType];
+		let args = [...arguments].shift();
+		let changes = [];
+		for (var i = 0; i < args.length; i++) {
+			let value = args[i];
+			if (value != null) {
+				changes.push(schemaOrder[i], value)
+			}
+		}
+		await updateSavedThing("calendar", eventId, changes);
 	}
 	window.updateSavedEvent = updateSavedEvent;
 
@@ -229,7 +248,11 @@ removeThing
 		let firstEventUrl = events[0].url.split("#")[1];
 		let thirdEventUrl = events[2].url.split("#")[1];
 		
-		await updateSavedEvent(firstEventUrl, new Date(), new Date());
+		await updateSavedEvent(firstEventUrl, {
+			schema.event.startDate: new Date(), 
+			schema.event.endDate: new Date(), 
+			schema.event.location: "Everywhere"
+		});
 		await removeSavedEvent(thirdEventUrl);
 	} 
 
