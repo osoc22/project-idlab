@@ -15,7 +15,16 @@ See the [solid project website](https://solidproject.org/about) for more info on
 Before you can use this application, you'll need a Solid pod by either...
 - ... using your existing pod (if applicable).
 - ... [signing up for a pod](https://solidproject.org/users/get-a-pod) from a pod provider.
-- ... [locally running our test pod.](dev/solidpod-testserver#getting-started)
+<details>
+    <summary>&nbsp;&nbsp;&nbsp;... locally running our test pod.</summary>
+
+<div markdown=1>
+
+{% include spts_setup.md %} 
+    
+</div>
+
+</details>
 
 ## Use our app!
 
