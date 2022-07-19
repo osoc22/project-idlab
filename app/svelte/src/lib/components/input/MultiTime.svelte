@@ -5,10 +5,11 @@
 
 	export let times: { from: Temporal.PlainTime; to: Temporal.PlainTime }[] = [];
 	export let timeStrings: { from: string; to: string }[] = [];
-	export let label: string = '';
+	export let label: string = 'init';
 	export let maxTimes: number = 5;
 
 	let newTimeString: { from: string; to: string } = { from: '', to: '' };
+	let lastTimeStrings: string = '';
 
 	function addNewTimeString() {
 		// Check if input is empty
@@ -25,7 +26,12 @@
 	}
 
 	function updateTimes() {
+		const newTimeStrings = JSON.stringify(timeStrings) ?? '';
+		console.log({ newTimeStrings, lastTimeStrings, t: newTimeStrings == lastTimeStrings });
+		if (newTimeStrings == lastTimeStrings) return;
+
 		timeStrings = timeStrings.filter((ts) => ts.from != '' || ts.to != '');
+		lastTimeStrings = newTimeStrings;
 
 		times = timeStrings.map((ts) => {
 			const fromTime = Temporal.PlainTime.from(ts.from);

@@ -5,7 +5,7 @@
 	import { PlannedActivity, TIME_ZONE } from '$lib/types/calendarEvents';
 	import { Temporal } from '@js-temporal/polyfill';
 	import { onMount } from 'svelte';
-	import { Icon, Pencil } from 'svelte-hero-icons';
+	import { Pencil } from 'svelte-hero-icons';
 
 	onMount(() => {
 		if ($plannedActivities.length) return;
@@ -43,21 +43,23 @@
 				{/each}
 			</div>
 
-			<div class="whitespace-nowrap">Is all day:</div>
-			{#if plannedActivity.isAllDay}
-				<div class="text-sm">Yes</div>
-			{:else}
-				<div class="text-sm">No</div>
-				<div>Times:</div>
-				<div class="options">
-					{#each plannedActivity.times as time}
-						<div class="option">
-							{time.from.round({ smallestUnit: 'minute' }).toString()}-
-							{time.to.round({ smallestUnit: 'minute' }).toString()}
-						</div>
-					{/each}
-				</div>
-			{/if}
+			{#key plannedActivity.times}
+				<div class="whitespace-nowrap">Is all day:</div>
+				{#if plannedActivity.isAllDay}
+					<div class="text-sm">Yes</div>
+				{:else}
+					<div class="text-sm">No</div>
+					<div>Times:</div>
+					<div class="options">
+						{#each plannedActivity.times as time}
+							<div class="option">
+								{time.from.round({ smallestUnit: 'minute' }).toString()}-
+								{time.to.round({ smallestUnit: 'minute' }).toString()}
+							</div>
+						{/each}
+					</div>
+				{/if}
+			{/key}
 		</div>
 
 		<div class="flex justify-end">

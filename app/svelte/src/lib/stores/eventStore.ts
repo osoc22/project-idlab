@@ -14,8 +14,8 @@ function createActivityStore<T extends Activity>() {
 
 				return es;
 			}),
-		deleteEvent: (activity: T) => update((as) => as.filter((act) => !act.equals(activity))),
-		updateEvent: (activity: T) =>
+		deleteActivity: (activity: T) => update((as) => as.filter((act) => !act.equals(activity))),
+		updateActivity: (activity: T) =>
 			update((as) => as.map((act) => (act == activity ? activity : act))),
 		reset: () => set([])
 	};

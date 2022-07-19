@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { modifyPlannedActivity, plannedActivities } from '$lib/stores/eventStore';
+
+	import Button from './Button.svelte';
 	import Input from './input/Input.svelte';
 	import MultiSelect from './input/MultiSelect.svelte';
 	import Select from './input/Select.svelte';
@@ -10,11 +12,29 @@
 
 	let newActivity = $modifyPlannedActivity;
 	$: dateStrings = newActivity?.activity.dates.map((act) => act.toString());
+	$: timeStrings = newActivity?.activity.times.map(({ from, to }) => {
+		return {
+			from: from.round({ smallestUnit: 'minute' }).toString(),
+			to: to.round({ smallestUnit: 'minute' }).toString()
+		};
+	});
 
 	function handleSubmit() {
 		if (!newActivity) return;
 
-		plannedActivities.add(newActivity.activity);
+		if (newActivity.editMode) {
+			plannedActivities.updateActivity(newActivity.activity);
+		} else {
+			plannedActivities.add(newActivity.activity);
+		}
+
+		modifyPlannedActivity.reset();
+	}
+
+	function destroyActivity() {
+		if (newActivity?.editMode) {
+			plannedActivities.deleteActivity(newActivity.activity);
+		}
 
 		modifyPlannedActivity.reset();
 	}
@@ -35,7 +55,11 @@
 					label="Enter possible dates"
 					bind:dates={newActivity.activity.dates}
 				/>
-				<MultiTime label="Enter possible times" bind:times={newActivity.activity.times} />
+				<MultiTime
+					{timeStrings}
+					label="Enter possible times"
+					bind:times={newActivity.activity.times}
+				/>
 			</div>
 			<div class="right grow">
 				<Input type="text" placeholder="Where?" label="Location" />
@@ -68,7 +92,10 @@
 			</div>
 		</div>
 
-		<div class="flex justify-end">
+		<div class="flex justify-end gap-4">
+			<Button destructive on:click={destroyActivity}
+				>{newActivity.editMode ? 'Remove' : 'Cancel'}</Button
+			>
 			<input
 				class="bg-slate-100 hover:bg-slate-300 transition-colors px-3 py-2 rounded cursor-pointer"
 				type="submit"

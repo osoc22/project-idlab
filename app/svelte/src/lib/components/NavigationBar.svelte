@@ -20,21 +20,23 @@
 
 <div class="flex">
 	<!-- Navigation Bar -->
-	<aside class="w-64 p-4 border-r-2 border-slate-200 h-[100vh]">
-		<h1 class="text-3xl font-bold border-b-2 border-green-700 text-green-700 mb-4">PodPlanner</h1>
+	<aside class="w-64 p-4">
+		<nav class="w-64 p-4 border-r-2 border-slate-200 fixed left-0 top-0 h-[100vh]">
+			<h1 class="text-3xl font-bold border-b-2 border-green-700 text-green-700 mb-4">PodPlanner</h1>
 
-		<div class="flex flex-col gap-2">
-			{#each navigationLinks as navigationLink}
-				<a
-					href={base + '/' + navigationLink.url[0]}
-					class="flex flex-row items-center justify-start px-2 gap-3"
-					class:active={navigationLink.url.includes($page.routeId || 'upcomming')}
-				>
-					<Icon src={navigationLink.icon} size="16" />
-					{navigationLink.title}
-				</a>
-			{/each}
-		</div>
+			<div class="flex flex-col gap-2">
+				{#each navigationLinks as navigationLink}
+					<a
+						href={base + '/' + navigationLink.url[0]}
+						class="flex flex-row items-center justify-start px-2 gap-3"
+						class:active={navigationLink.url.includes($page.routeId || 'upcomming')}
+					>
+						<Icon src={navigationLink.icon} size="16" />
+						{navigationLink.title}
+					</a>
+				{/each}
+			</div>
+		</nav>
 	</aside>
 
 	<!-- Main Content -->
