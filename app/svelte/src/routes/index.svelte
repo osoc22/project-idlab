@@ -19,7 +19,8 @@
 		createThing,
 		getThingAll,
 		saveSolidDatasetAt,
-getThing
+getThing,
+removeThing
 	} from '@inrupt/solid-client';
 	import { fetch } from '@inrupt/solid-client-authn-browser';
 	import { SCHEMA_INRUPT, RDF, ICAL} from '@inrupt/vocab-common-rdf'; // == https://schema.org/name
@@ -70,7 +71,7 @@ getThing
 
 		} catch (e: any) {
 			// If dataset doesn't exist yet, repeat functions
-			if (e.response.status == 404) {
+			if (true) {//e.response.status == 404 || e.response.status == 501) {
 				dataset = createSolidDataset();
 				await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 				saveThing(datasetName, thing);
@@ -104,6 +105,17 @@ getThing
 	window.updateSavedThing = updateSavedThing;
 
 
+	// This function removes a saved thing with id thingId, from the dataset with the specified datasetName
+	async function removeSavedThing(datasetName: string, thingId: any) {
+		let datasetUrl = DatasetUrl(datasetName);
+		let dataset = (await getSolidDataset(datasetUrl, { fetch: fetch }));
+		let thing = getThing(dataset, `${datasetUrl}#${thingId}`);
+
+		dataset = removeThing(dataset, thing);
+		saveSolidDatasetAt(datasetUrl, dataset, {fetch: fetch})
+	}
+	window.removeSavedThing = removeSavedThing;
+
 
 	// Create a new event, save it to calendar dataset
 	async function saveNewEvent(startDate: Date, endDate: Date) {
@@ -127,6 +139,10 @@ getThing
 	}
 	window.updateSavedEvent = updateSavedEvent;
 
+	async function removeSavedEvent(eventId: string) {
+		removeSavedThing("calendar", eventId);
+	}
+	window.removeSavedEvent = removeSavedEvent;
 
 	// Get all things from dataset with name datasetName
 	// If returnAsArray is true, do a clean return (mostly for use in code)
@@ -167,20 +183,37 @@ getThing
 		// Save an event that starts now and ends in two hours
 		var start = new Date();
 		var end = new Date();
-		end.setHours(end.getHours() + 2)
-		await saveNewEvent(start, end);
+		end.setHours(end.getHours() + 2);
+		let createEvents = [];
+
+		createEvents.push(saveNewEvent(start, end));  // To be updated
+		createEvents.push(saveNewEvent(start, end));  // This one just stays
+		createEvents.push(saveNewEvent(start, end));  // To be removed
+
+		Promise.all(createEvents).then(async (values) => {
+			// Set the first events start and end to now
+			// NOTE: don't forget to () your await because otherwise it doesn't work!
+			try {
+				listThingsFromDataset("calendar", true).then(async (events) => {
+					console.log(events)
+					let firstEventUrl = events[0].url.split("#")[1];
+					let thirdEventUrl = events[2].url.split("#")[1];
+					
+					updateSavedEvent(firstEventUrl, new Date(), new Date()).then(() => {
+						removeSavedEvent(thirdEventUrl);
+
+					});
+					
+				});
+				
+			} catch (e) {
+				console.error(e);
+			}
+		});
 
 		//await testerProgress("calendar", "after new Event (startdate now, enddate now + 2h), before update");
 
-		// Set the first events start and end to now
-		// NOTE: don't forget to () your await because otherwise it doesn't work!
-		try {
-			let firstEvent = (await listThingsFromDataset("calendar", true))[3];
-			await updateSavedEvent(firstEvent.url.split("#")[1], new Date(), new Date());
-		} catch (e) {
-			console.error(e);
-		}
-
+		
 		//await testerProgress("calendar", "after updating the event[3]'s start & end datetime to now");
 	} 
 
