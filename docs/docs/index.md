@@ -15,7 +15,7 @@ You can find info about...
 [
     The client-side calendar and link between weather and your solid pod.
     ![Icon of a calendar to link to Svelte](../assets/icons/Calendar-Duotone.svg) 
-](svelte-frontend/)
+](svelte/)
 
 <!-- Back-end -->
 ## Weather info: backend
@@ -26,6 +26,8 @@ You can find info about...
 
 <!-- Solidpod testserver -->
 ## Solidpod-testserver
-A quick way to set up a solidpod community server with a test user built in.
-![Icon of a cloud to link to solidpod-testserver](../assets/icons/Cloud-Duotone.svg)
+[
+    A quick way to set up a solidpod community server with a test user built in.
+    ![Icon of a cloud to link to solidpod-testserver](../assets/icons/Cloud-Duotone.svg)
+](solidpod-testserver/)
 
