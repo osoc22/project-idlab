@@ -89,20 +89,18 @@ removeThing
 		let datasetUrl = DatasetUrl(datasetName);
 		let dataset : any;
 		try {
+			console.log("Trying save")
 			dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 			dataset = setThing(dataset, thing);
 			await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 
 		} catch (e: any) {
+			console.log("error caughgt")
 			// If dataset doesn't exist yet, repeat functions
-			if (true) {//e.response.status == 404 || e.response.status == 501) {
-				dataset = createSolidDataset();
-				await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
-				saveThing(datasetName, thing);
-			}
-			else {
-				console.error(e);
-			}
+			//e.response.status == 404 || e.response.status == 501) {
+			dataset = createSolidDataset();
+			await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+			await saveThing(datasetName, thing);
 		}
 	}
 	window.saveThing = saveThing;
@@ -124,7 +122,7 @@ removeThing
 		let dataset = (await getSolidDataset(datasetUrl, { fetch: fetch }));
 		let thing = (await returnModifiedThing(buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))).build());
 		
-		saveThing(datasetName, thing);
+		await saveThing(datasetName, thing);
 	}
 	window.updateSavedThing = updateSavedThing;
 
@@ -135,8 +133,8 @@ removeThing
 		let dataset = (await getSolidDataset(datasetUrl, { fetch: fetch }));
 		let thing = getThing(dataset, `${datasetUrl}#${thingId}`);
 
-		dataset = removeThing(dataset, thing);
-		saveSolidDatasetAt(datasetUrl, dataset, {fetch: fetch})
+		dataset = await removeThing(dataset, thing);
+		await saveSolidDatasetAt(datasetUrl, dataset, {fetch: fetch})
 	}
 	window.removeSavedThing = removeSavedThing;
 
@@ -167,7 +165,7 @@ removeThing
 			.addStringNoLocale(schema.event.activityType, activityType)
 			.build();
 
-		saveThing("calendar", thingEvent);
+		await saveThing("calendar", thingEvent);
 	}
 	window.saveNewEvent = saveNewEvent;
 
@@ -183,7 +181,7 @@ removeThing
 	window.updateSavedEvent = updateSavedEvent;
 
 	async function removeSavedEvent(eventId: string) {
-		removeSavedThing("calendar", eventId);
+		await removeSavedThing("calendar", eventId);
 	}
 	window.removeSavedEvent = removeSavedEvent;
 
