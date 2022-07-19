@@ -34,7 +34,13 @@
 
 	function setupPlannedActivities() {
 		const e1 = new PlannedActivity('Test1', 'Work', new Set(['Windy', 'Rain']), d2);
-		const e2 = new PlannedActivity('Test2', 'Fun', new Set(['Windy', 'Rain']), d1, t1);
+		const e2 = new PlannedActivity(
+			'Test2',
+			'Fun',
+			new Set(['Windy', 'Rain']),
+			d1.subtract({ days: 1 }),
+			t1
+		);
 
 		plannedActivities.add(e1);
 		plannedActivities.add(e2);

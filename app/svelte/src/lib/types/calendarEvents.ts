@@ -68,6 +68,10 @@ export class UnplannedActivity extends Identifiable implements Activity {
 	}
 }
 
+/**
+ * Planned activities are activites that are planned for a specific date.
+ * These activities will be shown in the calendar. Or when it is in the past -> they will be shown in the past.
+ */
 export class PlannedActivity extends Identifiable implements Activity {
 	title: string;
 	actitityType: ActivityType;

@@ -1,4 +1,10 @@
-import { UnplannedActivity, PlannedActivity, type Activity } from '$lib/types/calendarEvents';
+import {
+	UnplannedActivity,
+	PlannedActivity,
+	type Activity,
+	TIME_ZONE
+} from '$lib/types/calendarEvents';
+import { Temporal } from '@js-temporal/polyfill';
 import { derived, writable } from 'svelte/store';
 
 function createActivityStore<T extends Activity>() {
@@ -19,10 +25,10 @@ function createActivityStore<T extends Activity>() {
 	};
 }
 
-// Store for all upcomming activities
+// Store for all planned activities
 export const plannedActivities = createActivityStore<PlannedActivity>();
-export const activitiesPerDay = derived(plannedActivities, ($calendarEvents) => {
-	return $calendarEvents.reduce((acc, ev) => {
+export const activitiesPerDay = derived(plannedActivities, ($activities) => {
+	return $activities.reduce((acc, ev) => {
 		const dateString = ev.date.toString();
 		if (dateString in acc) {
 			acc[dateString].push(ev);
@@ -31,6 +37,11 @@ export const activitiesPerDay = derived(plannedActivities, ($calendarEvents) => 
 		}
 		return acc;
 	}, {} as { [key: string]: PlannedActivity[] });
+});
+export const pastActivities = derived(plannedActivities, ($activities) => {
+	return $activities.filter(
+		($activity) => Temporal.Now.plainDateISO(TIME_ZONE).until($activity.date).days <= 0
+	);
 });
 
 export const unplannedActivities = createActivityStore<UnplannedActivity>();
