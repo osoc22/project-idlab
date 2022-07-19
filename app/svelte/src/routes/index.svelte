@@ -111,15 +111,17 @@ removeThing
 	   	3: Then, pass an array of [[type, value]]
 		*/
 	// 	And then your thing will automatically get updated!
-	async function updateSavedThing(datasetName : string, thingId: any, ...changes: any[]) {
+	async function updateSavedThing(datasetName : string, thingId: any, changes: {}) {
 		let datasetUrl = DatasetUrl(datasetName);
 		let dataset = (await getSolidDataset(datasetUrl, { fetch: fetch }));
 		let thingBuilder = buildThing(getThing(dataset, `${datasetUrl}#${thingId}`))
 
 
-		changes.forEach(change => {
-			let type = change[0];
-			let value = change[1];
+		var types = Object.keys(changes);
+
+		types.forEach(type => {
+			let value = changes[type];
+			
 			switch(type) {
 				// Date parser
 				case schema.startDate_type || schema.endDate_type:
@@ -184,17 +186,7 @@ removeThing
 	window.saveNewEvent = saveNewEvent;
 
 	// Update an existing event
-	async function updateSavedEvent(eventId: string, description=null, startDate=null, endDate=null, location=null, activityType=null) {
-		// Set to 
-		const schemaOrder = [schema.event.about, schema.event.startDate, schema.event.endDate, schema.event.location, schema.event.activityType];
-		let args = [...arguments].shift();
-		let changes = [];
-		for (var i = 0; i < args.length; i++) {
-			let value = args[i];
-			if (value != null) {
-				changes.push(schemaOrder[i], value)
-			}
-		}
+	async function updateSavedEvent(eventId: string, changes: {}) {
 		await updateSavedThing("calendar", eventId, changes);
 	}
 	window.updateSavedEvent = updateSavedEvent;
@@ -249,9 +241,9 @@ removeThing
 		let thirdEventUrl = events[2].url.split("#")[1];
 		
 		await updateSavedEvent(firstEventUrl, {
-			schema.event.startDate: new Date(), 
-			schema.event.endDate: new Date(), 
-			schema.event.location: "Everywhere"
+			[schema.event.startDate]: new Date(), 
+			[schema.event.endDate]: new Date(), 
+			[schema.event.location]: "Everywhere"
 		});
 		await removeSavedEvent(thirdEventUrl);
 	} 
