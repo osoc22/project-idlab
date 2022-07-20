@@ -1,5 +1,14 @@
 # Backend
 
+## Installation
+
+```bash
+cp .env .env.example # fill in the environment variables
+node ./node_modules/@rmlio/rmlmapper-java-wrapper/lib/download-latest-rmlmapper.js
+npm i
+npm run start
+```
+
 ## Deploy
 
 **Locally:**
