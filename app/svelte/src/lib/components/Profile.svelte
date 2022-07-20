@@ -1,13 +1,19 @@
 <script lang="ts">
+	import userStore from '$lib/stores/userStore';
+
 	export let firstname: string;
 	export let lastname: string;
 
 	$: lastnameSplit = lastname.split(' ');
+
+	async function logOut() {
+		await userStore.signOut();
+	}
 </script>
 
-<div
+<button
 	class="flex items-center hover:bg-gray-200 rounded-xl px-2 py-2 transition-colors cursor-pointer"
-	on:click
+	on:click={logOut}
 >
 	<div>
 		<div
@@ -24,4 +30,4 @@
 			{lastname}
 		</p>
 	</div>
-</div>
+</button>

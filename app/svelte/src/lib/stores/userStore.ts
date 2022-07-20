@@ -81,8 +81,13 @@ function createUserStore() {
 				throw new Error(getErrorMessage(e).message);
 			}
 		},
-		signOut: () => {
-			// TODO: Make sure a user can log out
+		signOut: async () => {
+			await getDefaultSession().logout()
+
+			set({
+				loading: false,
+				userSession: getDefaultSession().info
+			});
 		}
 	};
 }
