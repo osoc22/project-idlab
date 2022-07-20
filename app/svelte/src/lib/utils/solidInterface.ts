@@ -104,7 +104,7 @@ function newThingBuilder(type = 'https://schema.org/Thing', data = {}, id = "") 
 // Inverse of dataToThing
 function thingToData(thing: any, thingSchema: any) {
 	let typeKeys = Object.keys(thingSchema);  // Output example: [ "self", "startDate", "about" ]
-	let data = {};
+	let data: {[key: string]: any} = {};
 
 	typeKeys.forEach((typeKey: string) => {
 		if (typeKey == "self") return; // @see schema
