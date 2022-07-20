@@ -16,11 +16,9 @@ import { fetch } from '@inrupt/solid-client-authn-browser';
 import { RDF } from '@inrupt/vocab-common-rdf';
 import userStore from '$lib/stores/userStore';
 
-let podUrl: string = '';
 let storageLocation: string = '';
 
 userStore.subscribe((val) => {
-	podUrl = val.podUrl;
 	storageLocation = val.storageLocation;
 });
 
@@ -282,7 +280,6 @@ export async function getEvent(id: string) {
  * @todo Turn these functions into overloads
  *
  * @param eventId (getAndParseEvent) Id/Name of event to get from calendar dataset
- * @param eventThing (parseEventThing) Unparsed Event Thing object, gotten from @function getThing or @function getThingAll
  *
  * @returns Promise of @see thingToData, which should result in a Javascript object from an event
  */

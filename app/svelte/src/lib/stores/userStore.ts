@@ -35,7 +35,10 @@ function createUserStore() {
 				restorePreviousSession: true
 			});
 
-			storageLocation = storageLocation || localStorage.getItem('storageLocation') || 'http://localhost:3000/johndoe';
+			storageLocation =
+				storageLocation ||
+				localStorage.getItem('storageLocation') ||
+				'http://localhost:3000/johndoe';
 			podUrl = podUrl || localStorage.getItem('podUrl') || 'johndoe';
 
 			set({

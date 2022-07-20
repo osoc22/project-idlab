@@ -3,7 +3,7 @@
 
 	import { modifyUnplannedActivity, unplannedActivities } from '$lib/stores/eventStore';
 	import { Pencil } from 'svelte-hero-icons';
-	
+
 	import { tester } from '$lib/utils/solidInterface';
 	window.tester = tester;
 </script>

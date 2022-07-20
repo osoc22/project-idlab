@@ -7,7 +7,6 @@ import {
 } from '$lib/utils/solidInterface';
 import type { Thing } from '@inrupt/solid-client';
 import { plannedActivities } from '$lib/stores/eventStore';
-import { browser } from '$app/env';
 
 export const TIME_ZONE = 'Europe/Brussels';
 
@@ -175,7 +174,6 @@ export class PlannedActivity extends Identifiable implements Activity {
 		const location = schema.location || '';
 
 		let date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE);
-		let time: { from: Temporal.PlainTime; to: Temporal.PlainTime };
 
 		if (schema.startDate) {
 			const d = new Date(schema.startDate);
@@ -188,11 +186,11 @@ export class PlannedActivity extends Identifiable implements Activity {
 			const t2 = new Date(schema.endDate);
 			const from = new Temporal.PlainTime(t1.getHours(), t1.getMinutes(), t1.getSeconds());
 			const to = new Temporal.PlainTime(t2.getHours(), t2.getMinutes(), t2.getSeconds());
-			time = { from, to };
-			console.log(time);
+			const time = { from, to };
+			return new PlannedActivity(title, actitityType, notifyOnWeather, location, date, time);
 		}
 
-		return new PlannedActivity(title, actitityType, notifyOnWeather, location, date, time);
+		return new PlannedActivity(title, actitityType, notifyOnWeather, location, date);
 	}
 
 	static async init() {
@@ -210,5 +208,3 @@ export class PlannedActivity extends Identifiable implements Activity {
 		plannedActivities.set(calendarActivities);
 	}
 }
-
-if (browser) window.Temporal = Temporal;
