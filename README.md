@@ -33,6 +33,7 @@ chmod +x run.sh
 - [app/](app/)
   - [solidpod-testserver/](app/solidpod-testserver/) --> Scripts, files and build artifacts for the solidpod testserver - [docs page](https://osoc22.github.io/project-idlab/docs/solidpod-testserver/)
   - [svelte/](app/svelte/) --> Source files and scripts for the Svelte frontend - [docs page](https://osoc22.github.io/project-idlab/docs/svelte/)
+  - [backend/](app/backend) --> Source code and docker deployment file for the backend weather application
 - [docs/](docs/)
   - [app/](docs/app/) --> Static build of the [Svelte frontend](app/svelte/), built through [GitHub Actions](.github/workflows/svelte-to-gh-pages.yml) hosted online through [GitHub Pages](https://osoc22.github.io/project-idlab/app/).
   - [docs/](docs/docs/) --> Jekyll site for documentation, also [hosted through GitHub pages](https://osoc22.github.io/project-idlab/docs/).
