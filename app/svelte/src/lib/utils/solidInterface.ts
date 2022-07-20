@@ -19,11 +19,11 @@ import { RDF } from '@inrupt/vocab-common-rdf';
 import userStore from '$lib/stores/userStore';
 
 let podUrl: string = '';
-let webID: string = '';
+let storageLocation: string = '';
 
 userStore.subscribe((val) => {
 	podUrl = val.podUrl;
-	webID = val.webID;
+	storageLocation = val.storageLocation;
 });
 
 export interface SchemaEvent {
@@ -73,7 +73,7 @@ schema.event = {
  * */
 
 function DatasetUrl(datasetName: string) {
-	return `${podUrl}/${webID}/${datasetName}`;
+	return `${storageLocation}/${datasetName}`;
 }
 
 /**
@@ -181,7 +181,7 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
  * @returns Promise of @function getThing
  */
 export async function getThingFromDataset(datasetName: string, thingId: string) {
-	let datasetUrl = DatasetUrl(datasetName); 
+	let datasetUrl = DatasetUrl(datasetName);
 	let dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 	return getThing(dataset, `${datasetUrl}#${thingId}`);
 }
