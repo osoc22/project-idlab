@@ -1,12 +1,13 @@
 {
   ".svelte-kit/runtime/client/start.js": {
-    "file": "immutable/start-f573b349.js",
+    "file": "immutable/start-5cb5c9f9.js",
     "src": ".svelte-kit/runtime/client/start.js",
     "isEntry": true,
     "imports": [
       "_index-74ecf14d.js",
       "_index-ea2348b3.js",
-      "_singletons-bd1dfc1a.js"
+      "_singletons-bd1dfc1a.js",
+      "_preload-helper-ed63bd61.js"
     ],
     "dynamicImports": [
       "src/routes/__layout.svelte",
@@ -18,21 +19,23 @@
     ]
   },
   "src/routes/__layout.svelte": {
-    "file": "immutable/pages/__layout.svelte-1046f261.js",
+    "file": "immutable/pages/__layout.svelte-16c6f3ec.js",
     "src": "src/routes/__layout.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
       "_index-74ecf14d.js",
-      "_eventStore-e318eba3.js",
+      "_calendarEvents-aa09b667.js",
       "_Button-dde8ddbd.js",
-      "_navigation-77ac7245.js",
+      "_userStore-b92fdedd.js",
       "_index-dd833d83.js",
+      "_navigation-3ebc45bc.js",
       "_singletons-bd1dfc1a.js",
+      "_preload-helper-ed63bd61.js",
       "_index-ea2348b3.js"
     ],
     "css": [
-      "immutable/assets/pages/__layout.svelte-7cb57f92.css"
+      "immutable/assets/pages/__layout.svelte-f6274f39.css"
     ]
   },
   ".svelte-kit/runtime/components/error.svelte": {
@@ -45,25 +48,28 @@
     ]
   },
   "src/routes/index.svelte": {
-    "file": "immutable/pages/index.svelte-e913e490.js",
+    "file": "immutable/pages/index.svelte-a18d0633.js",
     "src": "src/routes/index.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
       "_index-74ecf14d.js",
-      "_navigation-77ac7245.js",
+      "_navigation-3ebc45bc.js",
       "_singletons-bd1dfc1a.js",
+      "_userStore-b92fdedd.js",
       "_index-ea2348b3.js"
     ]
   },
   "src/routes/past.svelte": {
-    "file": "immutable/pages/past.svelte-91631045.js",
+    "file": "immutable/pages/past.svelte-7a34b1d7.js",
     "src": "src/routes/past.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
       "_index-74ecf14d.js",
-      "_eventStore-e318eba3.js",
+      "_calendarEvents-aa09b667.js",
+      "_preload-helper-ed63bd61.js",
+      "_userStore-b92fdedd.js",
       "_index-ea2348b3.js"
     ],
     "css": [
@@ -71,15 +77,17 @@
     ]
   },
   "src/routes/planning.svelte": {
-    "file": "immutable/pages/planning.svelte-8c373d3b.js",
+    "file": "immutable/pages/planning.svelte-87083eae.js",
     "src": "src/routes/planning.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
       "_index-74ecf14d.js",
       "_Button-dde8ddbd.js",
-      "_eventStore-e318eba3.js",
+      "_calendarEvents-aa09b667.js",
       "_index-dd833d83.js",
+      "_preload-helper-ed63bd61.js",
+      "_userStore-b92fdedd.js",
       "_index-ea2348b3.js"
     ],
     "css": [
@@ -87,14 +95,16 @@
     ]
   },
   "src/routes/upcomming.svelte": {
-    "file": "immutable/pages/upcomming.svelte-921b5780.js",
+    "file": "immutable/pages/upcomming.svelte-5919ef24.js",
     "src": "src/routes/upcomming.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
       "_index-74ecf14d.js",
-      "_eventStore-e318eba3.js",
+      "_calendarEvents-aa09b667.js",
       "_Button-dde8ddbd.js",
+      "_preload-helper-ed63bd61.js",
+      "_userStore-b92fdedd.js",
       "_index-ea2348b3.js"
     ],
     "css": [
@@ -113,17 +123,25 @@
   "_singletons-bd1dfc1a.js": {
     "file": "immutable/chunks/singletons-bd1dfc1a.js"
   },
-  "_navigation-77ac7245.js": {
-    "file": "immutable/chunks/navigation-77ac7245.js",
-    "imports": [
-      "_index-ea2348b3.js",
-      "_singletons-bd1dfc1a.js"
-    ]
+  "_preload-helper-ed63bd61.js": {
+    "file": "immutable/chunks/preload-helper-ed63bd61.js"
   },
-  "_eventStore-e318eba3.js": {
-    "file": "immutable/chunks/eventStore-e318eba3.js",
+  "_userStore-b92fdedd.js": {
+    "file": "immutable/chunks/userStore-b92fdedd.js",
+    "isDynamicEntry": true,
     "imports": [
       "_index-ea2348b3.js"
+    ]
+  },
+  "_calendarEvents-aa09b667.js": {
+    "file": "immutable/chunks/calendarEvents-aa09b667.js",
+    "imports": [
+      "_preload-helper-ed63bd61.js",
+      "_userStore-b92fdedd.js",
+      "_index-ea2348b3.js"
+    ],
+    "dynamicImports": [
+      "_userStore-b92fdedd.js"
     ]
   },
   "_Button-dde8ddbd.js": {
@@ -137,5 +155,11 @@
   },
   "_index-dd833d83.js": {
     "file": "immutable/chunks/index-dd833d83.js"
+  },
+  "_navigation-3ebc45bc.js": {
+    "file": "immutable/chunks/navigation-3ebc45bc.js",
+    "imports": [
+      "_singletons-bd1dfc1a.js"
+    ]
   }
 }
