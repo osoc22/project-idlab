@@ -13,9 +13,12 @@ function createActivityStore<T extends Activity>() {
 
 	return {
 		subscribe,
-		add: (event: T) =>
+		add: (event: T, start: Date, end:Date) =>
 			update((es) => {
 				es.push(event);
+
+				// saveNewEvent('Description!', start, end, 'location', 'activitytype');
+				saveNewEvent(event.title, start, end, event.LOCATIONSTRING, event.actitityType);
 
 				return es;
 			}),
