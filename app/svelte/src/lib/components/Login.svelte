@@ -15,7 +15,7 @@
 
 	async function handleLogin() {
 		try {
-			userStore.signIn(podUrl, storageLocation, interfaceUrl);
+			await userStore.signIn(podUrl, storageLocation, interfaceUrl);
 		} catch (e) {
 			podError = getErrorMessage(e).message;
 		}
