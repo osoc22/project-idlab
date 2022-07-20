@@ -126,6 +126,13 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
 	return thingBuilder.build();
 }
 
+
+export async function getThingFromDataset(datasetName: string, thingId: string) {
+	let datasetUrl = DatasetUrl(datasetName); 
+	let dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
+	return getThing(dataset, `${datasetUrl}#${thingId}`);
+}
+
 /**
  * Saves a thing object, to a dataset with specified name
  * Will also create the dataset if it doesn't exist yet!
@@ -196,6 +203,12 @@ export async function removeSavedThing(datasetName: string, thingId: any) {
 	dataset = removeThing(dataset, thing);
 	return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 }
+
+
+export async function getEvent(id: string) {
+	return getThingFromDataset("calendar", id);
+}
+
 
 /**
  * Creates a new Event Thing, saves it to calendar dataset. See https://schema.org/Event for more information.
@@ -293,10 +306,14 @@ export async function tester() {
 	// Set the first events start and end to now
 	// NOTE: don't forget to () your await because otherwise it doesn't work!
 
+
 	const events = await listThingsFromDataset('calendar', true);
 	console.log(events);
 	const firstEventUrl = events[0].url.split('#')[1];
 	const thirdEventUrl = events[2].url.split('#')[1];
+
+	console.log("Specifically get first event")
+	console.log(await getEvent(events[0].url.split('#')[1]));
 
 	if (!schema.event) return;
 
