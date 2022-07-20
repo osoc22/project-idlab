@@ -131,7 +131,14 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
 	return thingBuilder.build();
 }
 
-
+/**
+ * Get a Thing with the specified id, from the dataset with the specified name
+ * 
+ * @param datasetName name of dataset to get the thing from
+ * @param thingId id/name of Thing to get
+ * 
+ * @returns Promise of @function getThing
+ */
 export async function getThingFromDataset(datasetName: string, thingId: string) {
 	let datasetUrl = DatasetUrl(datasetName); 
 	let dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
@@ -210,6 +217,13 @@ export async function removeSavedThing(datasetName: string, thingId: any) {
 }
 
 
+/**
+ * Gets an Event Thing from the calendar dataset
+ * 
+ * @param id Id of the Event/Thing to get
+ * 
+ * @returns Promise of @function getThing
+ */
 export async function getEvent(id: string) {
 	return getThingFromDataset("calendar", id);
 }
@@ -218,11 +232,12 @@ export async function getEvent(id: string) {
 /**
  * Creates a new Event Thing, saves it to calendar dataset. See https://schema.org/Event for more information.
  *
- * @param description		Optional. User side about/description/text
- * @param startDate		Start DateTime of event
+ * @param 	description		Optional. User side about/description/text
+ * @param 	startDate		Start DateTime of event
  * @param	endDate			End DateTime of event
  * @param	location		Optional. Location of the event
  * @param	activityType	Optional. Custom field
+ * @param 	id				Optional. Set id for new thing to be created
  *
  * @returns Promise of @function saveThing
  */
