@@ -6,7 +6,10 @@ ENV WEATHER_KEY f119b310ed841b9b8581db412dac6076
 ENV NODE_ENV production
 ENV CI true
 
-RUN apt-get update -y && apt install openjdk-17-jdk openjdk-17-jre -y
+RUN apt-get update -y && apt-get install -y \
+    openjdk-17-jdk \ 
+    openjdk-17-jre \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /api
 
