@@ -111,18 +111,15 @@ function thingToData(thing: any, thingSchema: any) {
 		// type would be the same as calling schema.event.startDate, for example https://schema.org/Event
 		let type = thingSchema[typeKey];  
 
-		console.log(type)
 		switch (type) {
 
 			// Date parser
-			case schema.startDate_type || schema.endDate_type:
-				console.log(typeKey)
+			case schema.startDate_type:
+			case schema.endDate_type:
 				data[typeKey] = getDatetime(thing, type);
 				break;
 			default:
-				console.log(typeKey)
 				data[typeKey] = getStringNoLocale(thing, type);
-				
 				break;
 		}
 
@@ -160,9 +157,13 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
 		const value = data[type];
 		if (!value) return;
 
+		console.log(type);
+		console.log(schema.endDate_type);
+
 		switch (type) {
 			// Date parser
-			case schema.startDate_type || schema.endDate_type:
+			case schema.startDate_type:
+			case schema.endDate_type:
 				thingBuilder.setDatetime(type, value);
 				break;
 			default:
@@ -358,20 +359,6 @@ export async function listThingsFromDataset(datasetName: string, supressConsoleL
 
 // A function that can be called that tests out the code above!
 export async function tester() {
-	//var dataset = await getSolidDataset(DatasetUrl("calendar"), {fetch: fetch});
-
-	//var turtle = await solidDatasetAsTurtle(dataset)
-	//console.log(turtle);
-	let allEvents = await listThingsFromDataset("calendar", true)
-	//let firstEvent = parseEvent(allEvents[0]);
-
-	let firstEventId = allEvents[0].url.split('#')[1];
-	let event = await parseEvent(firstEventId)
-
-	console.log(event)
-
-	
-	return;
 	// Save an event that starts now and ends in two hours
 	const start = new Date();
 	const end = new Date();
@@ -401,4 +388,9 @@ export async function tester() {
 		[schema.event.location]: 'Everywhere'
 	});
 	await removeSavedEvent(thirdEventUrl);
+
+
+	let firstEventToObject = await parseEvent(firstEventUrl)
+	console.log(firstEventToObject)
+
 }
