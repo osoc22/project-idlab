@@ -7,11 +7,11 @@ nav_order: 1
 
 ---
 
-### Getting started/using PPD
+### Quick start
 [
     ![Icon of an entrance to link to getting started](assets/icons/Entrance-Duotone.svg)
     Not sure where to begin? Click here!
-](getting-started)
+](docs/quick-start)
 
 ---
 

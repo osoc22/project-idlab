@@ -11,38 +11,15 @@
 </script>
 
 {#if visible}
-	<div class="backdrop" on:click={closeModal}>
-		<div class="modal" on:click|stopPropagation>
+	<div
+		class="fixed top-0 left-0 w-full h-[100%] bg-slate-900/30 z-10 cursor-pointer"
+		on:click={closeModal}
+	>
+		<div
+			class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl bg-white z-20 p-4 rounded-lg"
+			on:click|stopPropagation
+		>
 			<slot />
 		</div>
 	</div>
 {/if}
-
-<style>
-	.backdrop {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0, 0, 0, 0.5);
-		z-index: 10;
-		cursor: pointer;
-	}
-
-	.modal {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		width: 80%;
-		max-width: 30rem;
-		min-height: 10rem;
-		max-height: calc(100vh - 10rem);
-		overflow: auto;
-		background-color: #fff;
-		border-radius: 0.5rem;
-		padding: 1rem;
-		z-index: 11;
-	}
-</style>

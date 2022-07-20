@@ -2,21 +2,27 @@
 	import { Temporal, Intl } from '@js-temporal/polyfill';
 
 	import Button from '$lib/components/Button.svelte';
-	import Event from '$lib/components/Event.svelte';
-	import UpdateEvent from '$lib/components/UpdateEvent.svelte';
-	import Modal from '$lib/components/Modal.svelte';
+	import Activity from '$lib/components/Activity.svelte';
 	import Weather from '$lib/components/Weather.svelte';
 
-	import { calendarEvents, editEvent, eventsPerDay } from '$lib/stores/eventStore';
+	import { activitiesPerDay, modifyPlannedActivity } from '$lib/stores/eventStore';
+	import { PlannedActivity, TIME_ZONE } from '$lib/types/calendarEvents';
 
 	export let startOfWeek: Temporal.PlainDate;
-	const today = Temporal.Now.plainDateISO();
+	const today = Temporal.Now.plainDateISO(TIME_ZONE);
 
 	const dayOfWeekString = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 	let week: Temporal.PlainDate[] = [];
 
 	$: {
 		startOfWeek && (week = dayOfWeekString.map((_, index) => startOfWeek.add({ days: index })));
+	}
+
+	function newActivityOn(day: Temporal.PlainDate) {
+		modifyPlannedActivity.set({
+			editMode: false,
+			activity: PlannedActivity.new(day)
+		});
 	}
 </script>
 
@@ -34,33 +40,17 @@
 					<Weather {day} />
 				{/if}
 
-				{#if day.toString() in $eventsPerDay}
-					{#each $eventsPerDay[day.toString()] as event}
-						<Event {event} on:click={() => editEvent.edit(event)} />
+				{#if day.toString() in $activitiesPerDay}
+					{#each $activitiesPerDay[day.toString()] as activity}
+						<Activity {activity} on:click={() => modifyPlannedActivity.edit(activity)} />
 					{/each}
 				{:else}
-					<Button filled on:click={editEvent.new}>Create event</Button>
+					<Button filled on:click={() => newActivityOn(day)}>Create event</Button>
 				{/if}
 			</div>
 		</div>
 	{/each}
 </div>
-
-<Modal visible={$editEvent.visible} on:close={editEvent.reset}>
-	<UpdateEvent let:submit>
-		{#if $editEvent.editMode}
-			<Button filled destructive on:click={() => submit(calendarEvents.deleteEvent)}>
-				Delete Event
-			</Button>
-			<Button filled focused on:click={() => submit(calendarEvents.updateEvent)}>
-				Update Event
-			</Button>
-		{:else}
-			<Button filled destructive on:click={editEvent.reset}>Cancel</Button>
-			<Button filled focused on:click={() => submit(calendarEvents.addEvent)}>Create Event</Button>
-		{/if}
-	</UpdateEvent>
-</Modal>
 
 <style lang="postcss">
 	.today {

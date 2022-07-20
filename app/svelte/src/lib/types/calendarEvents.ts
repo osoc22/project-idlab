@@ -1,29 +1,117 @@
 import { Temporal } from '@js-temporal/polyfill';
-import UUID from '$lib/utils/uuid';
 import Identifiable from '$lib/types/identifiable';
 
 export const TIME_ZONE = 'Europe/Brussels';
 
-export class CalendarEvent extends Identifiable {
-	id: string = UUID();
+type ActivityType = 'Work' | 'Food' | 'Fun' | 'Workout' | 'Relax';
+type WeatherType = 'Sun' | 'Rain' | 'Cloudy' | 'Windy';
+type TimeFromTo = { from: Temporal.PlainTime; to: Temporal.PlainTime };
 
-	date: Temporal.PlainDate;
-	time: { from: Temporal.PlainTime; to: Temporal.PlainTime };
-
+export interface Activity extends Identifiable {
 	title: string;
-	description: string;
+
+	actitityType: ActivityType;
+	notifyOnWeather: Set<WeatherType>;
+
+	get isAllDay(): boolean;
+	set isAllDay(value: boolean);
+	setToAllDay(): void;
+}
+
+export class UnplannedActivity extends Identifiable implements Activity {
+	title: string;
+	actitityType: ActivityType;
+	notifyOnWeather: Set<WeatherType>;
+
+	dates: Temporal.PlainDate[];
+	times: TimeFromTo[];
 
 	constructor(
-		date: Temporal.PlainDate,
-		time: { from: Temporal.PlainTime; to: Temporal.PlainTime },
 		title: string,
-		description: string
+		actitityType: ActivityType,
+		notifyOnWeather: Set<WeatherType>,
+		dates: Temporal.PlainDate[],
+		times: TimeFromTo[] = []
 	) {
 		super();
+		this.title = title;
+		this.actitityType = actitityType;
+		this.notifyOnWeather = notifyOnWeather;
+		this.dates = dates;
+		this.times = times;
+	}
+
+	/**
+	 * If this activity is on the given date without a specified
+	 */
+	get isAllDay() {
+		return this.times.length === 0;
+	}
+
+	set isAllDay(value: boolean) {
+		if (value) {
+			this.setToAllDay();
+			return;
+		}
+
+		const from = Temporal.Now.plainTimeISO(TIME_ZONE);
+		const to = Temporal.Now.plainTimeISO(TIME_ZONE);
+		this.times = [{ from, to }];
+	}
+
+	setToAllDay() {
+		this.times = [];
+	}
+
+	static new(dates: Temporal.PlainDate[] = [], times: TimeFromTo[] = []) {
+		return new UnplannedActivity('', 'Work', new Set(['Sun']), dates, times);
+	}
+}
+
+/**
+ * Planned activities are activites that are planned for a specific date.
+ * These activities will be shown in the calendar. Or when it is in the past -> they will be shown in the past.
+ */
+export class PlannedActivity extends Identifiable implements Activity {
+	title: string;
+	actitityType: ActivityType;
+	notifyOnWeather: Set<WeatherType>;
+
+	date: Temporal.PlainDate;
+	time?: TimeFromTo;
+
+	constructor(
+		title: string,
+		actitityType: ActivityType,
+		notifyOnWeather: Set<WeatherType>,
+		date: Temporal.PlainDate,
+		time?: TimeFromTo
+	) {
+		super();
+		this.title = title;
+		this.actitityType = actitityType;
+		this.notifyOnWeather = notifyOnWeather;
 		this.date = date;
 		this.time = time;
-		this.title = title;
-		this.description = description;
+	}
+
+	get isAllDay() {
+		return !this.time || !this.time.from || !this.time.to;
+	}
+
+	set isAllDay(value: boolean) {
+		if (value) {
+			this.setToAllDay();
+			return;
+		}
+
+		const from = Temporal.Now.plainTimeISO(TIME_ZONE);
+		const to = Temporal.Now.plainTimeISO(TIME_ZONE).add({ hours: 1 });
+		this.time = { from, to };
+	}
+
+	setToAllDay() {
+		this.time = undefined;
 	}
 
 	toZonedTime(event: Event, key: 'from' | 'to') {
@@ -31,8 +119,17 @@ export class CalendarEvent extends Identifiable {
 		if (!timeString) return;
 
 		const [hour, minute] = timeString.split(':').map(parseInt);
+		const time = Temporal.PlainTime.from({ hour, minute });
 
-		this.time[key] = Temporal.PlainTime.from({ hour, minute });
+		// Set time | if not yet defined -> set it to the same time
+		if (!this.time) {
+			this.time =
+				key == 'from'
+					? { from: time, to: time.add({ hours: 1 }) }
+					: { from: time.subtract({ hours: 1 }), to: time };
+		} else {
+			this.time[key] = Temporal.PlainTime.from({ hour, minute });
+		}
 	}
 
 	setDate(event: Event) {
@@ -52,16 +149,7 @@ export class CalendarEvent extends Identifiable {
 		this.toZonedTime(event, 'to');
 	}
 
-	static new(date?: Temporal.PlainDate, timeStart?: Temporal.PlainTime) {
-		// Set date and time if they are not set -> use date/time now
-		date = date ?? Temporal.Now.plainDateISO(TIME_ZONE);
-		timeStart = timeStart ?? Temporal.Now.plainTimeISO(TIME_ZONE);
-
-		const time = {
-			from: timeStart,
-			to: timeStart.add({ hours: 1 })
-		};
-
-		return new CalendarEvent(date, time, '', '');
+	static new(date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE), time?: TimeFromTo) {
+		return new PlannedActivity('', 'Work', new Set(['Sun']), date, time);
 	}
 }

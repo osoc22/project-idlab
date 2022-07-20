@@ -1,5 +1,11 @@
 #!/bin/bash
 
+echo "THIS IS STILL THE OLD RUN.SH SCRIPT"
+echo "This has been deprecated in favour of better installation methods through npm"
+echo "Press ENTER to exit"
+read
+exit 0
+
 # This file should allow the project to be setup & run in one line
 # Not including global prerequisites (e.g. Node, Docker), but including requirements (e.g. CSS)
 

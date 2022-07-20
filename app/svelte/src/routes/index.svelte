@@ -1,5 +1,9 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
+
 	import { onMount } from 'svelte';
+	import user from '$lib/stores/userStore';
 
 	import { Temporal } from '@js-temporal/polyfill';
 	import { Icon, ArrowRight, ArrowLeft, Plus, TrendingDown } from 'svelte-hero-icons';
@@ -61,12 +65,14 @@ removeThing
 	window.schema = schema;
 
 
-	// On load,
-	// - adapt the schema to be more programming friendly
-	onMount(async () => {
-		gotoToday();
+  
+  onMount(() => {
+		// If a user is logged in, redirect to the calendar page.
+    //gotoToday();
+		if ($user.userSession.isLoggedIn) {
+			goto(base + '/upcomming');
+		}
 	});
-
 
 
 
@@ -318,24 +324,3 @@ removeThing
 
 	window.tester = tester;
 </script>
-
-<div class="flex py-5 px-4 justify-between items-center gap-4">
-	<h1 class="text-3xl font-bold underline">Your calendar</h1>
-
-	<RoundButton filled on:click={() => (startOfWeek = startOfWeek.subtract({ weeks: 1 }))}>
-		<Icon src={ArrowLeft} class="cursor-pointer" size="16" />
-	</RoundButton>
-	<RoundButton filled on:click={() => (startOfWeek = startOfWeek.add({ weeks: 1 }))}>
-		<Icon src={ArrowRight} class="cursor-pointer" size="16" />
-	</RoundButton>
-
-	<div class="m-auto" />
-
-	<Button on:click={editEvent.new}>
-		<Icon slot="icon" src={Plus} size="16" />
-		Create new event
-	</Button>
-	<Profile firstname="Abel" lastname="de Bruijn" />
-</div>
-
-<Calendar {startOfWeek} />
