@@ -83,9 +83,14 @@ function DatasetUrl(datasetName: string) {
  * 								(If there isn't, use the current full Datetime, which will be unique,
  * 								 unless the same user uses two devices and makes two updates at the EXACT same millisecond
  * 								 but look if they try that they're trying to break it so they get what the want)
+ *   							(To check if there isn't an id, an empty string is used. This is so functions
+ * 								 that make use of newThingBuilder can pass an empty string in case they want to autogenerate 
  * @returns	Thing built with all the provided data
  */
-function newThingBuilder(type = 'https://schema.org/Thing', data = {}, id = Date.now().toString()) {
+function newThingBuilder(type = 'https://schema.org/Thing', data = {}, id = "") {
+	if (!id) {  // If no id was passed ("", false, undefined, null)
+		id = Date.now().toString();  // Auto-generate an id
+	}
 	const newThing = buildThing(createThing({ name: id })).setUrl(RDF.type, type); // Set type
 	return dataToThing(newThing, data);
 }
@@ -226,7 +231,8 @@ export async function saveNewEvent(
 	startDate: Date,
 	endDate: Date,
 	location: string = '',
-	activityType: string = ''
+	activityType: string = '',
+	id: string = '',
 ) {
 	if (!schema.event) return;
 
@@ -236,7 +242,7 @@ export async function saveNewEvent(
 		[schema.event.endDate]: endDate,
 		[schema.event.location]: location,
 		[schema.event.activityType]: activityType
-	});
+	}, id=id);
 
 	return saveThing('calendar', thingEvent);
 }
@@ -299,7 +305,7 @@ export async function tester() {
 	const end = new Date();
 	end.setHours(end.getHours() + 2);
 
-	await saveNewEvent('2 hours, starting now!', start, end, 'here', 'random'); // To be updated
+	await saveNewEvent('2 hours, starting now!', start, end, 'here', 'random', "specificid"); // To be updated
 	await saveNewEvent('2 hours, starting now!', start, end, 'here'); // This one just stays
 	await saveNewEvent('2 hours, starting now!', start, end); // To be removed
 
