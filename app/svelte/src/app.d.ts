@@ -11,5 +11,5 @@ declare namespace App {
 }
 
 declare interface Window {
-  tester: () => Promise<void>
+	tester: () => Promise<void>;
 }

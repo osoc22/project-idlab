@@ -8,13 +8,11 @@
 	import { tester } from '$lib/utils/solidInterface';
 	window.tester = tester;
 
-  onMount(() => {
+	onMount(() => {
 		// If a user is logged in, redirect to the calendar page.
-    //gotoToday();
+		//gotoToday();
 		if ($user.userSession.isLoggedIn) {
 			goto(base + '/upcomming');
 		}
 	});
-
-
 </script>
