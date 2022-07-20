@@ -6,19 +6,27 @@ import {
 } from '$lib/types/calendarEvents';
 import { Temporal } from '@js-temporal/polyfill';
 import { derived, writable } from 'svelte/store';
-import { saveNewEvent, updateSavedEvent, removeSavedEvent } from '$lib/utils/solidInterface';
+import { saveNewEvent } from '$lib/utils/solidInterface';
 
 function createActivityStore<T extends Activity>() {
 	const { subscribe, set, update } = writable<T[]>([]);
 
 	return {
 		subscribe,
-		add: (event: T, start: Date, end:Date) =>
+		add: (event: T, date?: Temporal.PlainDate, from?: Temporal.PlainTime, to?: Temporal.PlainTime) =>
 			update((es) => {
 				es.push(event);
 
-				// saveNewEvent('Description!', start, end, 'location', 'activitytype');
-				saveNewEvent(event.title, start, end, event.LOCATIONSTRING, event.actitityType);
+				// Only store to pod if date and time are specified
+				if (date && from && to) {
+
+					const start = new Date(date.toString() + 'T' + from.toString({ smallestUnit: 'second' }))
+					const end = new Date(date.toString() + 'T' + to.toString({ smallestUnit: 'second' }))
+
+					console.log(start, end)
+
+					saveNewEvent(event.title, start, end, event.location, event.actitityType);
+				}
 
 				return es;
 			}),

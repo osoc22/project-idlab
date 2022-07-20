@@ -25,6 +25,7 @@
 		if (newActivity.editMode) {
 			unplannedActivities.updateActivity(newActivity.activity);
 		} else {
+			// TODO: send to the solid pod
 			unplannedActivities.add(newActivity.activity);
 		}
 
@@ -63,7 +64,12 @@
 				/>
 			</div>
 			<div class="right grow">
-				<Input type="text" placeholder="Where?" label="Location" />
+				<Input
+					type="text"
+					placeholder="Where?"
+					label="Location"
+					bind:value={newActivity.activity.location}
+				/>
 
 				<MultiSelect
 					grow

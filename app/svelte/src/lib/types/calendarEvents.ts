@@ -12,6 +12,7 @@ export interface Activity extends Identifiable {
 
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
+	location: string;
 
 	get isAllDay(): boolean;
 	set isAllDay(value: boolean);
@@ -22,6 +23,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 	title: string;
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
+	location: string;
 
 	dates: Temporal.PlainDate[];
 	times: TimeFromTo[];
@@ -30,6 +32,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 		title: string,
 		actitityType: ActivityType,
 		notifyOnWeather: Set<WeatherType>,
+		location: string,
 		dates: Temporal.PlainDate[],
 		times: TimeFromTo[] = []
 	) {
@@ -37,6 +40,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 		this.title = title;
 		this.actitityType = actitityType;
 		this.notifyOnWeather = notifyOnWeather;
+		this.location = location;
 		this.dates = dates;
 		this.times = times;
 	}
@@ -64,7 +68,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(dates: Temporal.PlainDate[] = [], times: TimeFromTo[] = []) {
-		return new UnplannedActivity('', 'Work', new Set(['Sun']), dates, times);
+		return new UnplannedActivity('', 'Work', new Set(['Sun']), "Brussels", dates, times);
 	}
 }
 
@@ -76,6 +80,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 	title: string;
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
+	location: string;
 
 	date: Temporal.PlainDate;
 	time?: TimeFromTo;
@@ -84,6 +89,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 		title: string,
 		actitityType: ActivityType,
 		notifyOnWeather: Set<WeatherType>,
+		location: string,
 		date: Temporal.PlainDate,
 		time?: TimeFromTo
 	) {
@@ -91,6 +97,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 		this.title = title;
 		this.actitityType = actitityType;
 		this.notifyOnWeather = notifyOnWeather;
+		this.location = location;
 		this.date = date;
 		this.time = time;
 	}
@@ -150,6 +157,6 @@ export class PlannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE), time?: TimeFromTo) {
-		return new PlannedActivity('', 'Work', new Set(['Sun']), date, time);
+		return new PlannedActivity('', 'Work', new Set(['Sun']), "Brussels", date, time);
 	}
 }

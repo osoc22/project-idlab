@@ -42,7 +42,7 @@ interface Schema {
 }
 
 // Links to types
-export let schema: Schema = {
+export const schema: Schema = {
 	event_type: 'https://schema.org/Event',
 	startDate_type: 'https://schema.org/startDate',
 	endDate_type: 'https://schema.org/endDate',
@@ -86,7 +86,7 @@ function DatasetUrl(datasetName: string) {
  * @returns	Thing built with all the provided data
  */
 function newThingBuilder(type = 'https://schema.org/Thing', data = {}, id = Date.now().toString()) {
-	let newThing = buildThing(createThing({ name: id })).setUrl(RDF.type, type); // Set type
+	const newThing = buildThing(createThing({ name: id })).setUrl(RDF.type, type); // Set type
 	return dataToThing(newThing, data);
 }
 
@@ -104,17 +104,19 @@ function newThingBuilder(type = 'https://schema.org/Thing', data = {}, id = Date
  * @param  data	 Data to be added to Thing. Structured as {rdf_type_url: thing_value_for_this_property}
  * @returns Thing.build(), including any new date.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
-	var types = Object.keys(data);
+	const types = Object.keys(data);
 
 	types.forEach((type) => {
-		let value = data[type];
+		const value = data[type];
 		if (!value) return;
 
 		switch (type) {
 			// Date parser
 			case schema.startDate_type || schema.endDate_type:
 				thingBuilder.setDatetime(type, value);
+				break;
 			default:
 				thingBuilder.setStringNoLocale(type, value);
 		}
@@ -133,13 +135,16 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
  *
  * @returns	Promise of saveSolidDatasetAt
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function saveThing(datasetName: string, thing: any): Promise<any> {
-	let datasetUrl = DatasetUrl(datasetName);
+	const datasetUrl = DatasetUrl(datasetName);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let dataset: any;
 	try {
 		dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 		dataset = setThing(dataset, thing);
 		return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (e: any) {
 		// If dataset doesn't exist yet, repeat functions
 		// TODO, specifcy error codes? e.response.status == 404 || e.response.status == 501
@@ -158,15 +163,16 @@ export async function saveThing(datasetName: string, thing: any): Promise<any> {
  *
  * @returns Promise of @see saveThing
  */
-export async function updateSavedThing(datasetName: string, thingId: any, changes: {}) {
-	let datasetUrl = DatasetUrl(datasetName);
-	let dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function updateSavedThing(datasetName: string, thingId: any, changes: object) {
+	const datasetUrl = DatasetUrl(datasetName);
+	const dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 
-	let existingThing = getThing(dataset, `${datasetUrl}#${thingId}`);
+	const existingThing = getThing(dataset, `${datasetUrl}#${thingId}`);
 
 	if (!existingThing) return; // TODO: throw error?
 
-	let modifiedThing = dataToThing(buildThing(existingThing), changes);
+	const modifiedThing = dataToThing(buildThing(existingThing), changes);
 
 	return saveThing(datasetName, modifiedThing);
 }
@@ -179,10 +185,11 @@ export async function updateSavedThing(datasetName: string, thingId: any, change
  *
  * @returns promose of @function saveSolidDatasetAt
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function removeSavedThing(datasetName: string, thingId: any) {
-	let datasetUrl = DatasetUrl(datasetName);
+	const datasetUrl = DatasetUrl(datasetName);
 	let dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
-	let thing = getThing(dataset, `${datasetUrl}#${thingId}`);
+	const thing = getThing(dataset, `${datasetUrl}#${thingId}`);
 
 	if (!thing) return; // TODO: throw error?
 
@@ -210,7 +217,7 @@ export async function saveNewEvent(
 ) {
 	if (!schema.event) return;
 
-	let thingEvent = newThingBuilder(schema.event.self, {
+	const thingEvent = newThingBuilder(schema.event.self, {
 		[schema.event.about]: description,
 		[schema.event.startDate]: startDate,
 		[schema.event.endDate]: endDate,
@@ -229,7 +236,7 @@ export async function saveNewEvent(
  *
  * @returns Promise of @see updateSavedThing
  */
-export async function updateSavedEvent(eventId: string, changes: {}) {
+export async function updateSavedEvent(eventId: string, changes: object) {
 	return updateSavedThing('calendar', eventId, changes);
 }
 
@@ -261,7 +268,7 @@ export async function removeSavedEvent(eventId: string) {
  *
  */
 export async function listThingsFromDataset(datasetName: string, supressConsoleLog = false) {
-	let things = getThingAll(await getSolidDataset(DatasetUrl(datasetName), { fetch: fetch }), {});
+	const things = getThingAll(await getSolidDataset(DatasetUrl(datasetName), { fetch: fetch }), {});
 	if (!supressConsoleLog) {
 		things.forEach((thing) => {
 			console.log(thing.url.split('#')[1]);
@@ -275,8 +282,8 @@ export async function listThingsFromDataset(datasetName: string, supressConsoleL
 // A function that can be called that tests out the code above!
 export async function tester() {
 	// Save an event that starts now and ends in two hours
-	var start = new Date();
-	var end = new Date();
+	const start = new Date();
+	const end = new Date();
 	end.setHours(end.getHours() + 2);
 
 	await saveNewEvent('2 hours, starting now!', start, end, 'here', 'random'); // To be updated
@@ -286,10 +293,10 @@ export async function tester() {
 	// Set the first events start and end to now
 	// NOTE: don't forget to () your await because otherwise it doesn't work!
 
-	let events = await listThingsFromDataset('calendar', true);
+	const events = await listThingsFromDataset('calendar', true);
 	console.log(events);
-	let firstEventUrl = events[0].url.split('#')[1];
-	let thirdEventUrl = events[2].url.split('#')[1];
+	const firstEventUrl = events[0].url.split('#')[1];
+	const thirdEventUrl = events[2].url.split('#')[1];
 
 	if (!schema.event) return;
 

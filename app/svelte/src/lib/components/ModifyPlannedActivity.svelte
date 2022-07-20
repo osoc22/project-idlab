@@ -16,7 +16,12 @@
 		if (newActivity.editMode) {
 			plannedActivities.updateActivity(newActivity.activity);
 		} else {
-			plannedActivities.add(newActivity.activity);
+			plannedActivities.add(
+				newActivity.activity,
+				newActivity.activity.date,
+				newActivity.activity.time?.from,
+				newActivity.activity.time?.to
+			);
 		}
 
 		modifyPlannedActivity.reset();
@@ -65,7 +70,12 @@
 				/>
 			</div>
 			<div class="right grow">
-				<Input type="text" placeholder="Where?" label="Location" />
+				<Input
+					type="text"
+					placeholder="Where?"
+					label="Location"
+					bind:value={newActivity.activity.location}
+				/>
 
 				<MultiSelect
 					grow
