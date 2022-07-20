@@ -26,7 +26,7 @@ userStore.subscribe((val) => {
 	webID = val.webID;
 });
 
-interface SchemaEvent {
+export interface SchemaEvent {
 	self: string;
 	startDate: string;
 	endDate: string;
@@ -343,7 +343,9 @@ export async function removeSavedEvent(eventId: string) {
  *
  */
 export async function listThingsFromDataset(datasetName: string, supressConsoleLog = false) {
-	const things = await getThingAll(await getSolidDataset(DatasetUrl(datasetName), { fetch: fetch }), {});
+	const dataset = await getSolidDataset(DatasetUrl(datasetName), { fetch: fetch });
+	const things = getThingAll(dataset, {});
+	
 	if (!supressConsoleLog) {
 		things.forEach((thing) => {
 			console.log(thing.url.split('#')[1]);
