@@ -7,7 +7,12 @@ import {
 	getThingAll,
 	saveSolidDatasetAt,
 	getThing,
-	removeThing
+	removeThing,
+	fromRdfJsDataset,
+	solidDatasetAsTurtle,
+	getDatetime,
+	getDatetimeAll,
+	getStringNoLocale
 } from '@inrupt/solid-client';
 import { fetch } from '@inrupt/solid-client-authn-browser';
 import { RDF } from '@inrupt/vocab-common-rdf';
@@ -94,6 +99,44 @@ function newThingBuilder(type = 'https://schema.org/Thing', data = {}, id = "") 
 	const newThing = buildThing(createThing({ name: id })).setUrl(RDF.type, type); // Set type
 	return dataToThing(newThing, data);
 }
+
+
+// Inverse of dataToThing
+function thingToData(thing: any, thingSchema: any) {
+	let typeKeys = Object.keys(thingSchema);  // Output example: [ "self", "startDate", "about" ]
+	let data = {};
+
+	typeKeys.forEach((typeKey: string) => {
+		if (typeKey == "self") return; // @see schema
+		// type would be the same as calling schema.event.startDate, for example https://schema.org/Event
+		let type = thingSchema[typeKey];  
+
+		console.log(type)
+		switch (type) {
+
+			// Date parser
+			case schema.startDate_type || schema.endDate_type:
+				console.log(typeKey)
+				data[typeKey] = getDatetime(thing, type);
+				break;
+			default:
+				console.log(typeKey)
+				data[typeKey] = getStringNoLocale(thing, type);
+				
+				break;
+		}
+
+	});
+
+	return data;
+}
+
+async function parseEvent(eventId : string) {
+	if (!schema.event) return;
+	let eventThing = await getEvent(eventId)
+	return thingToData(eventThing, schema.event);
+}
+
 
 /**
  * Inserts data into a Thing builder, overwriting if existing, appending if not.
@@ -302,7 +345,7 @@ export async function removeSavedEvent(eventId: string) {
  *
  */
 export async function listThingsFromDataset(datasetName: string, supressConsoleLog = false) {
-	const things = getThingAll(await getSolidDataset(DatasetUrl(datasetName), { fetch: fetch }), {});
+	const things = await getThingAll(await getSolidDataset(DatasetUrl(datasetName), { fetch: fetch }), {});
 	if (!supressConsoleLog) {
 		things.forEach((thing) => {
 			console.log(thing.url.split('#')[1]);
@@ -315,6 +358,20 @@ export async function listThingsFromDataset(datasetName: string, supressConsoleL
 
 // A function that can be called that tests out the code above!
 export async function tester() {
+	//var dataset = await getSolidDataset(DatasetUrl("calendar"), {fetch: fetch});
+
+	//var turtle = await solidDatasetAsTurtle(dataset)
+	//console.log(turtle);
+	let allEvents = await listThingsFromDataset("calendar", true)
+	//let firstEvent = parseEvent(allEvents[0]);
+
+	let firstEventId = allEvents[0].url.split('#')[1];
+	let event = await parseEvent(firstEventId)
+
+	console.log(event)
+
+	
+	return;
 	// Save an event that starts now and ends in two hours
 	const start = new Date();
 	const end = new Date();
