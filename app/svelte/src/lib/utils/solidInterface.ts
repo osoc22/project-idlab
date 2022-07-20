@@ -157,9 +157,6 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
 		const value = data[type];
 		if (!value) return;
 
-		console.log(type);
-		console.log(schema.endDate_type);
-
 		switch (type) {
 			// Date parser
 			case schema.startDate_type:
