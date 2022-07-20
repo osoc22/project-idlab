@@ -9,3 +9,7 @@ declare namespace App {
 	// interface Session {}
 	// interface Stuff {}
 }
+
+declare interface Window {
+  tester: () => Promise<void>
+}

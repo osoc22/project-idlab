@@ -6,6 +6,7 @@ import {
 } from '$lib/types/calendarEvents';
 import { Temporal } from '@js-temporal/polyfill';
 import { derived, writable } from 'svelte/store';
+import { saveNewEvent, updateSavedEvent, removeSavedEvent } from '$lib/utils/solidInterface';
 
 function createActivityStore<T extends Activity>() {
 	const { subscribe, set, update } = writable<T[]>([]);
