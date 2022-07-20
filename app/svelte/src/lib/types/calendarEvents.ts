@@ -1,6 +1,11 @@
 import { Temporal } from '@js-temporal/polyfill';
 import Identifiable from '$lib/types/identifiable';
-import { listThingsFromDataset, type SchemaEvent } from '$lib/utils/solidInterface';
+import {
+	listThingsFromDataset,
+	type SchemaEvent,
+	parseEventThing
+} from '$lib/utils/solidInterface';
+import type { Thing } from '@inrupt/solid-client';
 
 export const TIME_ZONE = 'Europe/Brussels';
 
@@ -69,7 +74,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(dates: Temporal.PlainDate[] = [], times: TimeFromTo[] = []) {
-		return new UnplannedActivity('', 'Work', new Set(['Sun']), "Brussels", dates, times);
+		return new UnplannedActivity('', 'Work', new Set(['Sun']), 'Brussels', dates, times);
 	}
 }
 
@@ -158,21 +163,27 @@ export class PlannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE), time?: TimeFromTo) {
-		return new PlannedActivity('', 'Work', new Set(['Sun']), "Brussels", date, time);
+		return new PlannedActivity('', 'Work', new Set(['Sun']), 'Brussels', date, time);
 	}
 
-
 	// static fromSolid(schema: any): PlannedActivity {
-		
+
 	// 	// return PlannedActivity.new()
 	// }
 
 	static async init() {
 		// STEP 1: Get solid data
-		const rdfDataset = await listThingsFromDataset("calendar", true)
+		const rdfDataset: Thing[] = await listThingsFromDataset('calendar', true);
 
 		// STEP 2: normalise dataset
-		const normDataset: SchemaEvent[] = []
+		const normDataset = rdfDataset.map(async (thing) => await parseEventThing<SchemaEvent>(thing));
+
+		const dataset = await Promise.all(normDataset);
+		const filteredDataset: SchemaEvent[] = dataset.filter(
+			(event) => event !== undefined
+		) as SchemaEvent[];
+
+		console.log('NorM', filteredDataset);
 
 		// STEP 3: Convert to {PlannedActivity} $lib/types/calendarEvents.ts
 		// const calendarActivities = normDataset.map(data => PlannedActivity.fromSolid(data))
