@@ -6,6 +6,8 @@ import {
 	parseEventThing
 } from '$lib/utils/solidInterface';
 import type { Thing } from '@inrupt/solid-client';
+import { plannedActivities } from '$lib/stores/eventStore';
+import { browser } from '$app/env';
 
 export const TIME_ZONE = 'Europe/Brussels';
 
@@ -166,29 +168,47 @@ export class PlannedActivity extends Identifiable implements Activity {
 		return new PlannedActivity('', 'Work', new Set(['Sun']), 'Brussels', date, time);
 	}
 
-	// static fromSolid(schema: any): PlannedActivity {
+	static fromSolid(schema: Partial<SchemaEvent>): PlannedActivity {
+		const title = schema.about || '';
+		const actitityType = (schema.activityType || 'Work') as ActivityType;
+		const notifyOnWeather = new Set(['Sun']) as Set<WeatherType>;
+		const location = schema.location || '';
 
-	// 	// return PlannedActivity.new()
-	// }
+		let date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE);
+		let time: { from: Temporal.PlainTime; to: Temporal.PlainTime };
+
+		if (schema.startDate) {
+			const d = new Date(schema.startDate);
+			date = new Temporal.PlainDate(d.getFullYear(), d.getMonth() + 1, d.getDate());
+		}
+
+		// If startDate is defined AND startDate IS endDate THEN event is all day
+		if (schema.startDate && schema.endDate && schema.startDate != schema.endDate) {
+			const t1 = new Date(schema.startDate);
+			const t2 = new Date(schema.endDate);
+			const from = new Temporal.PlainTime(t1.getHours(), t1.getMinutes(), t1.getSeconds());
+			const to = new Temporal.PlainTime(t2.getHours(), t2.getMinutes(), t2.getSeconds());
+			time = { from, to };
+			console.log(time);
+		}
+
+		return new PlannedActivity(title, actitityType, notifyOnWeather, location, date, time);
+	}
 
 	static async init() {
 		// STEP 1: Get solid data
 		const rdfDataset: Thing[] = await listThingsFromDataset('calendar', true);
 
 		// STEP 2: normalise dataset
-		const normDataset = rdfDataset.map(async (thing) => await parseEventThing<SchemaEvent>(thing));
-
-		const dataset = await Promise.all(normDataset);
-		const filteredDataset: SchemaEvent[] = dataset.filter(
-			(event) => event !== undefined
-		) as SchemaEvent[];
-
-		console.log('NorM', filteredDataset);
+		const normDataset = rdfDataset.map(async (thing) => await parseEventThing(thing));
+		const dataset: Partial<SchemaEvent>[] = await Promise.all(normDataset);
 
 		// STEP 3: Convert to {PlannedActivity} $lib/types/calendarEvents.ts
-		// const calendarActivities = normDataset.map(data => PlannedActivity.fromSolid(data))
+		const calendarActivities = dataset.map((data) => PlannedActivity.fromSolid(data));
 
 		// STEP 4: set data to store
-		// plannedActivities.set(calendarActivities)
+		plannedActivities.set(calendarActivities);
 	}
 }
+
+if (browser) window.Temporal = Temporal;

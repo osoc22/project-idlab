@@ -8,11 +8,9 @@ import {
 	saveSolidDatasetAt,
 	getThing,
 	removeThing,
-	fromRdfJsDataset,
-	solidDatasetAsTurtle,
 	getDatetime,
-	getDatetimeAll,
-	getStringNoLocale
+	getStringNoLocale,
+	type Thing
 } from '@inrupt/solid-client';
 import { fetch } from '@inrupt/solid-client-authn-browser';
 import { RDF } from '@inrupt/vocab-common-rdf';
@@ -89,12 +87,13 @@ function DatasetUrl(datasetName: string) {
  * 								 unless the same user uses two devices and makes two updates at the EXACT same millisecond
  * 								 but look if they try that they're trying to break it so they get what the want)
  *   							(To check if there isn't an id, an empty string is used. This is so functions
- * 								 that make use of newThingBuilder can pass an empty string in case they want to autogenerate 
+ * 								 that make use of newThingBuilder can pass an empty string in case they want to autogenerate
  * @returns	Thing built with all the provided data
  */
-function newThingBuilder(type = 'https://schema.org/Thing', data = {}, id = "") {
-	if (!id) {  // If no id was passed ("", false, undefined, null)
-		id = Date.now().toString();  // Auto-generate an id
+function newThingBuilder(type = 'https://schema.org/Thing', data = {}, id = '') {
+	if (!id) {
+		// If no id was passed ("", false, undefined, null)
+		id = Date.now().toString(); // Auto-generate an id
 	}
 	const newThing = buildThing(createThing({ name: id })).setUrl(RDF.type, type); // Set type
 	return dataToThing(newThing, data);
@@ -138,35 +137,44 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
 }
 
 /**
- * Turn a Thing object into a proper Javascript object 
+ * Make sure getDatetime returns some string
+ */
+function getDateFromThing(thing: Thing, type: string): string {
+	const dateTime = getDatetime(thing, type);
+	let dateString = dateTime?.toString();
+
+	if (!dateTime) dateString = getStringNoLocale(thing, type) || '';
+	return dateString || '';
+}
+
+/**
+ * Turn a Thing object into a proper Javascript object
  * Inverse of @see dataToThing
- * 
- * @param thing 		The object of the Thing, gotten from @function getThing or @function getThingAll 
- * @param thingSchema 	The schema the Thing follows 
- * 
+ *
+ * @param thing 		The object of the Thing, gotten from @function getThing or @function getThingAll
+ * @param thingSchema 	The schema the Thing follows
+ *
  * @returns A stripped Javascript object
  */
- function thingToData(thing: any, thingSchema: any) {
-	let typeKeys = Object.keys(thingSchema);  // Output example: [ "self", "startDate", "about" ]
-	let data: {[key: string]: any} = {};
+function thingToData(thing: Thing, thingSchema: SchemaEvent) {
+	const data: Partial<SchemaEvent> = {};
 
-	typeKeys.forEach((typeKey: string) => {
-		if (typeKey == "self") return; // @see schema
-		// type would be the same as calling schema.event.startDate, for example https://schema.org/Event
-		let type = thingSchema[typeKey];  
+	data['self'] = 'https://schema.org/Event';
+
+	const thingEntries = Object.entries(thingSchema) as [keyof SchemaEvent, string][];
+
+	thingEntries.forEach(([typeKey, type]) => {
+		if (typeKey == 'self') return; // @see schema
 
 		switch (type) {
-
-			// Date parser
 			case schema.startDate_type:
 			case schema.endDate_type:
-				data[typeKey] = getDatetime(thing, type);
+				data[typeKey] = getDateFromThing(thing, type);
 				break;
 			default:
-				data[typeKey] = getStringNoLocale(thing, type);
+				data[typeKey] = getStringNoLocale(thing, type) || '';
 				break;
 		}
-
 	});
 
 	return data;
@@ -174,15 +182,15 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
 
 /**
  * Get a Thing with the specified id, from the dataset with the specified name
- * 
+ *
  * @param datasetName name of dataset to get the thing from
  * @param thingId id/name of Thing to get
- * 
+ *
  * @returns Promise of @function getThing
  */
 export async function getThingFromDataset(datasetName: string, thingId: string) {
-	let datasetUrl = DatasetUrl(datasetName); 
-	let dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
+	const datasetUrl = DatasetUrl(datasetName);
+	const dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 	return getThing(dataset, `${datasetUrl}#${thingId}`);
 }
 
@@ -204,7 +212,7 @@ export async function saveThing(datasetName: string, thing: any): Promise<any> {
 		dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 		dataset = setThing(dataset, thing);
 		return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (e: any) {
 		// If dataset doesn't exist yet, repeat functions
 		// TODO, specifcy error codes? e.response.status == 404 || e.response.status == 501
@@ -257,38 +265,39 @@ export async function removeSavedThing(datasetName: string, thingId: any) {
 	return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 }
 
-
 /**
  * Gets an Event Thing from the calendar dataset
- * 
+ *
  * @param id Id of the Event/Thing to get
- * 
+ *
  * @returns Promise of @function getThing
  */
 export async function getEvent(id: string) {
-	return getThingFromDataset("calendar", id);
+	return getThingFromDataset('calendar', id);
 }
 
 /**
  * Functions to parse an Event Thing into a clean Javascript object
- * 
+ *
  * @todo Turn these functions into overloads
- * 
+ *
  * @param eventId (getAndParseEvent) Id/Name of event to get from calendar dataset
  * @param eventThing (parseEventThing) Unparsed Event Thing object, gotten from @function getThing or @function getThingAll
- * 
+ *
  * @returns Promise of @see thingToData, which should result in a Javascript object from an event
  */
- async function getAndParseEvent(eventId : string) {
+export async function getAndParseEvent(eventId: string) {
 	if (!schema.event) return;
-	let eventThing = await getEvent(eventId)
-	return thingToData(eventThing, schema.event);
-}
-async function parseEventThing(eventThing : object) {
-	if (!schema.event) return;
-	return thingToData(eventThing, schema.event);
-}
+	const eventThing = await getEvent(eventId);
+	if (!eventThing) return;
 
+	return thingToData(eventThing, schema.event);
+}
+export async function parseEventThing(eventThing: Thing): Promise<Partial<SchemaEvent>> {
+	if (!schema.event) throw Error('shema.event not defined');
+
+	return thingToData(eventThing, schema.event);
+}
 
 /**
  * Creates a new Event Thing, saves it to calendar dataset. See https://schema.org/Event for more information.
@@ -308,17 +317,21 @@ export async function saveNewEvent(
 	endDate: Date,
 	location: string = '',
 	activityType: string = '',
-	id: string = '',
+	id: string = ''
 ) {
 	if (!schema.event) return;
 
-	const thingEvent = newThingBuilder(schema.event.self, {
-		[schema.event.about]: description,
-		[schema.event.startDate]: startDate,
-		[schema.event.endDate]: endDate,
-		[schema.event.location]: location,
-		[schema.event.activityType]: activityType
-	}, id=id);
+	const thingEvent = newThingBuilder(
+		schema.event.self,
+		{
+			[schema.event.about]: description,
+			[schema.event.startDate]: startDate,
+			[schema.event.endDate]: endDate,
+			[schema.event.location]: location,
+			[schema.event.activityType]: activityType
+		},
+		id
+	);
 
 	return saveThing('calendar', thingEvent);
 }
@@ -365,7 +378,7 @@ export async function removeSavedEvent(eventId: string) {
 export async function listThingsFromDataset(datasetName: string, supressConsoleLog = false) {
 	const dataset = await getSolidDataset(DatasetUrl(datasetName), { fetch: fetch });
 	const things = getThingAll(dataset, {});
-	
+
 	if (!supressConsoleLog) {
 		things.forEach((thing) => {
 			console.log(thing.url.split('#')[1]);
@@ -383,20 +396,19 @@ export async function tester() {
 	const end = new Date();
 	end.setHours(end.getHours() + 2);
 
-	await saveNewEvent('2 hours, starting now!', start, end, 'here', 'random', "specificid"); // To be updated
+	await saveNewEvent('2 hours, starting now!', start, end, 'here', 'random', 'specificid'); // To be updated
 	await saveNewEvent('2 hours, starting now!', start, end, 'here'); // This one just stays
 	await saveNewEvent('2 hours, starting now!', start, end); // To be removed
 
 	// Set the first events start and end to now
 	// NOTE: don't forget to () your await because otherwise it doesn't work!
 
-
 	const events = await listThingsFromDataset('calendar', true);
 	console.log(events);
 	const firstEventUrl = events[0].url.split('#')[1];
 	const thirdEventUrl = events[2].url.split('#')[1];
 
-	console.log("Specifically get first event")
+	console.log('Specifically get first event');
 	console.log(await getEvent(events[0].url.split('#')[1]));
 
 	if (!schema.event) return;
@@ -408,10 +420,8 @@ export async function tester() {
 	});
 	await removeSavedEvent(thirdEventUrl);
 
-
-	let firstEventToObject = await getAndParseEvent(firstEventUrl)
-	console.log(firstEventToObject)
+	const firstEventToObject = await getAndParseEvent(firstEventUrl);
+	console.log(firstEventToObject);
 
 	console.log(await parseEventThing(events[2]));
-
 }

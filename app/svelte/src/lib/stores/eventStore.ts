@@ -6,27 +6,38 @@ import {
 } from '$lib/types/calendarEvents';
 import { Temporal } from '@js-temporal/polyfill';
 import { derived, writable } from 'svelte/store';
-import { saveNewEvent, updateSavedEvent } from '$lib/utils/solidInterface';
+import { saveNewEvent } from '$lib/utils/solidInterface';
 
 function createActivityStore<T extends Activity>() {
 	const { subscribe, set, update } = writable<T[]>([]);
 
 	return {
 		subscribe,
-		add: async (event: T, date?: Temporal.PlainDate, from?: Temporal.PlainTime, to?: Temporal.PlainTime) => {
-
+		set,
+		add: async (
+			event: T,
+			date?: Temporal.PlainDate,
+			from?: Temporal.PlainTime,
+			to?: Temporal.PlainTime
+		) => {
 			// send event to solid
 			if (date && from && to) {
-				const start = new Date(date.toString() + 'T' + from.toString({ smallestUnit: 'second' }))
-				const end = new Date(date.toString() + 'T' + to.toString({ smallestUnit: 'second' }))
+				const start = new Date(date.toString() + 'T' + from.toString({ smallestUnit: 'second' }));
+				const end = new Date(date.toString() + 'T' + to.toString({ smallestUnit: 'second' }));
 
-				console.log(start, end)
+				console.log(start, end);
 
-				const savedEvent = await saveNewEvent(event.title, start, end, event.location, event.actitityType);
-				console.log(savedEvent)
+				const savedEvent = await saveNewEvent(
+					event.title,
+					start,
+					end,
+					event.location,
+					event.actitityType
+				);
+				console.log(savedEvent);
 			}
 
-			update((es) => [...es, event])
+			update((es) => [...es, event]);
 		},
 		deleteActivity: (activity: T) => update((as) => as.filter((act) => !act.equals(activity))),
 		updateActivity: (activity: T) => {
@@ -81,5 +92,5 @@ function createModifyActivityStore<T extends Activity>(newActivity: () => T) {
 	};
 }
 
-export const modifyUnplannedActivity = createModifyActivityStore(UnplannedActivity.new);
-export const modifyPlannedActivity = createModifyActivityStore(PlannedActivity.new);
+export const modifyUnplannedActivity = createModifyActivityStore(() => UnplannedActivity.new());
+export const modifyPlannedActivity = createModifyActivityStore(() => PlannedActivity.new());
