@@ -128,9 +128,20 @@ function thingToData(thing: any, thingSchema: any) {
 	return data;
 }
 
-async function parseEvent(eventId : string) {
+/**
+ * 
+ * @param eventId Id/Name of event to convert
+ * 
+ * @returns Promise of @see thingToData
+ */
+async function getAndParseEvent(eventId : string) {
 	if (!schema.event) return;
 	let eventThing = await getEvent(eventId)
+	return thingToData(eventThing, schema.event);
+}
+
+async function parseEventThing(eventThing : object) {
+	if (!schema.event) return;
 	return thingToData(eventThing, schema.event);
 }
 
@@ -389,7 +400,9 @@ export async function tester() {
 	await removeSavedEvent(thirdEventUrl);
 
 
-	let firstEventToObject = await parseEvent(firstEventUrl)
+	let firstEventToObject = await getAndParseEvent(firstEventUrl)
 	console.log(firstEventToObject)
+
+	console.log(await parseEventThing(events[2]));
 
 }
