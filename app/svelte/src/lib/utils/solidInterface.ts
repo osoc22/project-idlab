@@ -17,11 +17,11 @@ import { RDF } from '@inrupt/vocab-common-rdf';
 import userStore from '$lib/stores/userStore';
 
 let podUrl: string = '';
-let webID: string = '';
+let storageLocation: string = '';
 
 userStore.subscribe((val) => {
 	podUrl = val.podUrl;
-	webID = val.webID;
+	storageLocation = val.storageLocation;
 });
 
 export interface SchemaEvent {
@@ -71,7 +71,7 @@ schema.event = {
  * */
 
 function DatasetUrl(datasetName: string) {
-	return `${podUrl}/${webID}/${datasetName}`;
+	return `${storageLocation}/${datasetName}`;
 }
 
 /**

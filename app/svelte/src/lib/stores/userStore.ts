@@ -11,7 +11,7 @@ import {
 interface UserStore {
 	loading: boolean;
 	userSession: ISessionInfo;
-	webID: string;
+	storageLocation: string;
 	podUrl: string;
 }
 
@@ -22,32 +22,32 @@ function createUserStore() {
 	const { subscribe, set } = writable<UserStore>({
 		loading: true,
 		userSession: getDefaultSession().info,
-		webID: '',
+		storageLocation: '',
 		podUrl: ''
 	});
 
 	return {
 		subscribe,
 		set,
-		init: async (webID?: string, podUrl?: string) => {
+		init: async (storageLocation?: string, podUrl?: string) => {
 			// Check if there is a session in the browser
 			await handleIncomingRedirect({
 				restorePreviousSession: true
 			});
 
-			webID = webID || localStorage.getItem('webID') || 'localhost:3000';
+			storageLocation = storageLocation || localStorage.getItem('storageLocation') || 'http://localhost:3000/johndoe';
 			podUrl = podUrl || localStorage.getItem('podUrl') || 'johndoe';
 
 			set({
 				loading: false,
 				userSession: getDefaultSession().info,
-				webID,
+				storageLocation,
 				podUrl
 			});
 		},
-		signIn: async (podUrl: string, webID: string, interfaceUrl: string) => {
+		signIn: async (podUrl: string, storageLocation: string, interfaceUrl: string) => {
 			if (!podUrl) throw new Error('Please enter a pod URL');
-			if (!webID) throw new Error('Please enter a web ID');
+			if (!storageLocation) throw new Error('Please enter a storage location');
 
 			if (podUrl.indexOf('//') < 0) {
 				podUrl = 'http://' + podUrl;
@@ -55,7 +55,7 @@ function createUserStore() {
 
 			// Set podUrl and webId for next sessions
 			localStorage.setItem('podUrl', podUrl);
-			localStorage.setItem('webID', webID);
+			localStorage.setItem('storageLocation', storageLocation);
 
 			// If something goes wrong, the error message will be displayed in the UI
 			try {
@@ -71,7 +71,7 @@ function createUserStore() {
 				set({
 					loading: false,
 					userSession: getDefaultSession().info,
-					webID,
+					storageLocation,
 					podUrl
 				});
 			} catch (e) {
