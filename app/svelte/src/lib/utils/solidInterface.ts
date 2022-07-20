@@ -100,52 +100,6 @@ function newThingBuilder(type = 'https://schema.org/Thing', data = {}, id = "") 
 	return dataToThing(newThing, data);
 }
 
-
-// Inverse of dataToThing
-function thingToData(thing: any, thingSchema: any) {
-	let typeKeys = Object.keys(thingSchema);  // Output example: [ "self", "startDate", "about" ]
-	let data: {[key: string]: any} = {};
-
-	typeKeys.forEach((typeKey: string) => {
-		if (typeKey == "self") return; // @see schema
-		// type would be the same as calling schema.event.startDate, for example https://schema.org/Event
-		let type = thingSchema[typeKey];  
-
-		switch (type) {
-
-			// Date parser
-			case schema.startDate_type:
-			case schema.endDate_type:
-				data[typeKey] = getDatetime(thing, type);
-				break;
-			default:
-				data[typeKey] = getStringNoLocale(thing, type);
-				break;
-		}
-
-	});
-
-	return data;
-}
-
-/**
- * 
- * @param eventId Id/Name of event to convert
- * 
- * @returns Promise of @see thingToData
- */
-async function getAndParseEvent(eventId : string) {
-	if (!schema.event) return;
-	let eventThing = await getEvent(eventId)
-	return thingToData(eventThing, schema.event);
-}
-
-async function parseEventThing(eventThing : object) {
-	if (!schema.event) return;
-	return thingToData(eventThing, schema.event);
-}
-
-
 /**
  * Inserts data into a Thing builder, overwriting if existing, appending if not.
  * Cool things this function achieves:
@@ -181,6 +135,41 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
 
 	// Return built thing
 	return thingBuilder.build();
+}
+
+/**
+ * Turn a Thing object into a proper Javascript object 
+ * Inverse of @see dataToThing
+ * 
+ * @param thing 		The object of the Thing, gotten from @function getThing or @function getThingAll 
+ * @param thingSchema 	The schema the Thing follows 
+ * 
+ * @returns A stripped Javascript object
+ */
+ function thingToData(thing: any, thingSchema: any) {
+	let typeKeys = Object.keys(thingSchema);  // Output example: [ "self", "startDate", "about" ]
+	let data: {[key: string]: any} = {};
+
+	typeKeys.forEach((typeKey: string) => {
+		if (typeKey == "self") return; // @see schema
+		// type would be the same as calling schema.event.startDate, for example https://schema.org/Event
+		let type = thingSchema[typeKey];  
+
+		switch (type) {
+
+			// Date parser
+			case schema.startDate_type:
+			case schema.endDate_type:
+				data[typeKey] = getDatetime(thing, type);
+				break;
+			default:
+				data[typeKey] = getStringNoLocale(thing, type);
+				break;
+		}
+
+	});
+
+	return data;
 }
 
 /**
@@ -278,6 +267,26 @@ export async function removeSavedThing(datasetName: string, thingId: any) {
  */
 export async function getEvent(id: string) {
 	return getThingFromDataset("calendar", id);
+}
+
+/**
+ * Functions to parse an Event Thing into a clean Javascript object
+ * 
+ * @todo Turn these functions into overloads
+ * 
+ * @param eventId (getAndParseEvent) Id/Name of event to get from calendar dataset
+ * @param eventThing (parseEventThing) Unparsed Event Thing object, gotten from @function getThing or @function getThingAll
+ * 
+ * @returns Promise of @see thingToData, which should result in a Javascript object from an event
+ */
+ async function getAndParseEvent(eventId : string) {
+	if (!schema.event) return;
+	let eventThing = await getEvent(eventId)
+	return thingToData(eventThing, schema.event);
+}
+async function parseEventThing(eventThing : object) {
+	if (!schema.event) return;
+	return thingToData(eventThing, schema.event);
 }
 
 
