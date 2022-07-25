@@ -6,7 +6,7 @@ import {
 } from '$lib/types/calendarEvents';
 import { Temporal } from '@js-temporal/polyfill';
 import { derived, writable } from 'svelte/store';
-import { saveNewEvent, updateSavedEvent, schema } from '$lib/utils/solidInterface';
+import { saveNewEvent, updateSavedEvent, schema, thingIdFromUrl } from '$lib/utils/solidInterface';
 
 function createActivityStore<T extends Activity>() {
 	const { subscribe, set, update } = writable<T[]>([]);
@@ -60,7 +60,6 @@ function createActivityStore<T extends Activity>() {
 			if (!schema.event) return;
 			console.log(activity)
 
-			/*
 			let time = activity.time;
 			let start;
 			let end;
@@ -75,19 +74,30 @@ function createActivityStore<T extends Activity>() {
 			
 			console.log(activity)
 
-
-			let data = {
-				[schema.event.startDate]: start,
-				[schema.event.endDate]: end,
-				[schema.event.about]: activity.about,
-				[schema.event.location]: activity.location,
-				[schema.event.activityType]: activity.actitityType
-			};
+			let data = {};
+			if (start) {
+				data[schema.event.startDate] = start;
+			}
+			if (end) {
+				data[schema.event.endDate] = end;
+			}
+			if (activity.title) {
+				data[schema.event.about] = activity.title;
+			}
+			if (activity.location) {
+				data[schema.event.location] = activity.location;
+			}
+			if (schema.event.activityType) {
+				data[schema.event.activityType] = activity.actitityType;
+			}
+		
 
 			console.log(data);
 
-			updateSavedEvent(activity.id, data);
-			*/
+			let id = thingIdFromUrl(activity.url);
+			console.log(id)
+
+			updateSavedEvent(id, data);
 		
 			update((as) => as.map((act) => (act == activity ? activity : act)));
 		},

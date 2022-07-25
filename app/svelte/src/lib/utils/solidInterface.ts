@@ -62,6 +62,11 @@ schema.event = {
 	activityType: schema.text_data_type // this can be replaced by a self-defined type
 };
 
+
+export function thingIdFromUrl(url : string) {
+	return url.substring(url.lastIndexOf("#") + 1);
+}
+
 /**
  * Returns absolute url to dataset
  *
@@ -206,6 +211,7 @@ export async function getThingFromDataset(datasetName: string, thingId: string) 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function saveThing(datasetName: string, thing: any): Promise<any> {
 	const datasetUrl = DatasetUrl(datasetName);
+	console.log(datasetUrl);
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let dataset: any;
 	try {
@@ -217,6 +223,7 @@ export async function saveThing(datasetName: string, thing: any): Promise<any> {
 		// If dataset doesn't exist yet, repeat functions
 		// TODO, specifcy error codes? e.response.status == 404 || e.response.status == 501
 		dataset = createSolidDataset();
+		//dataset.url = 
 		await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 		return saveThing(datasetName, thing);
 	}
