@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 
 	import setupActivities from '$lib/hardcoded/setupActivities';
 
@@ -16,7 +17,9 @@
 </script>
 
 {#if $user.loading}
-	<p>We are Loading</p>
+	<div class="w-full h-[100vh] flex items-center justify-center">
+		<img class="h-80 rounded-lg" src="{base}/loading.gif" alt="loading" height="400" />
+	</div>
 {:else if $user.userSession.isLoggedIn}
 	<NavigationBar>
 		<slot />
