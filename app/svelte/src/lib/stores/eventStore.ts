@@ -20,7 +20,22 @@ function createActivityStore<T extends Activity>() {
 			from?: Temporal.PlainTime,
 			to?: Temporal.PlainTime
 		) => {
+			console.log(date,from,to)
+
+			try {
+				if (!date) {
+					date = event.dates[0];
+				}
+				if (!from) {
+					from = event.times[0].from || event.time.from;
+				}
+				if (!to) {
+					to = event.times[0].to || event.time.to;
+				}
+			} catch {}
+
 			console.log(event)
+			console.log(date,from,to)
 			// send event to solid
 			if (date && from && to) {
 				const start = new Date(date.toString() + 'T' + from.toString({ smallestUnit: 'second' }));
