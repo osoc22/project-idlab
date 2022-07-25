@@ -167,7 +167,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE), time?: TimeFromTo) {
-		return new PlannedActivity('', 'Work', new Set(['Sun']), 'Brussels', date, time);
+		return new PlannedActivity('', 'Work', 'Sun', new Set(['Sun']), 'Brussels', date, time);
 	}
 
 	static fromSolid(schema: Partial<SchemaEvent>): PlannedActivity {
