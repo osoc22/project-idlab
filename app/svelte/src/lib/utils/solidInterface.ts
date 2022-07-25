@@ -23,6 +23,7 @@ userStore.subscribe((val) => {
 });
 
 export interface SchemaEvent {
+	url: URL;
 	self: string;
 	startDate: string;
 	endDate: string;
@@ -158,6 +159,7 @@ function thingToData(thing: Thing, thingSchema: SchemaEvent) {
 	const data: Partial<SchemaEvent> = {};
 
 	data['self'] = 'https://schema.org/Event';
+	data['url'] = thing.url;
 
 	const thingEntries = Object.entries(thingSchema) as [keyof SchemaEvent, string][];
 

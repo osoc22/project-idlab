@@ -84,6 +84,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
  * These activities will be shown in the calendar. Or when it is in the past -> they will be shown in the past.
  */
 export class PlannedActivity extends Identifiable implements Activity {
+	url: URL;
 	title: string;
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
@@ -93,6 +94,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 	time?: TimeFromTo;
 
 	constructor(
+		url: URL,
 		title: string,
 		actitityType: ActivityType,
 		notifyOnWeather: Set<WeatherType>,
@@ -101,6 +103,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 		time?: TimeFromTo
 	) {
 		super();
+		this.url = url;
 		this.title = title;
 		this.actitityType = actitityType;
 		this.notifyOnWeather = notifyOnWeather;
@@ -168,6 +171,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 	}
 
 	static fromSolid(schema: Partial<SchemaEvent>): PlannedActivity {
+		const url = schema.url || new URL('');
 		const title = schema.about || '';
 		const actitityType = (schema.activityType || 'Work') as ActivityType;
 		const notifyOnWeather = new Set(['Sun']) as Set<WeatherType>;
@@ -187,10 +191,10 @@ export class PlannedActivity extends Identifiable implements Activity {
 			const from = new Temporal.PlainTime(t1.getHours(), t1.getMinutes(), t1.getSeconds());
 			const to = new Temporal.PlainTime(t2.getHours(), t2.getMinutes(), t2.getSeconds());
 			const time = { from, to };
-			return new PlannedActivity(title, actitityType, notifyOnWeather, location, date, time);
+			return new PlannedActivity(url, title, actitityType, notifyOnWeather, location, date, time);
 		}
 
-		return new PlannedActivity(title, actitityType, notifyOnWeather, location, date);
+		return new PlannedActivity(url, title, actitityType, notifyOnWeather, location, date);
 	}
 
 	static async init() {

@@ -20,6 +20,7 @@ function createActivityStore<T extends Activity>() {
 			from?: Temporal.PlainTime,
 			to?: Temporal.PlainTime
 		) => {
+			console.log(event)
 			// send event to solid
 			if (date && from && to) {
 				const start = new Date(date.toString() + 'T' + from.toString({ smallestUnit: 'second' }));
@@ -41,6 +42,38 @@ function createActivityStore<T extends Activity>() {
 		},
 		deleteActivity: (activity: T) => update((as) => as.filter((act) => !act.equals(activity))),
 		updateActivity: (activity: T) => {
+			if (!schema.event) return;
+			console.log(activity)
+
+			/*
+			let time = activity.time;
+			let start;
+			let end;
+			if (time != undefined) {
+				start = new Date(activity.date.toString() + 'T' + time.from.toString({ smallestUnit: 'second' })) ;
+				end = new Date(activity.date.toString() + 'T' + time.to.toString({ smallestUnit: 'second' }));
+			}
+			else {
+				start = null;
+				end = null;
+			}
+			
+			console.log(activity)
+
+
+			let data = {
+				[schema.event.startDate]: start,
+				[schema.event.endDate]: end,
+				[schema.event.about]: activity.about,
+				[schema.event.location]: activity.location,
+				[schema.event.activityType]: activity.actitityType
+			};
+
+			console.log(data);
+
+			updateSavedEvent(activity.id, data);
+			*/
+		
 			update((as) => as.map((act) => (act == activity ? activity : act)));
 		},
 		reset: () => set([])
