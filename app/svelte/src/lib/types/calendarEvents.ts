@@ -1,5 +1,12 @@
 import { Temporal } from '@js-temporal/polyfill';
 import Identifiable from '$lib/types/identifiable';
+import {
+	listThingsFromDataset,
+	type SchemaEvent,
+	parseEventThing
+} from '$lib/utils/solidInterface';
+import type { Thing } from '@inrupt/solid-client';
+import { plannedActivities } from '$lib/stores/eventStore';
 
 export const TIME_ZONE = 'Europe/Brussels';
 
@@ -12,6 +19,7 @@ export interface Activity extends Identifiable {
 
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
+	location: string;
 
 	get isAllDay(): boolean;
 	set isAllDay(value: boolean);
@@ -22,6 +30,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 	title: string;
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
+	location: string;
 
 	dates: Temporal.PlainDate[];
 	times: TimeFromTo[];
@@ -30,6 +39,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 		title: string,
 		actitityType: ActivityType,
 		notifyOnWeather: Set<WeatherType>,
+		location: string,
 		dates: Temporal.PlainDate[],
 		times: TimeFromTo[] = []
 	) {
@@ -37,6 +47,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 		this.title = title;
 		this.actitityType = actitityType;
 		this.notifyOnWeather = notifyOnWeather;
+		this.location = location;
 		this.dates = dates;
 		this.times = times;
 	}
@@ -64,7 +75,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(dates: Temporal.PlainDate[] = [], times: TimeFromTo[] = []) {
-		return new UnplannedActivity('', 'Work', new Set(['Sun']), dates, times);
+		return new UnplannedActivity('', 'Work', new Set(['Sun']), 'Brussels', dates, times);
 	}
 }
 
@@ -76,6 +87,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 	title: string;
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
+	location: string;
 
 	date: Temporal.PlainDate;
 	time?: TimeFromTo;
@@ -84,6 +96,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 		title: string,
 		actitityType: ActivityType,
 		notifyOnWeather: Set<WeatherType>,
+		location: string,
 		date: Temporal.PlainDate,
 		time?: TimeFromTo
 	) {
@@ -91,6 +104,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 		this.title = title;
 		this.actitityType = actitityType;
 		this.notifyOnWeather = notifyOnWeather;
+		this.location = location;
 		this.date = date;
 		this.time = time;
 	}
@@ -150,6 +164,47 @@ export class PlannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE), time?: TimeFromTo) {
-		return new PlannedActivity('', 'Work', new Set(['Sun']), date, time);
+		return new PlannedActivity('', 'Work', new Set(['Sun']), 'Brussels', date, time);
+	}
+
+	static fromSolid(schema: Partial<SchemaEvent>): PlannedActivity {
+		const title = schema.about || '';
+		const actitityType = (schema.activityType || 'Work') as ActivityType;
+		const notifyOnWeather = new Set(['Sun']) as Set<WeatherType>;
+		const location = schema.location || '';
+
+		let date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE);
+
+		if (schema.startDate) {
+			const d = new Date(schema.startDate);
+			date = new Temporal.PlainDate(d.getFullYear(), d.getMonth() + 1, d.getDate());
+		}
+
+		// If startDate is defined AND startDate IS endDate THEN event is all day
+		if (schema.startDate && schema.endDate && schema.startDate != schema.endDate) {
+			const t1 = new Date(schema.startDate);
+			const t2 = new Date(schema.endDate);
+			const from = new Temporal.PlainTime(t1.getHours(), t1.getMinutes(), t1.getSeconds());
+			const to = new Temporal.PlainTime(t2.getHours(), t2.getMinutes(), t2.getSeconds());
+			const time = { from, to };
+			return new PlannedActivity(title, actitityType, notifyOnWeather, location, date, time);
+		}
+
+		return new PlannedActivity(title, actitityType, notifyOnWeather, location, date);
+	}
+
+	static async init() {
+		// STEP 1: Get solid data
+		const rdfDataset: Thing[] = await listThingsFromDataset('calendar', true);
+
+		// STEP 2: normalise dataset
+		const normDataset = rdfDataset.map(async (thing) => await parseEventThing(thing));
+		const dataset: Partial<SchemaEvent>[] = await Promise.all(normDataset);
+
+		// STEP 3: Convert to {PlannedActivity} $lib/types/calendarEvents.ts
+		const calendarActivities = dataset.map((data) => PlannedActivity.fromSolid(data));
+
+		// STEP 4: set data to store
+		plannedActivities.set(calendarActivities);
 	}
 }
