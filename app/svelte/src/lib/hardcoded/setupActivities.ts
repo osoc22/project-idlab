@@ -31,8 +31,9 @@ function setupUnplannedActivities() {
 }
 
 function setupPlannedActivities() {
-	const e1 = new PlannedActivity('Test1', 'Work', new Set(['Windy', 'Rain']), 'Brussels', d2);
+	const e1 = new PlannedActivity('', 'Test1', 'Work', new Set(['Windy', 'Rain']), 'Brussels', d2);
 	const e2 = new PlannedActivity(
+		'',
 		'Test2',
 		'Fun',
 		new Set(['Windy', 'Rain']),
