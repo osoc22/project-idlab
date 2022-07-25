@@ -11,6 +11,8 @@ import {
 interface UserStore {
 	loading: boolean;
 	userSession: ISessionInfo;
+	storageLocation: string;
+	podUrl: string;
 }
 
 /***
@@ -19,26 +21,36 @@ interface UserStore {
 function createUserStore() {
 	const { subscribe, set } = writable<UserStore>({
 		loading: true,
-		userSession: getDefaultSession().info
+		userSession: getDefaultSession().info,
+		storageLocation: '',
+		podUrl: ''
 	});
 
 	return {
 		subscribe,
 		set,
-		init: async () => {
+		init: async (storageLocation?: string, podUrl?: string) => {
 			// Check if there is a session in the browser
 			await handleIncomingRedirect({
 				restorePreviousSession: true
 			});
 
+			storageLocation =
+				storageLocation ||
+				localStorage.getItem('storageLocation') ||
+				'http://localhost:3000/johndoe';
+			podUrl = podUrl || localStorage.getItem('podUrl') || 'johndoe';
+
 			set({
 				loading: false,
-				userSession: getDefaultSession().info
+				userSession: getDefaultSession().info,
+				storageLocation,
+				podUrl
 			});
 		},
-		signIn: async (podUrl: string, webId: string, interfaceUrl: string) => {
+		signIn: async (podUrl: string, storageLocation: string, interfaceUrl: string) => {
 			if (!podUrl) throw new Error('Please enter a pod URL');
-			if (!webId) throw new Error('Please enter a web ID');
+			if (!storageLocation) throw new Error('Please enter a storage location');
 
 			if (podUrl.indexOf('//') < 0) {
 				podUrl = 'http://' + podUrl;
@@ -46,7 +58,7 @@ function createUserStore() {
 
 			// Set podUrl and webId for next sessions
 			localStorage.setItem('podUrl', podUrl);
-			localStorage.setItem('webID', webId);
+			localStorage.setItem('storageLocation', storageLocation);
 
 			// If something goes wrong, the error message will be displayed in the UI
 			try {
@@ -61,7 +73,9 @@ function createUserStore() {
 
 				set({
 					loading: false,
-					userSession: getDefaultSession().info
+					userSession: getDefaultSession().info,
+					storageLocation,
+					podUrl
 				});
 			} catch (e) {
 				throw new Error(getErrorMessage(e).message);

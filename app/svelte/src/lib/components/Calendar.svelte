@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { Temporal, Intl } from '@js-temporal/polyfill';
+	import { onMount } from 'svelte';
+
+	import { activitiesPerDay, modifyPlannedActivity } from '$lib/stores/eventStore';
+	import { PlannedActivity, TIME_ZONE } from '$lib/types/calendarEvents';
 
 	import Button from '$lib/components/Button.svelte';
 	import Activity from '$lib/components/Activity.svelte';
 	import Weather from '$lib/components/Weather.svelte';
-
-	import { activitiesPerDay, modifyPlannedActivity } from '$lib/stores/eventStore';
-	import { PlannedActivity, TIME_ZONE } from '$lib/types/calendarEvents';
 
 	export let startOfWeek: Temporal.PlainDate;
 	const today = Temporal.Now.plainDateISO(TIME_ZONE);
@@ -24,6 +25,10 @@
 			activity: PlannedActivity.new(day)
 		});
 	}
+
+	onMount(() => {
+		PlannedActivity.init();
+	});
 </script>
 
 <div class="m-4 flex gap-3 container mx-auto">

@@ -11,11 +11,11 @@
 
 	let podUrl = 'http://localhost:3000';
 	let podError = '';
-	let webID = 'johndoe';
+	let storageLocation = 'http://localhost:3000/johndoe';
 
 	async function handleLogin() {
 		try {
-			userStore.signIn(podUrl, webID, interfaceUrl);
+			userStore.signIn(podUrl, storageLocation, interfaceUrl);
 		} catch (e) {
 			podError = getErrorMessage(e).message;
 		}
@@ -25,13 +25,14 @@
 		interfaceUrl = window.location.href;
 
 		podUrl = localStorage.getItem('podUrl') || 'http://localhost:3000';
-		webID = localStorage.getItem('webID') || 'johndoe';
+		//webID = localStorage.getItem('webID') || 'johndoe';
+		storageLocation = localStorage.getItem('storageLocation') || 'http://localhost:3000/johndoe';
 	});
 </script>
 
 <div class="max-w-lg my-16 mx-auto">
 	<h1 class="text-2xl">Welcome to the pod</h1>
 	<Input label="pod url" error={podError} bind:value={podUrl} />
-	<Input label="webId" bind:value={webID} />
+	<Input label="Storage location" bind:value={storageLocation} />
 	<Button focused on:click={handleLogin}>Login with pod</Button>
 </div>
