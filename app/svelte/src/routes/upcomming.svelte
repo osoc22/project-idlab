@@ -5,8 +5,6 @@
 		const url = `https://idlab.osoc.be/weather/Brussels`;
 		const response = await fetch(url);
 
-		console.log({ response });
-
 		return {
 			status: response.status,
 			props: {

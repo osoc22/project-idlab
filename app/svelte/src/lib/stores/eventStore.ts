@@ -25,8 +25,6 @@ function createActivityStore<T extends Activity>() {
 				const start = new Date(date.toString() + 'T' + from.toString({ smallestUnit: 'second' }));
 				const end = new Date(date.toString() + 'T' + to.toString({ smallestUnit: 'second' }));
 
-				console.log(start, end);
-
 				const savedEvent = await saveNewEvent(
 					event.title,
 					start,
@@ -34,6 +32,7 @@ function createActivityStore<T extends Activity>() {
 					event.location,
 					event.actitityType
 				);
+
 				console.log(savedEvent);
 			}
 
