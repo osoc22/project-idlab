@@ -32,8 +32,7 @@ function createActivityStore<T extends Activity>() {
 					start,
 					end,
 					event.location,
-					event.actitityType,
-					event.id
+					event.actitityType
 				);
 				console.log(savedEvent);
 			}
