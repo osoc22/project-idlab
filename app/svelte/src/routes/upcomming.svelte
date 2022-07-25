@@ -1,17 +1,25 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 
-	export const load: Load = async ({ fetch }) => {
-		const url = `https://idlab.osoc.be/weather/Brussels`;
-		const response = await fetch(url);
+    let cachedWeather: any
 
-		return {
-			status: response.status,
-			props: {
-				rdfWeatherArray: response.ok && (await response.json())
-			}
-		};
-	};
+    export const load: Load = async ({ fetch }) => {
+
+        if (cachedWeather) {
+            return cachedWeather
+        }
+        const url = `https://idlab.osoc.be/weather/Brussels`;
+        const response = await fetch(url);
+
+        console.log({ response });
+        cachedWeather = {
+            status: response.status,
+            props: {
+                rdfWeatherArray: response.ok && (await response.json())
+            }
+        };
+        return cachedWeather
+    };
 </script>
 
 <script lang="ts">
