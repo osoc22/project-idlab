@@ -15,6 +15,7 @@ type WeatherType = 'Sun' | 'Rain' | 'Cloudy' | 'Windy';
 type TimeFromTo = { from: Temporal.PlainTime; to: Temporal.PlainTime };
 
 export interface Activity extends Identifiable {
+	url: string;
 	title: string;
 
 	actitityType: ActivityType;
@@ -27,6 +28,7 @@ export interface Activity extends Identifiable {
 }
 
 export class UnplannedActivity extends Identifiable implements Activity {
+	url: string;
 	title: string;
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
@@ -36,6 +38,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 	times: TimeFromTo[];
 
 	constructor(
+		url: string,
 		title: string,
 		actitityType: ActivityType,
 		notifyOnWeather: Set<WeatherType>,
@@ -44,6 +47,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 		times: TimeFromTo[] = []
 	) {
 		super();
+		this.url = url;
 		this.title = title;
 		this.actitityType = actitityType;
 		this.notifyOnWeather = notifyOnWeather;
@@ -75,7 +79,15 @@ export class UnplannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(dates: Temporal.PlainDate[] = [], times: TimeFromTo[] = []) {
-		return new UnplannedActivity('', 'Work', new Set(['Sun']), 'Brussels', dates, times);
+		return new UnplannedActivity(
+			'',
+			'Go to work',
+			'Work',
+			new Set(['Sun']),
+			'Brussels',
+			dates,
+			times
+		);
 	}
 }
 
@@ -84,6 +96,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
  * These activities will be shown in the calendar. Or when it is in the past -> they will be shown in the past.
  */
 export class PlannedActivity extends Identifiable implements Activity {
+	url: string;
 	title: string;
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
@@ -93,6 +106,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 	time?: TimeFromTo;
 
 	constructor(
+		url: string,
 		title: string,
 		actitityType: ActivityType,
 		notifyOnWeather: Set<WeatherType>,
@@ -101,6 +115,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 		time?: TimeFromTo
 	) {
 		super();
+		this.url = url;
 		this.title = title;
 		this.actitityType = actitityType;
 		this.notifyOnWeather = notifyOnWeather;
@@ -132,8 +147,11 @@ export class PlannedActivity extends Identifiable implements Activity {
 		const timeString = (event.target as HTMLInputElement)?.value;
 		if (!timeString) return;
 
-		const [hour, minute] = timeString.split(':').map(parseInt);
-		const time = Temporal.PlainTime.from({ hour, minute });
+		const tSplit = timeString.split(':');
+		const time = Temporal.PlainTime.from({
+			hour: parseInt(tSplit[0]),
+			minute: parseInt(tSplit[1])
+		});
 
 		// Set time | if not yet defined -> set it to the same time
 		if (!this.time) {
@@ -142,7 +160,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 					? { from: time, to: time.add({ hours: 1 }) }
 					: { from: time.subtract({ hours: 1 }), to: time };
 		} else {
-			this.time[key] = Temporal.PlainTime.from({ hour, minute });
+			this.time[key] = time;
 		}
 	}
 
@@ -164,10 +182,19 @@ export class PlannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE), time?: TimeFromTo) {
-		return new PlannedActivity('', 'Work', new Set(['Sun']), 'Brussels', date, time);
+		return new PlannedActivity(
+			'',
+			'Go to work',
+			'Work',
+			new Set(['Sun', 'Rain']),
+			'Brussels',
+			date,
+			time
+		);
 	}
 
-	static fromSolid(schema: Partial<SchemaEvent>): PlannedActivity {
+	static fromSolid(schema: Partial<SchemaEventWithUrl>): PlannedActivity {
+		const url = schema.url || '';
 		const title = schema.about || '';
 		const actitityType = (schema.activityType || 'Work') as ActivityType;
 		const notifyOnWeather = new Set(['Sun']) as Set<WeatherType>;
@@ -187,10 +214,10 @@ export class PlannedActivity extends Identifiable implements Activity {
 			const from = new Temporal.PlainTime(t1.getHours(), t1.getMinutes(), t1.getSeconds());
 			const to = new Temporal.PlainTime(t2.getHours(), t2.getMinutes(), t2.getSeconds());
 			const time = { from, to };
-			return new PlannedActivity(title, actitityType, notifyOnWeather, location, date, time);
+			return new PlannedActivity(url, title, actitityType, notifyOnWeather, location, date, time);
 		}
 
-		return new PlannedActivity(title, actitityType, notifyOnWeather, location, date);
+		return new PlannedActivity(url, title, actitityType, notifyOnWeather, location, date);
 	}
 
 	static async init() {
@@ -199,7 +226,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 
 		// STEP 2: normalise dataset
 		const normDataset = rdfDataset.map(async (thing) => await parseEventThing(thing));
-		const dataset: Partial<SchemaEvent>[] = await Promise.all(normDataset);
+		const dataset: Partial<SchemaEventWithUrl>[] = await Promise.all(normDataset);
 
 		// STEP 3: Convert to {PlannedActivity} $lib/types/calendarEvents.ts
 		const calendarActivities = dataset.map((data) => PlannedActivity.fromSolid(data));
@@ -207,4 +234,13 @@ export class PlannedActivity extends Identifiable implements Activity {
 		// STEP 4: set data to store
 		plannedActivities.set(calendarActivities);
 	}
+}
+
+// Schema.org/Event has its own URL property
+// but the url that is used here is the URL to the object,
+// which is not stored by us into the Thing itself
+// So hence SchemaEvent shouldn't use that url field
+// but its needed here to convert it to useable javascript data for Svelte
+interface SchemaEventWithUrl extends SchemaEvent {
+	url: string;
 }

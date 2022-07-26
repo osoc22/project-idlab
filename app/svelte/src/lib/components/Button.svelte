@@ -9,7 +9,7 @@
 </script>
 
 <div
-	class="rounded-md py-2 px-4 cursor-pointer bg-slate-100 hover:bg-slate-300 transition-colors flex items-center gap-2"
+	class="rounded-md py-2 px-4 cursor-pointer bg-slate-100 hover:bg-slate-300 transition-colors flex items-center gap-2 text-center"
 	class:filled
 	class:focused
 	class:destructive
