@@ -133,7 +133,7 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
 			// Date parser
 			case schema.startDate_type:
 			case schema.endDate_type:
-				thingBuilder.setDatetime(type, value);
+				thingBuilder.setDatetime(type, new Date(value));
 				break;
 			default:
 				thingBuilder.setStringNoLocale(type, value);
@@ -211,7 +211,7 @@ export async function getThingFromDataset(datasetName: string, thingId: string) 
  * @param datasetName	Name of the dataset to save to
  * @param thing	Object of thing to save
  *
- * @returns	Promise of saveSolidDatasetAt
+ * @returns	Newly created Thing object
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function saveThing(datasetName: string, thing: any): Promise<any> {
@@ -222,7 +222,8 @@ export async function saveThing(datasetName: string, thing: any): Promise<any> {
 	try {
 		dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 		dataset = setThing(dataset, thing);
-		return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+		await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+		return thing;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (e: any) {
 		// If dataset doesn't exist yet, repeat functions

@@ -46,14 +46,16 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 				console.log(start, end);
 
 				
-				const savedActivities = await saveNewEvent(
+				const newlySavedEvent = await saveNewEvent(
 					activity.title,
 					start,
 					end,
 					activity.location,
 					activity.actitityType
 				);
-				console.log(savedActivities);
+				console.log(newlySavedEvent);
+				activity.url = newlySavedEvent.url;
+
 
 			}
 
@@ -79,26 +81,28 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 
 			console.log(activity);
 
-			const data: { schema: { event: Partial<SchemaEvent> } } = { schema: { event: {} } };
+			let data: Partial<{ [key: string]: any }> = {};
 			if (start) {
-				data.schema.event.startDate = start.toString();
+				data[schema.event.startDate] = start.toString();
 			}
 			if (end) {
-				data.schema.event.endDate = end.toString();
+				data[schema.event.endDate] = end.toString();
 			}
 			if (activity.title) {
-				data.schema.event.about = activity.title;
+				data[schema.event.about] = activity.title;
 			}
 			if (activity.location) {
-				data.schema.event.location = activity.location;
+				data[schema.event.location] = activity.location;
 			}
 			if (schema.event.activityType) {
-				data.schema.event.activityType = activity.actitityType;
+				data[schema.event.activityType] = activity.actitityType;
 			}
 
 			console.log(data);
 
-			const id = thingIdFromUrl(activity.url);
+			console.log(activity.url)
+
+			let id = thingIdFromUrl(activity.url);
 			console.log(id);
 
 			updateSavedEvent(id, data);
