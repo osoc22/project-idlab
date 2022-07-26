@@ -42,7 +42,7 @@
 
 	<!-- Main Content -->
 	<main class="grow p-5">
-		<div class=" flex gap-4 justify-end ">
+		<div class="flex gap-4 justify-end mb-10">
 			<Button icon={Plus} on:click={modifyUnplannedActivity.new}>Create new event</Button>
 
 			<Profile firstname="Abel" lastname="de Bruijn" />
