@@ -77,7 +77,8 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 
 			console.log(activity);
 
-			let data: Partial<{ [key: string]: any }> = {};
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const data: Partial<{ [key: string]: any }> = {};
 			if (start) {
 				data[schema.event.startDate] = start.toString();
 			}
@@ -98,7 +99,7 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 
 			console.log(activity.url);
 
-			let id = thingIdFromUrl(activity.url);
+			const id = thingIdFromUrl(activity.url);
 			console.log(id);
 
 			updateSavedEvent(id, data);

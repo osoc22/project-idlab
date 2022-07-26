@@ -165,6 +165,7 @@ function getDateFromThing(thing: Thing, type: string): string {
  * @returns A stripped Javascript object
  */
 function thingToData(thing: Thing, thingSchema: SchemaEvent) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const data: Partial<{ [key: string]: any }> = {};
 
 	data.self = 'https://schema.org/Event';
