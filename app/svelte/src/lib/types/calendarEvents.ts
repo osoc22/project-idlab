@@ -147,8 +147,11 @@ export class PlannedActivity extends Identifiable implements Activity {
 		const timeString = (event.target as HTMLInputElement)?.value;
 		if (!timeString) return;
 
-		const [hour, minute] = timeString.split(':').map(parseInt);
-		const time = Temporal.PlainTime.from({ hour, minute });
+		const tSplit = timeString.split(':');
+		const time = Temporal.PlainTime.from({
+			hour: parseInt(tSplit[0]),
+			minute: parseInt(tSplit[1])
+		});
 
 		// Set time | if not yet defined -> set it to the same time
 		if (!this.time) {
@@ -157,7 +160,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 					? { from: time, to: time.add({ hours: 1 }) }
 					: { from: time.subtract({ hours: 1 }), to: time };
 		} else {
-			this.time[key] = Temporal.PlainTime.from({ hour, minute });
+			this.time[key] = time;
 		}
 	}
 
