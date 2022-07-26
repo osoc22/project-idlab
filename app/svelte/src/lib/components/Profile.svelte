@@ -2,9 +2,9 @@
 	import userStore from '$lib/stores/userStore';
 
 	export let firstname: string;
-	export let lastname: string;
+	export let lastname: string = '';
 
-	$: lastnameSplit = lastname.split(' ');
+	$: lastnameSplit = lastname?.split(' ') || firstname.split(' ');
 
 	async function logOut() {
 		await userStore.signOut();
