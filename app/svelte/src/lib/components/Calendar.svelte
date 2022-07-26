@@ -7,9 +7,11 @@
 
 	import Button from '$lib/components/Button.svelte';
 	import Activity from '$lib/components/Activity.svelte';
-	import Weather from '$lib/components/Weather.svelte';
+	import WeatherComponent from '$lib/components/Weather.svelte';
+	import type { Weather } from '$lib/utils/parseWeather';
 
 	export let startOfWeek: Temporal.PlainDate;
+	export let weather: Weather;
 	const today = Temporal.Now.plainDateISO(TIME_ZONE);
 
 	const dayOfWeekString = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -41,9 +43,7 @@
 			</div>
 
 			<div class="flex flex-col gap-4 my-4">
-				{#if day.until(today).days <= 0}
-					<Weather {day} />
-				{/if}
+				<WeatherComponent {weather} {day} />
 
 				{#if day.toString() in $activitiesPerDay}
 					{#each $activitiesPerDay[day.toString()] as activity}

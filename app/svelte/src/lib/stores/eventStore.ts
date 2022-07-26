@@ -47,12 +47,16 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 
 				const savedActivities = await saveNewEvent(
 					activity.title,
+				const savedEvent = await saveNewEvent(
+					event.title,
 					start,
 					end,
 					activity.location,
 					activity.actitityType
 				);
 				console.log(savedActivities);
+
+				console.log(savedEvent);
 			}
 
 			update((es) => [...es, activity]);

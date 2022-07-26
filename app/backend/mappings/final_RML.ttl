@@ -1,0 +1,213 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix map: <http://mapping.example.com/> .
+@prefix ma: <http://www.w3.org/ns/ma-ont#> .
+@prefix schema: <http://schema.org/> .
+@prefix sdm: <https://uri.fiware.org/ns/data-models#> .
+@prefix idlab-fn: <http://example.com/idlab/function/> .
+
+map:map_address_000 rml:logicalSource map:source_000 ;
+	rdf:type rr:TriplesMap ;
+	rdfs:label "address" ;
+	rr:predicateObjectMap map:pom_000 ;
+	rr:subjectMap map:s_000 .
+
+map:map_forecast_000 rml:logicalSource map:source_003 ;
+	rdf:type rr:TriplesMap ;
+	rdfs:label "forecast" ;
+	rr:predicateObjectMap map:pom_006, map:pom_007, map:pom_008, map:pom_009, map:pom_010, map:pom_011, map:pom_012 ;
+	rr:subjectMap map:s_003 .
+
+map:map_forecast_address_000 rml:logicalSource map:source_002 ;
+	rdf:type rr:TriplesMap ;
+	rdfs:label "forecast_address" ;
+	rr:predicateObjectMap map:pom_005 ;
+	rr:subjectMap map:s_002 .
+
+map:map_geoaddress_000 rml:logicalSource map:source_001 ;
+	rdf:type rr:TriplesMap ;
+	rdfs:label "geoaddress" ;
+	rr:predicateObjectMap map:pom_001, map:pom_002, map:pom_003, map:pom_004 ;
+	rr:subjectMap map:s_001 .
+
+map:om_000 rdf:type rr:ObjectMap ;
+	rr:constant "http://schema.org/PostalAddress" ;
+	rr:termType rr:IRI .
+
+map:om_001 rdf:type rr:ObjectMap ;
+	rr:constant "http://schema.org/GeoCoordinates" ;
+	rr:termType rr:IRI .
+
+map:om_002 rml:reference "lon" ;
+	rdf:type rr:ObjectMap ;
+	rr:termType rr:Literal .
+
+map:om_003 rml:reference "lat" ;
+	rdf:type rr:ObjectMap ;
+	rr:termType rr:Literal .
+
+map:om_004 rdf:type rr:ObjectMap ;
+	rr:template "https://example.com/Address/{lat}_{lon}" ;
+	rr:termType rr:IRI .
+
+map:om_005 rdf:type rr:ObjectMap ;
+	rr:template "https://example.com/Address/{lat}_{lon}" ;
+	rr:termType rr:IRI .
+
+map:om_006 rdf:type rr:ObjectMap ;
+	rr:constant "https://uri.fiware.org/ns/data-models#WeatherForcecast" ;
+	rr:termType rr:IRI .
+
+map:om_007 rml:reference "dt" ;
+	rdf:type rr:ObjectMap ;
+	rr:termType rr:Literal .
+
+map:om_008 rml:reference "temp.day" ;
+	rdf:type rr:ObjectMap ;
+	rr:termType rr:Literal .
+
+map:om_009 rml:reference "temp.min" ;
+	rdf:type rr:ObjectMap ;
+	rr:termType rr:Literal .
+
+map:om_010 rml:reference "temp.max" ;
+	rdf:type rr:ObjectMap ;
+	rr:termType rr:Literal .
+
+map:om_011 rml:reference "feels_like.day" ;
+	rdf:type rr:ObjectMap ;
+	rr:termType rr:Literal .
+
+map:om_012 rml:reference "clouds" ;
+	rdf:type rr:ObjectMap ;
+	rr:termType rr:Literal .
+
+map:pm_000 rdf:type rr:PredicateMap ;
+	rr:constant rdf:type .
+
+map:pm_001 rdf:type rr:PredicateMap ;
+	rr:constant rdf:type .
+
+map:pm_002 rdf:type rr:PredicateMap ;
+	rr:constant schema:longitude .
+
+map:pm_003 rdf:type rr:PredicateMap ;
+	rr:constant schema:latitude .
+
+map:pm_004 rdf:type rr:PredicateMap ;
+	rr:constant schema:address .
+
+map:pm_005 rdf:type rr:PredicateMap ;
+	rr:constant schema:address .
+
+map:pm_006 rdf:type rr:PredicateMap ;
+	rr:constant rdf:type .
+
+map:pm_007 rdf:type rr:PredicateMap ;
+	rr:constant schema:identifier .
+
+map:pm_008 rdf:type rr:PredicateMap ;
+	rr:constant sdm:temperature .
+
+map:pm_009 rdf:type rr:PredicateMap ;
+	rr:constant <ex:minimumTemperature> .
+
+map:pm_010 rdf:type rr:PredicateMap ;
+	rr:constant <ex:maximumTemperature> .
+
+map:pm_011 rdf:type rr:PredicateMap ;
+	rr:constant sdm:feelsLikeTemperature .
+
+map:pm_012 rdf:type rr:PredicateMap ;
+	rr:constant <ex:clouds> .
+
+map:pom_000 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_000 ;
+	rr:predicateMap map:pm_000 .
+
+map:pom_001 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_001 ;
+	rr:predicateMap map:pm_001 .
+
+map:pom_002 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_002 ;
+	rr:predicateMap map:pm_002 .
+
+map:pom_003 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_003 ;
+	rr:predicateMap map:pm_003 .
+
+map:pom_004 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_004 ;
+	rr:predicateMap map:pm_004 .
+
+map:pom_005 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_005 ;
+	rr:predicateMap map:pm_005 .
+
+map:pom_006 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_006 ;
+	rr:predicateMap map:pm_006 .
+
+map:pom_007 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_007 ;
+	rr:predicateMap map:pm_007 .
+
+map:pom_008 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_008 ;
+	rr:predicateMap map:pm_008 .
+
+map:pom_009 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_009 ;
+	rr:predicateMap map:pm_009 .
+
+map:pom_010 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_010 ;
+	rr:predicateMap map:pm_010 .
+
+map:pom_011 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_011 ;
+	rr:predicateMap map:pm_011 .
+
+map:pom_012 rdf:type rr:PredicateObjectMap ;
+	rr:objectMap map:om_012 ;
+	rr:predicateMap map:pm_012 .
+
+map:rules_000 <http://rdfs.org/ns/void#exampleResource> map:map_address_000, map:map_forecast_000, map:map_forecast_address_000, map:map_geoaddress_000 ;
+	rdf:type <http://rdfs.org/ns/void#Dataset> .
+
+map:s_000 rdf:type rr:SubjectMap ;
+	rr:template "https://example.com/Address/{lat}_{lon}" .
+
+map:s_001 rdf:type rr:SubjectMap ;
+	rr:template "https://example.com/GeoCoordinates/{lat}_{lon}" .
+
+map:s_002 rdf:type rr:SubjectMap ;
+	rr:template "https://example.com/WeatherForcecast/{daily[*].dt}" .
+
+map:s_003 rdf:type rr:SubjectMap ;
+	rr:template "https://example.com/WeatherForcecast/{dt}" .
+
+map:source_000 rml:iterator "$" ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:source "data.json" ;
+	rdf:type rml:LogicalSource .
+
+map:source_001 rml:iterator "$" ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:source "data.json" ;
+	rdf:type rml:LogicalSource .
+
+map:source_002 rml:iterator "$" ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:source "data.json" ;
+	rdf:type rml:LogicalSource .
+
+map:source_003 rml:iterator "$.daily[*]" ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:source "data.json" ;
+	rdf:type rml:LogicalSource .
+

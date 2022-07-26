@@ -1,16 +1,33 @@
 <script lang="ts">
-	export let firstname: string;
-	export let lastname: string;
+	import userStore from '$lib/stores/userStore';
 
-	$: lastnameSplit = lastname.split(' ');
+	export let firstname: string;
+	export let lastname: string = '';
+
+	$: lastnameSplit = lastname?.split(' ') || firstname.split(' ');
+
+	async function logOut() {
+		await userStore.signOut();
+	}
 </script>
 
-<div
-	class="rounded-full bg-green-600 text-green-100 h-12 w-12 flex items-center cursor-pointer"
-	on:click
+<button
+	class="flex items-center hover:bg-gray-200 rounded-xl px-2 py-2 transition-colors cursor-pointer"
+	on:click={logOut}
 >
-	<span class="w-full text-center">
-		{firstname[0]}
-		{lastnameSplit[lastnameSplit.length - 1][0]}
-	</span>
-</div>
+	<div>
+		<div
+			class="rounded-full bg-green-700 text-green-100 h-8 w-8 flex items-center justify-center cursor-pointer"
+		>
+			<span class="leading-none p-2 text-sm">
+				{firstname[0]}{lastnameSplit[lastnameSplit.length - 1][0]}
+			</span>
+		</div>
+	</div>
+	<div class="ml-3">
+		<p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+			{firstname}
+			{lastname}
+		</p>
+	</div>
+</button>
