@@ -1,51 +1,49 @@
 <script context="module" lang="ts">
-    import type {Load} from '@sveltejs/kit';
+	import type { Load } from '@sveltejs/kit';
 
-    let cachedWeather: any
+	let cachedWeather: any;
 
-    export const load: Load = async ({fetch}) => {
+	export const load: Load = async ({ fetch }) => {
+		if (cachedWeather) {
+			return cachedWeather;
+		}
+		const url = `https://idlab.osoc.be/weather/Brussels`;
+		const response = await fetch(url);
 
-        if (cachedWeather) {
-            return cachedWeather
-        }
-        const url = `https://idlab.osoc.be/weather/Brussels`;
-        const response = await fetch(url);
-
-        console.log({response});
-        cachedWeather = {
-            status: response.status,
-            props: {
-                rdfWeatherArray: response.ok && (await response.json())
-            }
-        };
-        return cachedWeather
-    };
+		cachedWeather = {
+			status: response.status,
+			props: {
+				rdfWeatherArray: response.ok && (await response.json())
+			}
+		};
+		return cachedWeather;
+	};
 </script>
 
 <script lang="ts">
-    import {onMount} from 'svelte';
-    import {Temporal} from '@js-temporal/polyfill';
+	import { onMount } from 'svelte';
+	import { Temporal } from '@js-temporal/polyfill';
 
-    import Calendar from '$lib/components/Calendar.svelte';
-    import {type RdfWeatherData, Weather} from '$lib/utils/parseWeather';
+	import Calendar from '$lib/components/Calendar.svelte';
+	import { type RdfWeatherData, Weather } from '$lib/utils/parseWeather';
 
-    export let rdfWeatherArray: RdfWeatherData[];
+	export let rdfWeatherArray: RdfWeatherData[];
 
-    const today = Temporal.Now.plainDateISO();
-    let startOfWeek: Temporal.PlainDate;
-    let weather: Weather;
+	const today = Temporal.Now.plainDateISO();
+	let startOfWeek: Temporal.PlainDate;
+	let weather: Weather;
 
-    function gotoToday() {
-        startOfWeek = today.subtract({days: today.dayOfWeek - 1});
-        return startOfWeek;
-    }
+	function gotoToday() {
+		startOfWeek = today.subtract({ days: today.dayOfWeek - 1 });
+		return startOfWeek;
+	}
 
-    // On load
-    onMount(async () => {
-        weather = Weather.fromRDF(rdfWeatherArray);
+	// On load
+	onMount(async () => {
+		weather = Weather.fromRDF(rdfWeatherArray);
 
-        gotoToday();
-    });
+		gotoToday();
+	});
 </script>
 
-<Calendar {startOfWeek} {weather}/>
+<Calendar {startOfWeek} {weather} />
