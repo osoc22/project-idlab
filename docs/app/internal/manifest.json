@@ -1,11 +1,11 @@
 {
   ".svelte-kit/runtime/client/start.js": {
-    "file": "immutable/start-827c7174.js",
+    "file": "immutable/start-c8876f60.js",
     "src": ".svelte-kit/runtime/client/start.js",
     "isEntry": true,
     "imports": [
-      "_index-d2039bb9.js",
-      "_index-ae43794d.js",
+      "_index-6d6fbed6.js",
+      "_index-b2bed869.js",
       "_singletons-bd1dfc1a.js",
       "_preload-helper-ed63bd61.js"
     ],
@@ -19,105 +19,105 @@
     ]
   },
   "src/routes/__layout.svelte": {
-    "file": "immutable/pages/__layout.svelte-4b2a5979.js",
+    "file": "immutable/pages/__layout.svelte-4b58e25b.js",
     "src": "src/routes/__layout.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_index-d2039bb9.js",
+      "_index-6d6fbed6.js",
       "_singletons-bd1dfc1a.js",
-      "_calendarEvents-5b5396b8.js",
-      "_Button-f4d5fd62.js",
-      "_userStore-1328782f.js",
+      "_Button-f35f33f5.js",
+      "_eventStore-34057608.js",
+      "_userStore-ad134bbc.js",
       "_index-dd833d83.js",
       "_navigation-3ebc45bc.js",
       "_preload-helper-ed63bd61.js",
-      "_index-ae43794d.js"
+      "_index-b2bed869.js"
     ],
     "css": [
       "immutable/assets/pages/__layout.svelte-77772fc1.css"
     ]
   },
   ".svelte-kit/runtime/components/error.svelte": {
-    "file": "immutable/error.svelte-2bc9747a.js",
+    "file": "immutable/error.svelte-42c39977.js",
     "src": ".svelte-kit/runtime/components/error.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_index-d2039bb9.js"
+      "_index-6d6fbed6.js"
     ]
   },
   "src/routes/index.svelte": {
-    "file": "immutable/pages/index.svelte-c4479736.js",
+    "file": "immutable/pages/index.svelte-b1cfe785.js",
     "src": "src/routes/index.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_index-d2039bb9.js",
+      "_index-6d6fbed6.js",
       "_navigation-3ebc45bc.js",
       "_singletons-bd1dfc1a.js",
-      "_userStore-1328782f.js",
-      "_index-ae43794d.js"
+      "_userStore-ad134bbc.js",
+      "_index-b2bed869.js"
     ]
   },
   "src/routes/past.svelte": {
-    "file": "immutable/pages/past.svelte-f12851aa.js",
+    "file": "immutable/pages/past.svelte-0b326bb2.js",
     "src": "src/routes/past.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_index-d2039bb9.js",
-      "_calendarEvents-5b5396b8.js",
+      "_index-6d6fbed6.js",
+      "_eventStore-34057608.js",
       "_preload-helper-ed63bd61.js",
-      "_userStore-1328782f.js",
-      "_index-ae43794d.js"
+      "_userStore-ad134bbc.js",
+      "_index-b2bed869.js"
     ],
     "css": [
       "immutable/assets/pages/past.svelte-245c0f54.css"
     ]
   },
   "src/routes/planning.svelte": {
-    "file": "immutable/pages/planning.svelte-1648f610.js",
+    "file": "immutable/pages/planning.svelte-9bec14b0.js",
     "src": "src/routes/planning.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_index-d2039bb9.js",
-      "_Button-f4d5fd62.js",
-      "_calendarEvents-5b5396b8.js",
+      "_index-6d6fbed6.js",
+      "_Button-f35f33f5.js",
+      "_eventStore-34057608.js",
       "_index-dd833d83.js",
       "_preload-helper-ed63bd61.js",
-      "_userStore-1328782f.js",
-      "_index-ae43794d.js"
+      "_userStore-ad134bbc.js",
+      "_index-b2bed869.js"
     ],
     "css": [
       "immutable/assets/pages/planning.svelte-5702c459.css"
     ]
   },
   "src/routes/upcomming.svelte": {
-    "file": "immutable/pages/upcomming.svelte-aa3d79d6.js",
+    "file": "immutable/pages/upcomming.svelte-5cd51ef4.js",
     "src": "src/routes/upcomming.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_index-d2039bb9.js",
-      "_calendarEvents-5b5396b8.js",
-      "_Button-f4d5fd62.js",
+      "_index-6d6fbed6.js",
+      "_eventStore-34057608.js",
+      "_Button-f35f33f5.js",
       "_preload-helper-ed63bd61.js",
-      "_userStore-1328782f.js",
-      "_index-ae43794d.js"
+      "_userStore-ad134bbc.js",
+      "_index-b2bed869.js"
     ],
     "css": [
       "immutable/assets/pages/upcomming.svelte-34e94fe5.css"
     ]
   },
-  "_index-d2039bb9.js": {
-    "file": "immutable/chunks/index-d2039bb9.js"
+  "_index-6d6fbed6.js": {
+    "file": "immutable/chunks/index-6d6fbed6.js"
   },
-  "_index-ae43794d.js": {
-    "file": "immutable/chunks/index-ae43794d.js",
+  "_index-b2bed869.js": {
+    "file": "immutable/chunks/index-b2bed869.js",
     "imports": [
-      "_index-d2039bb9.js"
+      "_index-6d6fbed6.js"
     ]
   },
   "_singletons-bd1dfc1a.js": {
@@ -126,28 +126,17 @@
   "_preload-helper-ed63bd61.js": {
     "file": "immutable/chunks/preload-helper-ed63bd61.js"
   },
-  "_userStore-1328782f.js": {
-    "file": "immutable/chunks/userStore-1328782f.js",
+  "_userStore-ad134bbc.js": {
+    "file": "immutable/chunks/userStore-ad134bbc.js",
     "isDynamicEntry": true,
     "imports": [
-      "_index-ae43794d.js"
+      "_index-b2bed869.js"
     ]
   },
-  "_calendarEvents-5b5396b8.js": {
-    "file": "immutable/chunks/calendarEvents-5b5396b8.js",
+  "_Button-f35f33f5.js": {
+    "file": "immutable/chunks/Button-f35f33f5.js",
     "imports": [
-      "_preload-helper-ed63bd61.js",
-      "_userStore-1328782f.js",
-      "_index-ae43794d.js"
-    ],
-    "dynamicImports": [
-      "_userStore-1328782f.js"
-    ]
-  },
-  "_Button-f4d5fd62.js": {
-    "file": "immutable/chunks/Button-f4d5fd62.js",
-    "imports": [
-      "_index-d2039bb9.js"
+      "_index-6d6fbed6.js"
     ],
     "css": [
       "immutable/assets/Button-9cb5859e.css"
@@ -155,6 +144,17 @@
   },
   "_index-dd833d83.js": {
     "file": "immutable/chunks/index-dd833d83.js"
+  },
+  "_eventStore-34057608.js": {
+    "file": "immutable/chunks/eventStore-34057608.js",
+    "imports": [
+      "_preload-helper-ed63bd61.js",
+      "_userStore-ad134bbc.js",
+      "_index-b2bed869.js"
+    ],
+    "dynamicImports": [
+      "_userStore-ad134bbc.js"
+    ]
   },
   "_navigation-3ebc45bc.js": {
     "file": "immutable/chunks/navigation-3ebc45bc.js",
