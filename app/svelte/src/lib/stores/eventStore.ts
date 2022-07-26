@@ -50,13 +50,16 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 					start,
 					end,
 					activity.location,
-					activity.actitityType
+					activity.actitityType,
+					activity.notifyOnWeatherString
 				);
 				console.log(newlySavedEvent);
 				console.log(eventUrl(newlySavedEvent));
 				// This is to circumvent a specific bug, see @thingUrl in solidInterface
 				activity.url = eventUrl(newlySavedEvent);
 			}
+
+			console.log(activity)
 
 			update((es) => [...es, activity]);
 		},
@@ -98,7 +101,7 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 				data[schema.event.activityType] = activity.actitityType;
 			}
 			if (activity.notifyOnWeather) {
-				data[schema.event.notifyOnWeather] = Array.from(activity.notifyOnWeather).join(',');
+				data[schema.event.notifyOnWeather] = activity.notifyOnWeatherString;
 			}
 
 			console.log(data);

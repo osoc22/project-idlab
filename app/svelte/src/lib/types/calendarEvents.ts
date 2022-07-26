@@ -25,6 +25,7 @@ export interface Activity extends Identifiable {
 	get isAllDay(): boolean;
 	set isAllDay(value: boolean);
 	setToAllDay(): void;
+	notifyOnWeatherString: string;
 }
 
 export class UnplannedActivity extends Identifiable implements Activity {
@@ -76,6 +77,10 @@ export class UnplannedActivity extends Identifiable implements Activity {
 
 	setToAllDay() {
 		this.times = [];
+	}
+
+	get notifyOnWeatherString() {
+		return Array.from(this.notifyOnWeather).join(',');
 	}
 
 	static new(dates: Temporal.PlainDate[] = [], times: TimeFromTo[] = []) {
@@ -141,6 +146,10 @@ export class PlannedActivity extends Identifiable implements Activity {
 
 	setToAllDay() {
 		this.time = undefined;
+	}
+
+	get notifyOnWeatherString() {
+		return Array.from(this.notifyOnWeather).join(',');
 	}
 
 	toZonedTime(event: Event, key: 'from' | 'to') {

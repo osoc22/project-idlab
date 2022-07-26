@@ -350,6 +350,7 @@ export async function saveNewEvent(
 	endDate: Date,
 	location: string = '',
 	activityType: string = '',
+	notifyOnWeather: string = '',
 	id: string = ''
 ) {
 	if (!schema.event) return;
@@ -361,7 +362,8 @@ export async function saveNewEvent(
 			[schema.event.startDate]: startDate,
 			[schema.event.endDate]: endDate,
 			[schema.event.location]: location,
-			[schema.event.activityType]: activityType
+			[schema.event.activityType]: activityType,
+			[schema.event.notifyOnWeather]: notifyOnWeather
 		},
 		id
 	);
