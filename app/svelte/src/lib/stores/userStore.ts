@@ -82,11 +82,13 @@ function createUserStore() {
 			}
 		},
 		signOut: async () => {
-			await getDefaultSession().logout()
+			await getDefaultSession().logout();
 
 			set({
 				loading: false,
-				userSession: getDefaultSession().info
+				userSession: getDefaultSession().info,
+				storageLocation: '',
+				podUrl: ''
 			});
 		}
 	};
