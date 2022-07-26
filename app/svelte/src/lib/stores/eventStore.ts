@@ -1,9 +1,4 @@
-import {
-	UnplannedActivity,
-	PlannedActivity,
-	type Activity,
-	TIME_ZONE
-} from '$lib/types/calendarEvents';
+import { UnplannedActivity, PlannedActivity, TIME_ZONE } from '$lib/types/calendarEvents';
 import { Temporal } from '@js-temporal/polyfill';
 import { derived, writable } from 'svelte/store';
 import {

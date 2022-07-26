@@ -29,6 +29,7 @@ export interface SchemaEvent {
 	about: string;
 	location: string;
 	activityType: string;
+	url: string;
 }
 
 interface Schema {
@@ -58,7 +59,8 @@ schema.event = {
 	endDate: schema.endDate_type,
 	about: schema.about_type,
 	location: schema.location_type,
-	activityType: schema.text_data_type // this can be replaced by a self-defined type
+	activityType: schema.text_data_type, // this can be replaced by a self-defined type,
+	url: ''
 };
 
 console.log({ schema });
