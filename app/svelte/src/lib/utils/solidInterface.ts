@@ -29,7 +29,6 @@ export interface SchemaEvent {
 	about: string;
 	location: string;
 	activityType: string;
-	url: string;
 }
 
 interface Schema {
@@ -39,6 +38,8 @@ interface Schema {
 	about_type: string;
 	location_type: string;
 	text_data_type: string;
+	keywords_type: string;
+	url_type: string;
 
 	event?: SchemaEvent;
 }
@@ -50,7 +51,9 @@ export const schema: Schema = {
 	endDate_type: 'https://schema.org/endDate',
 	about_type: 'https://schema.org/about',
 	location_type: 'https://schema.org/location',
-	text_data_type: 'https://schema.org/Text'
+	text_data_type: 'https://schema.org/Text',
+	keywords_type: 'https://schema.org/keywords',
+	url_type: 'https://schema.org/URL'
 };
 
 schema.event = {
@@ -59,8 +62,7 @@ schema.event = {
 	endDate: schema.endDate_type,
 	about: schema.about_type,
 	location: schema.location_type,
-	activityType: schema.text_data_type, // this can be replaced by a self-defined type,
-	url: schema.text_data_type
+	activityType: schema.keywords_type // this can be replaced by a self-defined type,
 };
 
 console.log({ schema });
@@ -182,6 +184,8 @@ function thingToData(thing: Thing, thingSchema: SchemaEvent) {
 				break;
 		}
 	});
+
+	data['url'] = thing.url;
 
 	return data;
 }
