@@ -10,7 +10,8 @@ import {
 	removeThing,
 	getDatetime,
 	getStringNoLocale,
-	type Thing
+	type Thing,
+	asUrl
 } from '@inrupt/solid-client';
 import { fetch } from '@inrupt/solid-client-authn-browser';
 import { RDF } from '@inrupt/vocab-common-rdf';
@@ -68,7 +69,12 @@ schema.event = {
 console.log({ schema });
 
 export function thingIdFromUrl(url: string) {
-	return url.substring(url.lastIndexOf('#') + 1);
+	// Reasoning behind the # and / thing, @see thingUrl
+	let delimiter = '#';
+	if (!url.includes(delimiter)) {
+		delimiter = '/';
+	}
+	return url.substring(url.lastIndexOf(delimiter) + 1);
 }
 
 /**
@@ -80,6 +86,12 @@ export function thingIdFromUrl(url: string) {
 
 function DatasetUrl(datasetName: string) {
 	return `${storageLocation}/${datasetName}`;
+}
+
+function thingUrl(datasetName: string, thing: any) {
+	// Sometimes new files return something like https://inrupt.com/.well-known/sdk-local-node/1658841527554
+	// So ensure that the url is the one with dataseturl
+	return asUrl(thing, DatasetUrl(datasetName));
 }
 
 /**
@@ -277,6 +289,10 @@ export async function removeSavedThing(datasetName: string, thingId: any) {
 
 	dataset = removeThing(dataset, thing);
 	return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+}
+
+export function eventUrl(thing: any) {
+	return thingUrl("calendar", thing);
 }
 
 /**
