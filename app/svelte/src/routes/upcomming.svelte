@@ -1,12 +1,19 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 
-	let cachedWeather: any;
+	interface CachedWeather {
+		status: number;
+		props: { rdfWeatherArray?: RdfWeatherData[] };
+	}
+
+	let cachedWeather: CachedWeather;
 
 	export const load: Load = async ({ fetch }) => {
 		if (cachedWeather) {
 			return cachedWeather;
 		}
+
+		// TODO: remove hardcoded location
 		const url = `https://idlab.osoc.be/weather/Brussels`;
 		const response = await fetch(url);
 
@@ -27,7 +34,7 @@
 	import Calendar from '$lib/components/Calendar.svelte';
 	import { type RdfWeatherData, Weather } from '$lib/utils/parseWeather';
 
-	export let rdfWeatherArray: RdfWeatherData[];
+	export let rdfWeatherArray: RdfWeatherData[] = [];
 
 	const today = Temporal.Now.plainDateISO();
 	let startOfWeek: Temporal.PlainDate;
