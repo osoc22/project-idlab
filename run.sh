@@ -1,5 +1,79 @@
 #!/bin/bash
 
+# Check what's installed, adapt the features accordingly
+basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )  # Set working directory to the script directory. https://stackoverflow.com/a/246128
+
+
+function is_installed {
+    if [ -e "$basedir/app/$1/node_modules" ] ; then
+        return 0  # return true
+    else
+        return 1  # return false
+    fi
+}
+
+function _install_or_run_prompt {
+    if [ $(is_installed $1) ] ; then
+    echo "yeet"
+    else
+    echo "yeet"
+    fi
+}
+start "" "cmd /C \"echo yeet\""
+
+function newterminal {
+    # Implemented based on https://askubuntu.com/a/46630  && Mac os x solution from https://superuser.com/a/308460
+    gnome-terminal -- "$@" || xterm -e "$@" || konsole -e "$@" || terminal -e "$@" || start "" "cmd /C $@"# || osascript -e "tell app \"Terminal\" to do script \"$@\"" 
+}
+
+newterminal "ngrok >test2.txt" 1> test3.txt 2> test.txt &
+
+function selection_screen_option {
+    # https://phoenixnap.com/kb/bash-math#ftoc-heading-15
+    echo "[$((index++))] $1"
+    selection_screen_options+=("$2")
+}
+
+function selection_screen {
+    clear
+    echo "Welcome to Powerful Personal Data."
+    echo ""
+    echo ""
+
+    index=0
+    selection_screen_options=()
+    newterminal "echo yeet"
+
+    if is_installed "svelte" ; then
+        selection_screen_option "Run frontend on port 3333" "newterminal cd \"$basedir/app/svelte/\" && npm run dev"
+        selection_screen_option "Build frontend" "$newterminal cd $basedir/app/svelte/ && npm build"
+    else
+        echo "yeet2"
+    fi
+    #is_installed "svelte" "echo \"    [0] Install Svelte/frontend\"" "    [0] Install Svelte/frontend\""
+
+    read -p "Select option: " option
+    echo ${selection_screen_options[$option]}
+    eval $(${selection_screen_options[$option]})
+
+   #     case "$dev" in
+    #    0* ) chmod +x "$basedir/app/setup/setup-credentials.sh" && "$basedir/app/setup/setup-credentials.sh" & ;;
+     #   * ) echo "No credentials will be set up!" ;;
+      #  esac
+}
+
+svelte_installed=$(checkinstall "svelte")
+spts_installed=$(checkinstall "solidpod-testserver")
+backend_installed=$(checkinstall "backend")
+
+selection_screen
+
+echo ""
+echo ""
+echo ""
+
+
+
 echo "THIS IS STILL THE OLD RUN.SH SCRIPT"
 echo "This has been deprecated in favour of better installation methods through npm"
 echo "Press ENTER to exit"
@@ -12,7 +86,6 @@ exit 0
 # ----- Setup Solid Community server -----
 
 # Ensure the user is running from the projects root directory
-basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )  # Set working directory to the script directory. https://stackoverflow.com/a/246128
 cd $basedir
 mkdir -p app/solid  # Directory to keep solid community server data
 
@@ -37,11 +110,6 @@ function devsetup {
     y|Y ) chmod +x "$basedir/app/setup/setup-credentials.sh" && "$basedir/app/setup/setup-credentials.sh" & ;;
     * ) echo "No credentials will be set up!" ;;
     esac
-}
-
-function newterminal {
-    # Implemented based on https://askubuntu.com/a/46630
-    gnome-terminal -- "$@" || xterm -e "$@" || konsole -e "$@" || terminal -e "$@" || start "" "cmd /C $@"
 }
 
 if [ ! -e "tools/Bashlib/bashlib/css/bin/" ] ; then
