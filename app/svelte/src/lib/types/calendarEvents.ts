@@ -206,8 +206,14 @@ export class PlannedActivity extends Identifiable implements Activity {
 		const url = schema.url || '';
 		const title = schema.about || '';
 		const actitityType = (schema.activityType || 'Work') as ActivityType;
-		const notifyOnWeather = new Set(['Sun']) as Set<WeatherType>;
 		const location = schema.location || '';
+
+		let notifyOnWeather : Set<WeatherType>;
+		if (schema.notifyOnWeather) {
+			notifyOnWeather = new Set(schema.notifyOnWeather.split(',')) as Set<WeatherType>;
+		} else {
+			notifyOnWeather = new Set(['Sun']) as Set<WeatherType>;
+		}
 
 		let date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE);
 
