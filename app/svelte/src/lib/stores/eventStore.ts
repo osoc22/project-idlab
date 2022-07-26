@@ -44,7 +44,6 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 
 				console.log(start, end);
 
-				
 				const newlySavedEvent = await saveNewEvent(
 					activity.title,
 					start,
@@ -54,8 +53,6 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 				);
 				console.log(newlySavedEvent);
 				activity.url = newlySavedEvent.url;
-
-
 			}
 
 			update((es) => [...es, activity]);
@@ -99,7 +96,7 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 
 			console.log(data);
 
-			console.log(activity.url)
+			console.log(activity.url);
 
 			let id = thingIdFromUrl(activity.url);
 			console.log(id);
