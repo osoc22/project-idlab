@@ -6,8 +6,7 @@ import {
 	updateSavedEvent,
 	schema,
 	thingIdFromUrl,
-	removeSavedEvent,
-	type SchemaEvent
+	removeSavedEvent
 } from '$lib/utils/solidInterface';
 
 function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {

@@ -165,7 +165,7 @@ function getDateFromThing(thing: Thing, type: string): string {
  * @returns A stripped Javascript object
  */
 function thingToData(thing: Thing, thingSchema: SchemaEvent) {
-	const data: Partial<SchemaEvent> = {};
+	const data: Partial<{ [key: string]: any }> = {};
 
 	data.self = 'https://schema.org/Event';
 

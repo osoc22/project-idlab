@@ -190,7 +190,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 		);
 	}
 
-	static fromSolid(schema: Partial<SchemaEvent>): PlannedActivity {
+	static fromSolid(schema: Partial<SchemaEventWithUrl>): PlannedActivity {
 		const url = schema.url || '';
 		const title = schema.about || '';
 		const actitityType = (schema.activityType || 'Work') as ActivityType;
@@ -223,7 +223,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 
 		// STEP 2: normalise dataset
 		const normDataset = rdfDataset.map(async (thing) => await parseEventThing(thing));
-		const dataset: Partial<SchemaEvent>[] = await Promise.all(normDataset);
+		const dataset: Partial<SchemaEventWithUrl>[] = await Promise.all(normDataset);
 
 		// STEP 3: Convert to {PlannedActivity} $lib/types/calendarEvents.ts
 		const calendarActivities = dataset.map((data) => PlannedActivity.fromSolid(data));
@@ -231,4 +231,13 @@ export class PlannedActivity extends Identifiable implements Activity {
 		// STEP 4: set data to store
 		plannedActivities.set(calendarActivities);
 	}
+}
+
+// Schema.org/Event has its own URL property
+// but the url that is used here is the URL to the object,
+// which is not stored by us into the Thing itself
+// So hence SchemaEvent shouldn't use that url field
+// but its needed here to convert it to useable javascript data for Svelte
+interface SchemaEventWithUrl extends SchemaEvent {
+	url: string;
 }
