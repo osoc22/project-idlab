@@ -25,13 +25,19 @@
 </script>
 
 {#if forecast}
-	<div class="bg-blue-200 rounded-md min-h-4 p-3 select-none relative">
-		<span class="text-lg">
+	<div class="bg-blue-200 rounded-md min-h-4 px-3 py-1 select-none relative">
+		<span class="">
 			{forecast.minimumTemperature}-{forecast.maximumTemperature}°C
 		</span>
 
 		<div class="absolute h-6 aspect-square rounded-full bg-blue-700 -right-1 -top-1">
 			<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">🌤</div>
 		</div>
+	</div>
+{/if}
+
+{#if !forecast}
+	<div class="bg-blue-50 rounded-md min-h-4 px-3 py-1 select-none relative">
+		<span class="italic text-gray-500">unavailable</span>
 	</div>
 {/if}
