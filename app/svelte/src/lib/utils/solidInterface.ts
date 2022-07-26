@@ -38,6 +38,8 @@ interface Schema {
 	about_type: string;
 	location_type: string;
 	text_data_type: string;
+	keywords_type: string;
+	url_type: string;
 
 	event?: SchemaEvent;
 }
@@ -49,7 +51,9 @@ export const schema: Schema = {
 	endDate_type: 'https://schema.org/endDate',
 	about_type: 'https://schema.org/about',
 	location_type: 'https://schema.org/location',
-	text_data_type: 'https://schema.org/Text'
+	text_data_type: 'https://schema.org/Text',
+	keywords_type: 'https://schema.org/keywords',
+	url_type: 'https://schema.org/URL'
 };
 
 schema.event = {
@@ -58,8 +62,14 @@ schema.event = {
 	endDate: schema.endDate_type,
 	about: schema.about_type,
 	location: schema.location_type,
-	activityType: schema.text_data_type // this can be replaced by a self-defined type
+	activityType: schema.keywords_type // this can be replaced by a self-defined type,
 };
+
+console.log({ schema });
+
+export function thingIdFromUrl(url: string) {
+	return url.substring(url.lastIndexOf('#') + 1);
+}
 
 /**
  * Returns absolute url to dataset
@@ -123,7 +133,7 @@ function dataToThing(thingBuilder: any, data: { [key: string]: any }) {
 			// Date parser
 			case schema.startDate_type:
 			case schema.endDate_type:
-				thingBuilder.setDatetime(type, value);
+				thingBuilder.setDatetime(type, new Date(value));
 				break;
 			default:
 				thingBuilder.setStringNoLocale(type, value);
@@ -155,9 +165,10 @@ function getDateFromThing(thing: Thing, type: string): string {
  * @returns A stripped Javascript object
  */
 function thingToData(thing: Thing, thingSchema: SchemaEvent) {
-	const data: Partial<SchemaEvent> = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const data: Partial<{ [key: string]: any }> = {};
 
-	data['self'] = 'https://schema.org/Event';
+	data.self = 'https://schema.org/Event';
 
 	const thingEntries = Object.entries(thingSchema) as [keyof SchemaEvent, string][];
 
@@ -174,6 +185,8 @@ function thingToData(thing: Thing, thingSchema: SchemaEvent) {
 				break;
 		}
 	});
+
+	data['url'] = thing.url;
 
 	return data;
 }
@@ -199,22 +212,25 @@ export async function getThingFromDataset(datasetName: string, thingId: string) 
  * @param datasetName	Name of the dataset to save to
  * @param thing	Object of thing to save
  *
- * @returns	Promise of saveSolidDatasetAt
+ * @returns	Newly created Thing object
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function saveThing(datasetName: string, thing: any): Promise<any> {
 	const datasetUrl = DatasetUrl(datasetName);
+	console.log(datasetUrl);
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let dataset: any;
 	try {
 		dataset = await getSolidDataset(datasetUrl, { fetch: fetch });
 		dataset = setThing(dataset, thing);
-		return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+		await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
+		return thing;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (e: any) {
 		// If dataset doesn't exist yet, repeat functions
 		// TODO, specifcy error codes? e.response.status == 404 || e.response.status == 501
 		dataset = createSolidDataset();
+		//dataset.url =
 		await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 		return saveThing(datasetName, thing);
 	}

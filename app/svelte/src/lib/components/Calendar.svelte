@@ -9,6 +9,7 @@
 	import Activity from '$lib/components/Activity.svelte';
 	import WeatherComponent from '$lib/components/Weather.svelte';
 	import type { Weather } from '$lib/utils/parseWeather';
+	import { Plus } from 'svelte-hero-icons';
 
 	export let startOfWeek: Temporal.PlainDate;
 	export let weather: Weather;
@@ -33,24 +34,31 @@
 	});
 </script>
 
-<div class="m-4 flex gap-3 container mx-auto">
+<div class="m-4 flex container mx-auto h-full w-full">
 	{#each week as day}
-		<div class="grow max-w-xs">
+		<div class="grow max-w-xs border-r last:border-r-0 flex flex-shrink-0 flex-col w-[14%]">
 			<!-- Date title with name of day (i.e Mon), the date as [dd::MM:YYYY] and a plus button to add a new event -->
-			<div class="py-2" class:today={day.equals(today)}>
-				<span class="font-lg">{dayOfWeekString[day.dayOfWeek - 1]}</span>
-				{Intl.DateTimeFormat('gb-GB').format(day)}
+			<div class="py-2 flex items-center justify-center text-sm border-b">
+				<span class="text-gray-400 font-light mr-1">{dayOfWeekString[day.dayOfWeek - 1]}</span>
+				<span
+					class="font-medium h-8 flex items-center justify-center"
+					class:today={day.equals(today)}>{day.day}</span
+				>
 			</div>
 
-			<div class="flex flex-col gap-4 my-4">
+			<div class="flex flex-col p-4 min-h-[38] border-b">
 				<WeatherComponent {weather} {day} />
+			</div>
 
+			<div class="flex flex-col my-4 p-4 gap-4">
 				{#if day.toString() in $activitiesPerDay}
 					{#each $activitiesPerDay[day.toString()] as activity}
 						<Activity {activity} on:click={() => modifyPlannedActivity.edit(activity)} />
 					{/each}
 				{:else}
-					<Button filled on:click={() => newActivityOn(day)}>Create event</Button>
+					<div>
+						<Button icon={Plus} on:click={() => newActivityOn(day)}>Create event</Button>
+					</div>
 				{/if}
 			</div>
 		</div>
@@ -59,6 +67,6 @@
 
 <style lang="postcss">
 	.today {
-		@apply font-bold border-b-2 text-blue-900 border-blue-900;
+		@apply rounded-full bg-green-700 w-8 h-8 flex items-center justify-center text-white;
 	}
 </style>
