@@ -3,16 +3,16 @@
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 
-	import setupActivities from '$lib/hardcoded/setupActivities';
-
 	import Login from '$lib/components/Login.svelte';
 	import NavigationBar from '$lib/components/NavigationBar.svelte';
 
 	import user from '$lib/stores/userStore';
 
+	import setupActivities from '$lib/hardcoded/setupActivities';
+
 	onMount(() => {
 		user.init();
-		setupActivities();
+		window.setupActivities = setupActivities;
 	});
 </script>
 
