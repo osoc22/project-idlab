@@ -17,7 +17,7 @@
 </script>
 
 {#if $user.loading}
-	<div class="w-full h-[100vh] flex items-center justify-center">
+	<div class="w-full h-[100vh] flex items-center justify-center antialiased">
 		<img class="h-80 rounded-lg" src="{base}/loading.gif" alt="loading" height="400" />
 	</div>
 {:else if $user.userSession.isLoggedIn}
