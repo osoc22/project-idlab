@@ -48,5 +48,5 @@ chmod +x run.sh
 - CommunitySolidServer is licensed under the MIT License. The copyright notice is included [in this repository](NOTICE.md#CommunitySolidServer) or [on their repository](https://github.com/CommunitySolidServer/CommunitySolidServer/blob/main/LICENSE.md).
 
 ## License
-Developed by [Abel de Bruijn](https://github.com/yustarandomname), [Denperidge](https://github.com/Denperidge) and [Matei Penca](https://github.com/Matei9721) for [Open Summer Of Code](https://osoc.be/) 2022.
+Developed by [Abel de Bruijn](https://github.com/yustarandomname), [DemianD](https://github.com/demiand), [Denperidge](https://github.com/Denperidge), [Matei Penca](https://github.com/Matei9721) and [Thor Galle](https://github.com/th0rgall) for [Open Summer Of Code](https://osoc.be/) 2022.
 This software is licensed under the [MIT license](LICENSE).
