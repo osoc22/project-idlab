@@ -23,7 +23,6 @@ userStore.subscribe((val) => {
 });
 
 export interface SchemaEvent {
-	url: string;
 	self: string;
 	startDate: string;
 	endDate: string;
@@ -62,9 +61,10 @@ schema.event = {
 	activityType: schema.text_data_type // this can be replaced by a self-defined type
 };
 
+console.log({ schema });
 
-export function thingIdFromUrl(url : string) {
-	return url.substring(url.lastIndexOf("#") + 1);
+export function thingIdFromUrl(url: string) {
+	return url.substring(url.lastIndexOf('#') + 1);
 }
 
 /**
@@ -163,8 +163,7 @@ function getDateFromThing(thing: Thing, type: string): string {
 function thingToData(thing: Thing, thingSchema: SchemaEvent) {
 	const data: Partial<SchemaEvent> = {};
 
-	data['self'] = 'https://schema.org/Event';
-	data['url'] = thing.url;
+	data.self = 'https://schema.org/Event';
 
 	const thingEntries = Object.entries(thingSchema) as [keyof SchemaEvent, string][];
 
@@ -223,7 +222,7 @@ export async function saveThing(datasetName: string, thing: any): Promise<any> {
 		// If dataset doesn't exist yet, repeat functions
 		// TODO, specifcy error codes? e.response.status == 404 || e.response.status == 501
 		dataset = createSolidDataset();
-		//dataset.url = 
+		//dataset.url =
 		await saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 		return saveThing(datasetName, thing);
 	}
