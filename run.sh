@@ -19,19 +19,16 @@ function _install_or_run_prompt {
     echo "yeet"
     fi
 }
-start "" "cmd /C \"echo yeet\""
 
 function newterminal {
     # Implemented based on https://askubuntu.com/a/46630  && Mac os x solution from https://superuser.com/a/308460
-    gnome-terminal -- "$@" || xterm -e "$@" || konsole -e "$@" || terminal -e "$@" || start "" "cmd /C $@"# || osascript -e "tell app \"Terminal\" to do script \"$@\"" 
+    gnome-terminal -- "$@" || xterm -e "$@" || konsole -e "$@" || terminal -e "$@" || osascript -e "tell app \"Terminal\" to do script \"$@\"" || start "Powerful Personal Data" "C:/Program Files/Git/bin/sh.exe" -i -c "$@" || start "Powerful Personal Data" "C:/Program Files (x86)/Git/bin/sh.exe" -i -c "$@"   #|| start "" "cmd /C $@"#  osascript -e "tell app \"Terminal\" to do script \"$@\"" 
 }
-
-newterminal "ngrok >test2.txt" 1> test3.txt 2> test.txt &
 
 function selection_screen_option {
     # https://phoenixnap.com/kb/bash-math#ftoc-heading-15
-    echo "[$((index++))] $1"
-    selection_screen_options+=("$2")
+    selection_screen_prompts+=("$1")
+    selection_screen_actions+=("$2")
 }
 
 function selection_screen {
@@ -41,20 +38,42 @@ function selection_screen {
     echo ""
 
     index=0
-    selection_screen_options=()
-    newterminal "echo yeet"
+    selection_screen_prompts=()
+    selection_screen_actions=()
+    #newterminal "echo yeet & sleep 5"
 
     if is_installed "svelte" ; then
-        selection_screen_option "Run frontend on port 3333" "newterminal cd \"$basedir/app/svelte/\" && npm run dev"
+        selection_screen_option "Run frontend on port 3333" "cd $basedir/app/svelte/ && npm run dev" #"newterminal cd \"$basedir/app/svelte/\" && npm run dev"
         selection_screen_option "Build frontend" "$newterminal cd $basedir/app/svelte/ && npm build"
     else
-        echo "yeet2"
+        selection_screen_option "Install Svelte frontend"
     fi
     #is_installed "svelte" "echo \"    [0] Install Svelte/frontend\"" "    [0] Install Svelte/frontend\""
+    select opt in "${selection_screen_prompts[@]}" # https://askubuntu.com/a/1716
+    do
+        index="$REPLY-1" #https://stackoverflow.com/a/22714578
+        action=${selection_screen_actions[$index]}
+        echo $action
+
+        $action &
+
+        
+        case "$opt" in
+            "Run frontend on port 3333")
+                $action
+                ;;
+            *)
+                echo ""
+                break
+                ;;
+
+        #$($action)
+        esac
+    done
 
     read -p "Select option: " option
     echo ${selection_screen_options[$option]}
-    eval $(${selection_screen_options[$option]})
+    
 
    #     case "$dev" in
     #    0* ) chmod +x "$basedir/app/setup/setup-credentials.sh" && "$basedir/app/setup/setup-credentials.sh" & ;;
