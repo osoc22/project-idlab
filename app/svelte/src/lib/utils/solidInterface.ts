@@ -60,7 +60,7 @@ schema.event = {
 	about: schema.about_type,
 	location: schema.location_type,
 	activityType: schema.text_data_type, // this can be replaced by a self-defined type,
-	url: ''
+	url: schema.text_data_type
 };
 
 console.log({ schema });
