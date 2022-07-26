@@ -28,6 +28,10 @@ jobs:
       - name: Checking types
         working-directory: ./app/svelte
         run: npm run check
+        
+      - name: Format
+        working-directory: ./app/svelte
+        run: npm run format
 
       - name: Linting
         working-directory: ./app/svelte
