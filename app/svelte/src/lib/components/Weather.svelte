@@ -26,7 +26,7 @@
 </script>
 
 {#if forecast}
-	<div class="bg-blue-200 rounded-md min-h-4 px-3 py-1 select-none relative">
+	<div class="bg-blue-100 rounded-md min-h-4 p-4 select-none relative">
 		<span class="">
 			{forecast.minimumTemperature}-{forecast.maximumTemperature}°C
 		</span>
@@ -45,10 +45,8 @@
 			</div>
 		</div>
 	</div>
-{/if}
-
-{#if !forecast}
-	<div class="bg-blue-50 rounded-md min-h-4 px-3 py-1 select-none relative">
-		<span class="italic text-gray-500">unavailable</span>
+{:else}
+	<div class="rounded-md min-h-4 p-4 select-none relative italic text-gray-400 text-center ">
+		unavailable
 	</div>
 {/if}
