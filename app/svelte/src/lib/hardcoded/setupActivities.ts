@@ -13,11 +13,12 @@ const t1 = { from: t, to: t.add({ minutes: 30 }) };
 const t2 = { from: t.add({ minutes: 90 }), to: t.add({ minutes: 180 }) };
 
 function setupUnplannedActivities() {
-	const e1 = new UnplannedActivity('Test1', 'Work', new Set(['Windy', 'Rain']), 'Brussels', [
+	const e1 = new UnplannedActivity('', 'Test1', 'Work', new Set(['Windy', 'Rain']), 'Brussels', [
 		d1,
 		d2
 	]);
 	const e2 = new UnplannedActivity(
+		'',
 		'Test2',
 		'Fun',
 		new Set(['Windy', 'Rain']),

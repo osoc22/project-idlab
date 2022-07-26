@@ -23,7 +23,7 @@ userStore.subscribe((val) => {
 });
 
 export interface SchemaEvent {
-	url: URL;
+	url: string;
 	self: string;
 	startDate: string;
 	endDate: string;

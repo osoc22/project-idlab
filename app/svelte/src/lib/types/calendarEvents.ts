@@ -15,11 +15,15 @@ type WeatherType = 'Sun' | 'Rain' | 'Cloudy' | 'Windy';
 type TimeFromTo = { from: Temporal.PlainTime; to: Temporal.PlainTime };
 
 export interface Activity extends Identifiable {
+	url: string;
 	title: string;
 
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
 	location: string;
+
+	date: Date;
+	time: Date;
 
 	get isAllDay(): boolean;
 	set isAllDay(value: boolean);
@@ -27,6 +31,7 @@ export interface Activity extends Identifiable {
 }
 
 export class UnplannedActivity extends Identifiable implements Activity {
+	url: string;
 	title: string;
 	actitityType: ActivityType;
 	notifyOnWeather: Set<WeatherType>;
@@ -36,6 +41,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 	times: TimeFromTo[];
 
 	constructor(
+		url: string,
 		title: string,
 		actitityType: ActivityType,
 		notifyOnWeather: Set<WeatherType>,
@@ -44,6 +50,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 		times: TimeFromTo[] = []
 	) {
 		super();
+		this.url= url;
 		this.title = title;
 		this.actitityType = actitityType;
 		this.notifyOnWeather = notifyOnWeather;
@@ -75,7 +82,7 @@ export class UnplannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(dates: Temporal.PlainDate[] = [], times: TimeFromTo[] = []) {
-		return new UnplannedActivity('', 'Work', new Set(['Sun']), 'Brussels', dates, times);
+		return new UnplannedActivity('', 'Go to work', 'Work', new Set(['Sun']), 'Brussels', dates, times);
 	}
 }
 
@@ -167,11 +174,11 @@ export class PlannedActivity extends Identifiable implements Activity {
 	}
 
 	static new(date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE), time?: TimeFromTo) {
-		return new PlannedActivity('', 'Work', 'Sun', new Set(['Sun']), 'Brussels', date, time);
+		return new PlannedActivity('', 'Go to work', 'Work', new Set(['Sun', 'Rain']), 'Brussels', date, time);
 	}
 
 	static fromSolid(schema: Partial<SchemaEvent>): PlannedActivity {
-		const url = schema.url || new URL('');
+		const url = schema.url || '';
 		const title = schema.about || '';
 		const actitityType = (schema.activityType || 'Work') as ActivityType;
 		const notifyOnWeather = new Set(['Sun']) as Set<WeatherType>;
