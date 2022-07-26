@@ -94,8 +94,11 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 			if (activity.location) {
 				data[schema.event.location] = activity.location;
 			}
-			if (schema.event.activityType) {
+			if (activity.actitityType) {
 				data[schema.event.activityType] = activity.actitityType;
+			}
+			if (activity.notifyOnWeather) {
+				data[schema.event.notifyOnWeather] = Array.from(activity.notifyOnWeather).join(',');
 			}
 
 			console.log(data);

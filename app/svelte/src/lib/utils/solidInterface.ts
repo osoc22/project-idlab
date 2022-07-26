@@ -30,6 +30,7 @@ export interface SchemaEvent {
 	about: string;
 	location: string;
 	activityType: string;
+	notifyOnWeather: string;
 }
 
 interface Schema {
@@ -41,6 +42,7 @@ interface Schema {
 	text_data_type: string;
 	keywords_type: string;
 	url_type: string;
+	description_type: string;
 
 	event?: SchemaEvent;
 }
@@ -54,7 +56,8 @@ export const schema: Schema = {
 	location_type: 'https://schema.org/location',
 	text_data_type: 'https://schema.org/Text',
 	keywords_type: 'https://schema.org/keywords',
-	url_type: 'https://schema.org/URL'
+	url_type: 'https://schema.org/URL',
+	description_type: 'https://schema.org/description'
 };
 
 schema.event = {
@@ -63,7 +66,8 @@ schema.event = {
 	endDate: schema.endDate_type,
 	about: schema.about_type,
 	location: schema.location_type,
-	activityType: schema.keywords_type // this can be replaced by a self-defined type,
+	activityType: schema.description_type,
+	notifyOnWeather: schema.keywords_type
 };
 
 console.log({ schema });
