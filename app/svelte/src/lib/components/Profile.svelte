@@ -19,15 +19,10 @@
 		<div
 			class="rounded-full bg-green-700 text-green-100 h-8 w-8 flex items-center justify-center cursor-pointer"
 		>
-			<span class="leading-none p-2 text-sm">
-				{firstname[0]}{lastnameSplit[lastnameSplit.length - 1][0]}
-			</span>
+			<span class="leading-none p-2 text-sm"> SU </span>
 		</div>
 	</div>
 	<div class="ml-3">
-		<p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-			{firstname}
-			{lastname}
-		</p>
+		<p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">Welcome, Solid User</p>
 	</div>
 </button>
