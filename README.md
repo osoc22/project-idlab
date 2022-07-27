@@ -34,15 +34,17 @@ chmod +x run.sh
   - [solidpod-testserver/](app/solidpod-testserver/) --> Scripts, files and build artifacts for the solidpod testserver - [docs page](https://osoc22.github.io/project-idlab/docs/solidpod-testserver/)
   - [svelte/](app/svelte/) --> Source files and scripts for the Svelte frontend - [docs page](https://osoc22.github.io/project-idlab/docs/svelte/)
   - [backend/](app/backend) --> Source code and docker deployment file for the backend weather application
-- [docs/](docs/)
-  - [svelte/](docs/docs/svelte/) --> Static build of the [Svelte frontend](app/svelte/), built through [GitHub Actions](.github/workflows/svelte-to-gh-pages.yml) hosted online through [GitHub Pages](https://osoc22.github.io/project-idlab/app/).
-  - [docs/](docs/docs/) --> Jekyll site for documentation, also [hosted through GitHub pages](https://osoc22.github.io/project-idlab/docs/).
+- [docs/](docs/) GitHub Pages site for documentation and hosting. Accessible through https://osoc22.github.io/project-idlab/
 - [poc](poc/) --> proof of concepts (using comunica, rml, JSON-LD...)
 - [LICENSE](LICENSE) --> License used by this project
 - [NOTICE.md](https://github.com/osoc22/project-idlab/blob/master/NOTICE.md) --> Licenses used by projects used by this project
 - [README.md](README.md) --> this
-- [run.sh](run.sh) --> bash script for interactive CLI
+- [run.mjs](run.mjs) --> node script for interactive CLI
 
+More specific info of files within or functions of many of these folders can be found in https://osoc22.github.io/project-idlab/docs/
+
+## Todo's/enhancements
+Some features were cancelled due to time constraints. You can find these with the [out of scope label in our GitHub Issues](https://github.com/osoc22/project-idlab/issues?q=is%3Aissue+label%3A%22out+of+scope%22).
 
 ## Notice
 - CommunitySolidServer is licensed under the MIT License. The copyright notice is included [in this repository](NOTICE.md#CommunitySolidServer) or [on their repository](https://github.com/CommunitySolidServer/CommunitySolidServer/blob/main/LICENSE.md).

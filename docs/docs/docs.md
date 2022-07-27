@@ -24,6 +24,7 @@ bundle exec jekyll serve"
 
 ## Important docs/ files that aren't straight up documentation
 - {% include rl.md base="docs/" relpath="404.html" %} page displayed in the docs when no result is found.
+- *[app/](https://github.com/osoc22/project-idlab/tree/gh-pages/docs/app) only available on the gh-pages branch. static build of the Svelte frontend, built through GitHub Actions in {% include rl.md base=".github/workflows/" relpath="svelte-to-gh-pages.yml" %}.*
 - {% include rl.md base="docs/" relpath="assets" %} stores files like the crest svg, icons...
 - {% include rl.md base="docs/" relpath="_config.yml" %} is used to configure Jekyll.
   - For _config.yml, [Just The Docs has multiple configuration options](https://just-the-docs.github.io/just-the-docs/docs/configuration/)
