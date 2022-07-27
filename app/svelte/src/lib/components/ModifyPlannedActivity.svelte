@@ -34,6 +34,25 @@
 
 		modifyPlannedActivity.reset();
 	}
+
+	function validateSubmit(e) {
+		let submit = document.querySelector('input[type="submit"]');
+
+		let emptyValues = false;
+		document.querySelectorAll('input[type="date"],input[type="time"]').forEach((input) => {
+			if (input.value == "") {
+				console.log(input.value)
+				emptyValues = true;
+			}
+		});
+		if (emptyValues) {
+			submit.disabled = true;
+			submit.style.color="gray"
+		} else {
+			submit.disabled = false;
+			submit.style.color="initial"
+		}
+	}
 </script>
 
 {#if newActivity && $modifyPlannedActivity}
@@ -49,24 +68,24 @@
 				<!-- <Date > -->
 				<Input
 					type="date"
-					label="date"
+					label="date *"
 					value={newActivity.activity.date.toString()}
-					on:change={(e) => newActivity?.activity.setDate(e)}
+					on:change={(e) => {validateSubmit(e); newActivity?.activity.setDate(e) }}
 				/>
 
 				<!-- <Time {}> -->
 				<Input
 					type="time"
-					label="from"
+					label="from *"
 					value={newActivity?.activity.time?.from.toString({ smallestUnit: 'minute' })}
-					on:change={(e) => newActivity?.activity.setFromTime(e)}
+					on:change={(e) => {validateSubmit(e); newActivity?.activity.setFromTime(e)}}
 				/>
 
 				<Input
 					type="time"
-					label="to"
+					label="to *"
 					value={newActivity?.activity.time?.to.toString({ smallestUnit: 'minute' })}
-					on:change={(e) => newActivity?.activity.setToTime(e)}
+					on:change={(e) => {validateSubmit(e); newActivity?.activity.setToTime(e)}}
 				/>
 			</div>
 			<div class="right grow">
