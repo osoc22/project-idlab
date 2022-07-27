@@ -35,11 +35,11 @@ chmod +x run.sh
   - [svelte/](app/svelte/) --> Source files and scripts for the Svelte frontend - [docs page](https://osoc22.github.io/project-idlab/docs/svelte/)
   - [backend/](app/backend) --> Source code and docker deployment file for the backend weather application
 - [docs/](docs/)
-  - [app/](docs/app/) --> Static build of the [Svelte frontend](app/svelte/), built through [GitHub Actions](.github/workflows/svelte-to-gh-pages.yml) hosted online through [GitHub Pages](https://osoc22.github.io/project-idlab/app/).
+  - [svelte/](docs/docs/svelte/) --> Static build of the [Svelte frontend](app/svelte/), built through [GitHub Actions](.github/workflows/svelte-to-gh-pages.yml) hosted online through [GitHub Pages](https://osoc22.github.io/project-idlab/app/).
   - [docs/](docs/docs/) --> Jekyll site for documentation, also [hosted through GitHub pages](https://osoc22.github.io/project-idlab/docs/).
 - [poc](poc/) --> proof of concepts (using comunica, rml, JSON-LD...)
 - [LICENSE](LICENSE) --> License used by this project
-- [NOTICE.md](NOTICE) --> Licenses used by projects used by this project
+- [NOTICE.md](https://github.com/osoc22/project-idlab/blob/master/NOTICE.md) --> Licenses used by projects used by this project
 - [README.md](README.md) --> this
 - [run.sh](run.sh) --> bash script for interactive CLI
 
