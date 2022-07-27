@@ -25,6 +25,7 @@ export interface Activity extends Identifiable {
 	get isAllDay(): boolean;
 	set isAllDay(value: boolean);
 	setToAllDay(): void;
+	notifyOnWeatherString: string;
 }
 
 export class UnplannedActivity extends Identifiable implements Activity {
@@ -76,6 +77,10 @@ export class UnplannedActivity extends Identifiable implements Activity {
 
 	setToAllDay() {
 		this.times = [];
+	}
+
+	get notifyOnWeatherString() {
+		return Array.from(this.notifyOnWeather).join(',');
 	}
 
 	static new(dates: Temporal.PlainDate[] = [], times: TimeFromTo[] = []) {
@@ -143,6 +148,10 @@ export class PlannedActivity extends Identifiable implements Activity {
 		this.time = undefined;
 	}
 
+	get notifyOnWeatherString() {
+		return Array.from(this.notifyOnWeather).join(',');
+	}
+
 	toZonedTime(event: Event, key: 'from' | 'to') {
 		const timeString = (event.target as HTMLInputElement)?.value;
 		if (!timeString) return;
@@ -197,8 +206,14 @@ export class PlannedActivity extends Identifiable implements Activity {
 		const url = schema.url || '';
 		const title = schema.about || '';
 		const actitityType = (schema.activityType || 'Work') as ActivityType;
-		const notifyOnWeather = new Set(['Sun']) as Set<WeatherType>;
 		const location = schema.location || '';
+
+		let notifyOnWeather: Set<WeatherType>;
+		if (schema.notifyOnWeather) {
+			notifyOnWeather = new Set(schema.notifyOnWeather.split(',')) as Set<WeatherType>;
+		} else {
+			notifyOnWeather = new Set(['Sun']) as Set<WeatherType>;
+		}
 
 		let date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE);
 
