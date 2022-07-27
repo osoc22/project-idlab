@@ -42,7 +42,7 @@
 			{newActivity.editMode ? 'Edit' : 'Create New'} activity
 		</h3>
 
-		<div class="flex gap-4 w-full">
+		<div class="flex flex-col lg:flex-row gap-4 w-full">
 			<div class="left grow">
 				<Input type="text" label="title" bind:value={newActivity.activity.title} />
 

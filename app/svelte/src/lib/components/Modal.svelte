@@ -16,7 +16,7 @@
 		on:click={closeModal}
 	>
 		<div
-			class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl bg-white z-20 p-4 rounded-lg"
+			class="fixed max-h-[90vh] overflow-auto top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl bg-white z-20 p-4 rounded-lg"
 			on:click|stopPropagation
 		>
 			<slot />
