@@ -9,7 +9,7 @@
 </script>
 
 <div class="max-w-3xl mx-auto rounded-md bg-red-50 border-red-700 text-red-900 border-2 mb-2 p-4">
-	WARNING: this page only works client-side, and will not save to the Solid pod.<br>
+	WARNING: this page only works client-side, and will not save to the Solid pod.<br />
 	This page is kept for future expansion and/or as proof of concept.
 </div>
 

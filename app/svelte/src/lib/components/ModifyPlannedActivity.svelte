@@ -7,7 +7,7 @@
 	import Select from './input/Select.svelte';
 
 	import { Sun, LightningBolt, Briefcase } from 'svelte-hero-icons';
-import type { List } from 'postcss/lib/list';
+	import type { List } from 'postcss/lib/list';
 
 	let newActivity = $modifyPlannedActivity;
 
@@ -41,19 +41,21 @@ import type { List } from 'postcss/lib/list';
 		if (!submit) return;
 
 		let emptyValues = false;
-		let requiredInputs : NodeListOf<HTMLInputElement> = document.querySelectorAll('input[type="date"],input[type="time"]');
+		let requiredInputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+			'input[type="date"],input[type="time"]'
+		);
 		requiredInputs.forEach((input) => {
-			if (input.value == "") {
-				console.log(input.value)
+			if (input.value == '') {
+				console.log(input.value);
 				emptyValues = true;
 			}
 		});
 		if (emptyValues) {
 			submit.disabled = true;
-			submit.style.color="gray"
+			submit.style.color = 'gray';
 		} else {
 			submit.disabled = false;
-			submit.style.color="initial"
+			submit.style.color = 'initial';
 		}
 	}
 </script>
@@ -73,7 +75,10 @@ import type { List } from 'postcss/lib/list';
 					type="date"
 					label="date *"
 					value={newActivity.activity.date.toString()}
-					on:change={(e) => {validateSubmit(); newActivity?.activity.setDate(e) }}
+					on:change={(e) => {
+						validateSubmit();
+						newActivity?.activity.setDate(e);
+					}}
 				/>
 
 				<!-- <Time {}> -->
@@ -81,14 +86,20 @@ import type { List } from 'postcss/lib/list';
 					type="time"
 					label="from *"
 					value={newActivity?.activity.time?.from.toString({ smallestUnit: 'minute' })}
-					on:change={(e) => {validateSubmit(); newActivity?.activity.setFromTime(e)}}
+					on:change={(e) => {
+						validateSubmit();
+						newActivity?.activity.setFromTime(e);
+					}}
 				/>
 
 				<Input
 					type="time"
 					label="to *"
 					value={newActivity?.activity.time?.to.toString({ smallestUnit: 'minute' })}
-					on:change={(e) => {validateSubmit(); newActivity?.activity.setToTime(e)}}
+					on:change={(e) => {
+						validateSubmit();
+						newActivity?.activity.setToTime(e);
+					}}
 				/>
 			</div>
 			<div class="right grow">
