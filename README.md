@@ -4,7 +4,9 @@
   <img src="./docs/assets/powerful-personal-data-crest.svg" width="250px" />
 </div>
 
-Powerful Personal Data consists of three parts:
+Team Powerful Personal Data, also known as Solid Concepts, partnered up with [IDLab](https://www.ugent.be/ea/idlab/en) and [Imec](https://www.imec-int.com/en) to showcase how "taking back control of your personal data" can be achieved using linked data and Solid pods. We have built a smart calendar application that takes advantage of linked data to serve you weather data for the events that you store on your private Solid pod.
+
+Our application consists of three parts:
 - A front-end calendar app
 - A back-end weather API
 - A solidpod server for testing
