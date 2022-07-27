@@ -59,8 +59,6 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 				activity.url = eventUrl(newlySavedEvent);
 			}
 
-			console.log(activity)
-
 			update((es) => [...es, activity]);
 		},
 		deleteActivity: (activity: T) => {

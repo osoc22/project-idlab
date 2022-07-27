@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Temporal, Intl } from '@js-temporal/polyfill';
+	import { Temporal } from '@js-temporal/polyfill';
 	import { onMount } from 'svelte';
 
 	import { activitiesPerDay, modifyPlannedActivity } from '$lib/stores/eventStore';

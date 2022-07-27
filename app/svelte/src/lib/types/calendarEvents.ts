@@ -208,7 +208,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 		const actitityType = (schema.activityType || 'Work') as ActivityType;
 		const location = schema.location || '';
 
-		let notifyOnWeather : Set<WeatherType>;
+		let notifyOnWeather: Set<WeatherType>;
 		if (schema.notifyOnWeather) {
 			notifyOnWeather = new Set(schema.notifyOnWeather.split(',')) as Set<WeatherType>;
 		} else {

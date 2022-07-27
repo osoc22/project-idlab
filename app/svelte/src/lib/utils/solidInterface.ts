@@ -296,7 +296,7 @@ export async function removeSavedThing(datasetName: string, thingId: any) {
 }
 
 export function eventUrl(thing: any) {
-	return thingUrl("calendar", thing);
+	return thingUrl('calendar', thing);
 }
 
 /**
