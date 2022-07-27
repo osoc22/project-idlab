@@ -1,5 +1,5 @@
 <script>
-	import { Icon, Plus, Calendar } from 'svelte-hero-icons';
+	import { Icon, Plus, Calendar, ChevronLeft, Menu } from 'svelte-hero-icons';
 
 	import { modifyPlannedActivity, modifyUnplannedActivity } from '$lib/stores/eventStore';
 
@@ -17,26 +17,46 @@
 		{ title: 'Upcomming activities', url: ['upcomming'], icon: Calendar },
 		{ title: 'Past activities', url: ['past'], icon: Calendar }
 	];
+
+	let showNav = false;
 </script>
 
 <div class="flex">
 	<!-- Navigation Bar -->
-	<nav class="flex-shrink-0 w-64 p-4 border-r border-slate-200 h-[100vh]">
-		<h1 class="text-3xl font-bold border-b-2 border-green-700 text-green-700 mb-4">PodPlanner</h1>
+	<div
+		class="absolute left-4 top-4 w-14 h-14 bg-green-400 hover:bg-green-500 cursor-pointer rounded-full flex items-center justify-center"
+		on:click={() => (showNav = !showNav)}
+	>
+		<Icon src={Menu} size="16" />
+	</div>
 
-		<div class="flex flex-col gap-2">
-			{#each navigationLinks as navigationLink}
-				<a
-					href={base + '/' + navigationLink.url[0]}
-					class="flex flex-row items-center justify-start px-2 gap-3"
-					class:active={navigationLink.url.includes($page.routeId || 'upcomming')}
-				>
-					<Icon src={navigationLink.icon} size="16" />
-					{navigationLink.title}
-				</a>
-			{/each}
-		</div>
-	</nav>
+	<div class="transition-all" class:showNav>
+		<nav
+			class="fixed -left-72 transition-all bg-white flex-shrink-0 border-r w-64 p-4 border-slate-200 h-[100vh]"
+		>
+			<h1 class="text-3xl font-bold border-b-2 border-green-700 text-green-700 mb-4">PodPlanner</h1>
+
+			<div class="flex flex-col gap-2">
+				{#each navigationLinks as navigationLink}
+					<a
+						href={base + '/' + navigationLink.url[0]}
+						class="flex flex-row items-center justify-start px-2 gap-3"
+						class:active={navigationLink.url.includes($page.routeId || 'upcomming')}
+					>
+						<Icon src={navigationLink.icon} size="16" />
+						{navigationLink.title}
+					</a>
+				{/each}
+			</div>
+
+			<div
+				class="absolute -right-7 bottom-7 w-14 h-14 bg-green-400 hover:bg-green-500 cursor-pointer rounded-full flex items-center justify-center"
+				on:click={() => (showNav = !showNav)}
+			>
+				<Icon src={ChevronLeft} size="16" />
+			</div>
+		</nav>
+	</div>
 
 	<!-- Main Content -->
 	<main class="grow p-5">
@@ -61,5 +81,13 @@
 <style lang="postcss">
 	.active {
 		@apply text-green-500 border-l-2 border-green-700;
+	}
+
+	.showNav {
+		@apply w-64;
+	}
+
+	.showNav > nav {
+		@apply left-0;
 	}
 </style>
