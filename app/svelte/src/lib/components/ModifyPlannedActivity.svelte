@@ -7,6 +7,7 @@
 	import Select from './input/Select.svelte';
 
 	import { Sun, LightningBolt, Briefcase } from 'svelte-hero-icons';
+import type { List } from 'postcss/lib/list';
 
 	let newActivity = $modifyPlannedActivity;
 
@@ -35,11 +36,13 @@
 		modifyPlannedActivity.reset();
 	}
 
-	function validateSubmit(e) {
-		let submit = document.querySelector('input[type="submit"]');
+	function validateSubmit() {
+		const submit = document.querySelector('input[type="submit"]') as HTMLInputElement;
+		if (!submit) return;
 
 		let emptyValues = false;
-		document.querySelectorAll('input[type="date"],input[type="time"]').forEach((input) => {
+		let requiredInputs : NodeListOf<HTMLInputElement> = document.querySelectorAll('input[type="date"],input[type="time"]');
+		requiredInputs.forEach((input) => {
 			if (input.value == "") {
 				console.log(input.value)
 				emptyValues = true;
@@ -70,7 +73,7 @@
 					type="date"
 					label="date *"
 					value={newActivity.activity.date.toString()}
-					on:change={(e) => {validateSubmit(e); newActivity?.activity.setDate(e) }}
+					on:change={(e) => {validateSubmit(); newActivity?.activity.setDate(e) }}
 				/>
 
 				<!-- <Time {}> -->
@@ -78,14 +81,14 @@
 					type="time"
 					label="from *"
 					value={newActivity?.activity.time?.from.toString({ smallestUnit: 'minute' })}
-					on:change={(e) => {validateSubmit(e); newActivity?.activity.setFromTime(e)}}
+					on:change={(e) => {validateSubmit(); newActivity?.activity.setFromTime(e)}}
 				/>
 
 				<Input
 					type="time"
 					label="to *"
 					value={newActivity?.activity.time?.to.toString({ smallestUnit: 'minute' })}
-					on:change={(e) => {validateSubmit(e); newActivity?.activity.setToTime(e)}}
+					on:change={(e) => {validateSubmit(); newActivity?.activity.setToTime(e)}}
 				/>
 			</div>
 			<div class="right grow">
