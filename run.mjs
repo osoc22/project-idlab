@@ -1,7 +1,7 @@
 // Imports
 import { createInterface } from 'readline';
 import { stdin, stdout} from 'process';
-import { existsSync } from 'fs';
+import { existsSync, writeFileSync } from 'fs';
 import { spawn } from 'child_process';
 import { request } from 'http';
 
@@ -73,10 +73,6 @@ async function listPrompts() {
                 newAppPrompt("Exit Svelte/frontend dev server", "svelte", ()=>{
                     let pid = processes['sveltedev'].pid;
                     kill(pid)
-                    //console.log(processes["sveltedev"].kill)
-                    //process.kill(
-                    //processes["sveltedev"].kill('SIGINT');
-                    //kill()
                 });
             } else {
                 console.log("[ ] Port 3333 in use!")
@@ -88,6 +84,39 @@ async function listPrompts() {
     }
     
     //if (!isInstalled("backend"))
+
+    if (!isInstalled("solidpod-testserver")) {
+        newAppPrompt("Install Solidpod Testserver", "solidpod-testserver", "npm install");
+    } else {
+        if (await portInUse(3000)) {
+            if (processes["solid"]) {
+                let johndoe = appDir('solidpod-testserver') + '/data/johndoe/';
+                if (existsSync(johndoe)) {
+                    let calendar = johndoe + 'calendar$.ttl';
+
+                    if (existsSync(calendar)) {
+                        newAppPrompt('Clear John Doe\'s calendar', 'solidpod-testserver', () => {
+                            writeFileSync(calendar, '');
+                        });
+                    } else {
+                        console.log('[ ] No test calendar found in Solidpod testserver');
+                    }
+                    
+                } else {
+                    newAppPrompt("Create testuser John Doe", 'solidpod-testserver', 'setup-credentials.sh');
+                }
+
+                newAppPrompt("Exit Solidpod Testserver", "solidpod-testserver", ()=>{
+                    let pid = processes['solid'].pid;
+                    kill(pid)
+                });
+            } else {
+                console.log('[ ] Port 3000 already in use');
+            }
+        } else {
+            newAppPrompt('Start Solidpod Testserver', 'solidpod-testserver', 'npm run start', 'solid');
+        }
+    }
 
     // UI
     console.log("[q] Quit");
@@ -106,7 +135,6 @@ function parseAnswer(answer) {
 
     if (answerInt != NaN && answerInt >= 0 && answerInt < prompts.length) {
         let choice = prompts[answerInt];
-        console.log(choice);
         let child = runCommand(choice.cwd, choice.command);
         processes[choice.id] = child;
 
