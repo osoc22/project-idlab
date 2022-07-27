@@ -17,36 +17,50 @@ function runCommand(cwd, command) {
     spawn(command, {cwd: cwd, detached: true, shell: true});
 }
 
-const rl = createInterface(stdin, stdout);
-let prompts = [];  // [{prompt, cwd command}]
-
-if (!isInstalled("svelte")) {
+function newAppPrompt(prompt, appName, command, statusText) {
     prompts.push({
-        "prompt": "Install Svelte/frontend",
-        "cwd": appDir("svelte"),
-        "command": "npm install"
+        "prompt": prompt,
+        "cwd": appDir(appName),
+        "command": command,
+        "statusText": statusText
     });
-} else {
-
 }
 
-prompts.forEach((prompt, i) => {
-    console.log(`[${i}] ${prompt.prompt}`);
-})
+function listPrompts() {
+    prompts.forEach((prompt, i) => {
+        console.log(`[${i}] ${prompt.prompt}`);
+    })
+    console.log("[q] Quit");
+}
 
-let answer;
-let exit = false;
-while (!exit) {
-    console.log("Answer: ")
-    answer = await rl.prompt();
-    console.log("yeter")
-    answer = parseInt(answer);
+const rl = createInterface(stdin, stdout);
+let prompts = [];  // [{prompt, cwd, command}]
+
+if (!isInstalled("svelte")) {
+    newAppPrompt("Install Svelte/frontend", "svelte", "npm install");
+} else {
+    newAppPrompt("Install Svelte/frontend", "svelte", "npm install");
+    newAppPrompt("Install Svelte/frontend", "svelte", "npm install");
+}
+
+function parseAnswer(answer) {
+    let answerInt = parseInt(answer);
 
     console.log(answer);
 
-    if (answer != NaN && answer >= 0 && answer < prompts.length) {
-        let choice = answer[i];
+    if (answerInt != NaN && answerInt >= 0 && answerInt < prompts.length) {
+        let choice = prompts[answerInt];
         console.log(choice);
         runCommand(choice.cwd, choice.command);
-    } else exit = true;
+    } else if (answer.toLowerCase().startsWith("q")) {
+        return;
+    }
+    main();
 }
+
+function main() {
+    listPrompts();
+    rl.question("meow: ", parseAnswer);
+}
+
+main();
