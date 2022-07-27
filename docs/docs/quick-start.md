@@ -30,6 +30,12 @@ Before you can use this application, you'll need a Solid pod by either...
 
 Next, all you have to do is [open our web app](https://osoc22.github.io/project-idlab/app/), and you're all set!
 
+<style>
+    img {
+        width: 100%;
+    }
+</style>
+
 ### Enter your Solid identity provider, and where you want the calendar to be stored
 ![Screenshot of login screen](../assets/screenshots/0.png)
 
