@@ -41,8 +41,11 @@
 	<!-- Main Content -->
 	<main class="grow p-5">
 		<div class="flex gap-4 justify-end mb-10">
-			<Button icon={Plus} on:click={modifyPlannedActivity.new}>Create new event</Button>
-
+			{#if $page.routeId?.includes("planning") }
+				<Button icon={Plus} on:click={modifyUnplannedActivity.new}>Create new event</Button>
+			{:else}
+				<Button icon={Plus} on:click={modifyPlannedActivity.new}>Create new event</Button>
+			{/if}
 			<Profile firstname="John" lastname="Doe" />
 		</div>
 
