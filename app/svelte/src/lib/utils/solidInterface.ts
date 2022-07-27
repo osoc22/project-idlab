@@ -92,6 +92,7 @@ function DatasetUrl(datasetName: string) {
 	return `${storageLocation}/${datasetName}`;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function thingUrl(datasetName: string, thing: any) {
 	// Sometimes new files return something like https://inrupt.com/.well-known/sdk-local-node/1658841527554
 	// So ensure that the url is the one with dataseturl
@@ -295,6 +296,7 @@ export async function removeSavedThing(datasetName: string, thingId: any) {
 	return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function eventUrl(thing: any) {
 	return thingUrl('calendar', thing);
 }
