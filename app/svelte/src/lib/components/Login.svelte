@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	import Button from '$lib/components/Button.svelte';
 	import Input from '$lib/components/input/Input.svelte';
@@ -21,6 +22,10 @@
 		}
 	}
 
+	function goToDocs() {
+		goto('https://osoc22.github.io/project-idlab/');
+	}
+
 	onMount(async () => {
 		interfaceUrl = window.location.href;
 
@@ -34,5 +39,8 @@
 	<h1 class="text-2xl">Welcome to the pod</h1>
 	<Input label="pod url" error={podError} bind:value={podUrl} />
 	<Input label="Storage location" bind:value={storageLocation} />
+
 	<Button focused on:click={handleLogin}>Login with pod</Button>
+	<br />
+	<Button on:click={goToDocs}>Learn how to obtain your own pod</Button>
 </div>
