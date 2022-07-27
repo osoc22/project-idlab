@@ -29,3 +29,25 @@ Before you can use this application, you'll need a Solid pod by either...
 ## Use our app!
 
 Next, all you have to do is [open our web app](https://osoc22.github.io/project-idlab/app/), and you're all set!
+
+### Enter your Solid identity provider, and where you want the calendar to be stored
+![Screenshot of login screen](../assets/screenshots/0.png)
+
+### In the upcoming view, you can see your calendar for the week, with the weather!
+![Screenshot of upcoming view](../assets/screenshots/1.png)
+
+### Use the Create new event button to add to your calendar
+![Screenshot of new activity creation](../assets/screenshots/2.png)
+
+### It'll immediately get added to your solid pod!
+![Screenshot of the newly created activity](../assets/screenshots/3.png)
+
+### On the side, you can navigate to different views
+![Screenshot of side navigation](../assets/screenshots/4.png)
+
+### The past view shows an oversight of your past activities
+![Screenshot of past view](../assets/screenshots/5.png)
+
+### While the (unimplemented) planning view showcases how the calendar could be used for planning out activities
+![Screenshot of planning activity creation](../assets/screenshots/6.png)
+![Screenshot of planning view](../assets/screenshots/7.png)
