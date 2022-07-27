@@ -41,8 +41,8 @@
 		if (!submit) return;
 
 		let emptyValues = false;
-		let requiredInputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(
-			'input[type="date"],input[type="time"]'
+		let requiredInputs: Array<HTMLInputElement> = Array.from(
+			document.querySelectorAll('input[type="date"],input[type="time"]')
 		);
 		requiredInputs.forEach((input) => {
 			if (input.value == '') {
