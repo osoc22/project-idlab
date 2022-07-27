@@ -66,7 +66,7 @@
 			{:else}
 				<Button icon={Plus} on:click={modifyPlannedActivity.new}>Create new event</Button>
 			{/if}
-			<Profile firstname="John" lastname="Doe" />
+			<Profile />
 		</div>
 
 		<slot />

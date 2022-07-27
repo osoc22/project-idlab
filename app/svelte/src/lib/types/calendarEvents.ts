@@ -229,7 +229,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 
 	static async init() {
 		// STEP 1: Get solid data
-		const rdfDataset: Thing[] = await listThingsFromDataset('calendar', true);
+		const rdfDataset: Thing[] = await listThingsFromDataset('calendar');
 
 		// STEP 2: normalise dataset
 		const normDataset = rdfDataset.map(async (thing) => await parseEventThing(thing));
