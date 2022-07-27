@@ -22,12 +22,13 @@ For any of the parts, you will require the following prerequisites:
 
 To set up specific parts locally, refer to [the docs](https://osoc22.github.io/project-idlab/docs/) of the [frontend](https://osoc22.github.io/project-idlab/docs/svelte/), [backend](https://osoc22.github.io/project-idlab/docs/backend/) or [solidpod testserver](https://osoc22.github.io/project-idlab/docs/solidpod-testserver/) 
 
-Or to use the interactive CLI
+Or use the interactive CLI
 ```bash
 git clone https://github.com/osoc22/project-idlab.git
-chmod +x run.sh
-./run.sh
+cd project-idlab/
+node run.mjs
 ```
+*Note: the cli doesn't support backend at the moment.*
 
 ## Project structure
 - [.github/workflows/](.github/workflows/)
