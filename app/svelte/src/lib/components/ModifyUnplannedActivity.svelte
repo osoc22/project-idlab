@@ -73,20 +73,19 @@
 
 				<MultiSelect
 					grow
-					label="Get notified if it will"
+					label="Get notified if there will be:"
 					options={[
 						{ title: 'Sun', icon: Sun },
-						{ title: 'Windy' },
-						{ title: 'Rain' },
-						{ title: 'Snow' },
-						{ title: 'Thunder', icon: LightningBolt }
+						{ title: 'Cloudy' },
+						{ title: 'Partly-cloudy' },
+						{ title: 'Snow' }
 					]}
 					bind:value={newActivity.activity.notifyOnWeather}
 				/>
 
 				<Select
 					grow
-					label="Activity type"
+					label="Activity type:"
 					options={[
 						{ title: 'Work', icon: Briefcase },
 						{ title: 'Food' },
