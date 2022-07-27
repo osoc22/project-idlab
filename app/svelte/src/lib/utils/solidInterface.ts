@@ -70,8 +70,6 @@ schema.event = {
 	notifyOnWeather: schema.keywords_type
 };
 
-console.log({ schema });
-
 export function thingIdFromUrl(url: string) {
 	// Reasoning behind the # and / thing, @see thingUrl
 	let delimiter = '#';
@@ -92,6 +90,7 @@ function DatasetUrl(datasetName: string) {
 	return `${storageLocation}/${datasetName}`;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function thingUrl(datasetName: string, thing: any) {
 	// Sometimes new files return something like https://inrupt.com/.well-known/sdk-local-node/1658841527554
 	// So ensure that the url is the one with dataseturl
@@ -233,7 +232,7 @@ export async function getThingFromDataset(datasetName: string, thingId: string) 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function saveThing(datasetName: string, thing: any): Promise<any> {
 	const datasetUrl = DatasetUrl(datasetName);
-	console.log(datasetUrl);
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let dataset: any;
 	try {
@@ -295,6 +294,7 @@ export async function removeSavedThing(datasetName: string, thingId: any) {
 	return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function eventUrl(thing: any) {
 	return thingUrl('calendar', thing);
 }
@@ -398,7 +398,6 @@ export async function removeSavedEvent(eventId: string) {
  * List all Things in a dataset (specified by name)
  *
  * @param datasetName 	Name of the dataset of which to list contents
- * @param supressConsoleLog	Set as true to not get console output (for when used in code as opposed to debugging)
  *
  * @returns array of
  * 		Console log structure:
@@ -410,17 +409,10 @@ export async function removeSavedEvent(eventId: string) {
  *	 		-----
  *
  */
-export async function listThingsFromDataset(datasetName: string, supressConsoleLog = false) {
+export async function listThingsFromDataset(datasetName: string) {
 	const dataset = await getSolidDataset(DatasetUrl(datasetName), { fetch: fetch });
 	const things = getThingAll(dataset, {});
 
-	if (!supressConsoleLog) {
-		things.forEach((thing) => {
-			console.log(thing.url.split('#')[1]);
-			console.dir(thing);
-			console.log('-----');
-		});
-	}
 	return things;
 }
 
@@ -438,7 +430,7 @@ export async function tester() {
 	// Set the first events start and end to now
 	// NOTE: don't forget to () your await because otherwise it doesn't work!
 
-	const events = await listThingsFromDataset('calendar', true);
+	const events = await listThingsFromDataset('calendar');
 	console.log(events);
 	const firstEventUrl = events[0].url.split('#')[1];
 	const thirdEventUrl = events[2].url.split('#')[1];

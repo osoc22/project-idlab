@@ -43,8 +43,6 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 				const start = new Date(date.toString() + 'T' + from.toString({ smallestUnit: 'second' }));
 				const end = new Date(date.toString() + 'T' + to.toString({ smallestUnit: 'second' }));
 
-				console.log(start, end);
-
 				const newlySavedEvent = await saveNewEvent(
 					activity.title,
 					start,
@@ -53,8 +51,7 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 					activity.actitityType,
 					activity.notifyOnWeatherString
 				);
-				console.log(newlySavedEvent);
-				console.log(eventUrl(newlySavedEvent));
+
 				// This is to circumvent a specific bug, see @thingUrl in solidInterface
 				activity.url = eventUrl(newlySavedEvent);
 			}
@@ -79,8 +76,6 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 				end = new Date(date.toString() + 'T' + time.to.toString({ smallestUnit: 'second' }));
 			}
 
-			console.log(activity);
-
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const data: Partial<{ [key: string]: any }> = {};
 			if (start) {
@@ -102,12 +97,7 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 				data[schema.event.notifyOnWeather] = activity.notifyOnWeatherString;
 			}
 
-			console.log(data);
-
-			console.log(activity.url);
-
 			const id = thingIdFromUrl(activity.url);
-			console.log(id);
 
 			updateSavedEvent(id, data);
 

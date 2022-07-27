@@ -154,7 +154,7 @@ export class PlannedActivity extends Identifiable implements Activity {
 
 	toZonedTime(event: Event, key: 'from' | 'to') {
 		const timeString = (event.target as HTMLInputElement)?.value;
-		if (!timeString) return;
+		if (!timeString) return (this.time = undefined);
 
 		const tSplit = timeString.split(':');
 		const time = Temporal.PlainTime.from({
@@ -180,14 +180,6 @@ export class PlannedActivity extends Identifiable implements Activity {
 		const zonedDate = dateInstant.toZonedDateTimeISO(TIME_ZONE);
 
 		this.date = zonedDate.toPlainDate();
-	}
-
-	setFromTime(event: Event) {
-		this.toZonedTime(event, 'from');
-	}
-
-	setToTime(event: Event) {
-		this.toZonedTime(event, 'to');
 	}
 
 	static new(date: Temporal.PlainDate = Temporal.Now.plainDateISO(TIME_ZONE), time?: TimeFromTo) {
