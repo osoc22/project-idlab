@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Sun, LightningBolt, Briefcase } from 'svelte-hero-icons';
+	import { Sun, Briefcase } from 'svelte-hero-icons';
 	import { goto } from '$app/navigation';
 	import { modifyUnplannedActivity, unplannedActivities } from '$lib/stores/eventStore';
 
