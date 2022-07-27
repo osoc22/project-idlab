@@ -6,10 +6,10 @@
 	import MultiSelect from './input/MultiSelect.svelte';
 	import Select from './input/Select.svelte';
 
-	import { Sun, LightningBolt, Briefcase } from 'svelte-hero-icons';
-	import type { List } from 'postcss/lib/list';
+	import { Sun, Briefcase } from 'svelte-hero-icons';
 
 	let newActivity = $modifyPlannedActivity;
+	let submitDisabled = true;
 
 	function handleSubmit() {
 		if (!newActivity) return;
@@ -37,26 +37,18 @@
 	}
 
 	function validateSubmit() {
-		const submit = document.querySelector('input[type="submit"]') as HTMLInputElement;
-		if (!submit) return;
+		if (!newActivity) return (submitDisabled = true);
 
-		let emptyValues = false;
-		let requiredInputs: Array<HTMLInputElement> = Array.from(
-			document.querySelectorAll('input[type="date"],input[type="time"]')
-		);
-		requiredInputs.forEach((input) => {
-			if (input.value == '') {
-				console.log(input.value);
-				emptyValues = true;
-			}
-		});
-		if (emptyValues) {
-			submit.disabled = true;
-			submit.style.color = 'gray';
-		} else {
-			submit.disabled = false;
-			submit.style.color = 'initial';
+		if (
+			!newActivity?.activity.date.toString() ||
+			!newActivity?.activity.time?.from.toString() ||
+			!newActivity?.activity.time?.to.toString()
+		) {
+			submitDisabled = true;
+			return;
 		}
+
+		submitDisabled = false;
 	}
 </script>
 
@@ -76,19 +68,20 @@
 					label="date *"
 					value={newActivity.activity.date.toString()}
 					on:change={(e) => {
-						validateSubmit();
 						newActivity?.activity.setDate(e);
+						validateSubmit();
 					}}
 				/>
 
 				<!-- <Time {}> -->
+
 				<Input
 					type="time"
 					label="from *"
 					value={newActivity?.activity.time?.from.toString({ smallestUnit: 'minute' })}
 					on:change={(e) => {
+						newActivity?.activity.toZonedTime(e, 'from');
 						validateSubmit();
-						newActivity?.activity.setFromTime(e);
 					}}
 				/>
 
@@ -97,8 +90,8 @@
 					label="to *"
 					value={newActivity?.activity.time?.to.toString({ smallestUnit: 'minute' })}
 					on:change={(e) => {
+						newActivity?.activity.toZonedTime(e, 'to');
 						validateSubmit();
-						newActivity?.activity.setToTime(e);
 					}}
 				/>
 			</div>
@@ -142,10 +135,11 @@
 				>{newActivity.editMode ? 'Remove' : 'Cancel'}</Button
 			>
 			<input
-				class="bg-slate-100 hover:bg-slate-300 transition-colors px-3 py-2 rounded cursor-pointer"
+				class="bg-slate-100 disabled:text-slate-300 enabled:hover:bg-slate-300 transition-colors px-3 py-2 rounded cursor-pointer"
 				type="submit"
 				on:click|preventDefault={handleSubmit}
 				value="submit"
+				disabled={submitDisabled}
 			/>
 		</div>
 	</form>
