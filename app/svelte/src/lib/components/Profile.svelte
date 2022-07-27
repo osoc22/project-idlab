@@ -19,7 +19,7 @@
 		<div
 			class="rounded-full bg-green-700 text-green-100 h-8 w-8 flex items-center justify-center cursor-pointer"
 		>
-			<span class="leading-none p-2 text-sm"> U </span>
+			<span class="leading-none p-2 text-sm"> SU </span>
 		</div>
 	</div>
 	<div class="ml-3">
