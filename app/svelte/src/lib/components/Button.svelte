@@ -22,7 +22,7 @@
 	{/if}
 
 	{#if $$slots.default}
-		<div class="div">
+		<div class="relative">
 			<slot />
 		</div>
 	{/if}

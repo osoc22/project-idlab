@@ -29,8 +29,19 @@
 			<span class="font-medium mt-1">{activity.title}</span>
 
 			{#if weatherType && notifies.map((n) => n.toLowerCase()).includes(weatherType)}
-				<!-- TODO make better notification -->
-				<p>It is {weatherType}</p>
+				<div class="mt-2 relative">
+					<p class="text-sm font-light">Weather is {weatherType}.</p>
+
+					<Button>
+						<span class="text-sm">Would you like to reschedule?</span>
+						<div class="w-3 h-3 absolute -top-3 -right-5">
+							<div class="bg-blue-500 h-full rounded-full" />
+							<div
+								class="animate-ping absolute top-0 w-full bg-blue-500 h-full rounded-full opacity-75"
+							/>
+						</div>
+					</Button>
+				</div>
 			{:else}
 				<span class="font-light text-xs mt-3">
 					You are beining notified when the weather is {notifies.join(', ')}.
