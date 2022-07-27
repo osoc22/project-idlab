@@ -51,7 +51,7 @@
 				</div>
 			</div>
 
-			<WeatherComponent {weather} {day} let:forecast let:weatherType>
+			<WeatherComponent {weather} {day} let:weatherType>
 				<div class="flex flex-col p-3 gap-4">
 					{#if day.toString() in $activitiesPerDay}
 						{#each $activitiesPerDay[day.toString()] as activity}
