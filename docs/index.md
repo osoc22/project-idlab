@@ -3,7 +3,11 @@ title: Home
 nav_order: 1
 ---
 
-*a.k.a. Powerful Personal Data, by Solid Concepts.*
+<p align="center">
+  <img src="assets/powerful-personal-data-crest.svg" alt="Powerful Personal Data Crest"/>
+</p>
+
+Team Powerful Personal Data, also known as Solid Concepts, partnered up with [IDLab](https://www.ugent.be/ea/idlab/en) and [Imec](https://www.imec-int.com/en) to showcase how "taking back control of your personal data" can be achieved using linked data and Solid pods. We have built a smart calendar application that takes advantage of linked data to serve you weather data for the events that you store on your private Solid pod.
 
 ---
 
