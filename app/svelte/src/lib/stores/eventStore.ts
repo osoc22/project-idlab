@@ -6,7 +6,8 @@ import {
 	updateSavedEvent,
 	schema,
 	thingIdFromUrl,
-	removeSavedEvent
+	removeSavedEvent,
+	eventUrl
 } from '$lib/utils/solidInterface';
 
 function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
@@ -49,10 +50,13 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 					start,
 					end,
 					activity.location,
-					activity.actitityType
+					activity.actitityType,
+					activity.notifyOnWeatherString
 				);
 				console.log(newlySavedEvent);
-				activity.url = newlySavedEvent.url;
+				console.log(eventUrl(newlySavedEvent));
+				// This is to circumvent a specific bug, see @thingUrl in solidInterface
+				activity.url = eventUrl(newlySavedEvent);
 			}
 
 			update((es) => [...es, activity]);
@@ -91,8 +95,11 @@ function createActivityStore<T extends PlannedActivity | UnplannedActivity>() {
 			if (activity.location) {
 				data[schema.event.location] = activity.location;
 			}
-			if (schema.event.activityType) {
+			if (activity.actitityType) {
 				data[schema.event.activityType] = activity.actitityType;
+			}
+			if (activity.notifyOnWeather) {
+				data[schema.event.notifyOnWeather] = activity.notifyOnWeatherString;
 			}
 
 			console.log(data);

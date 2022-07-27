@@ -10,7 +10,8 @@ import {
 	removeThing,
 	getDatetime,
 	getStringNoLocale,
-	type Thing
+	type Thing,
+	asUrl
 } from '@inrupt/solid-client';
 import { fetch } from '@inrupt/solid-client-authn-browser';
 import { RDF } from '@inrupt/vocab-common-rdf';
@@ -29,6 +30,7 @@ export interface SchemaEvent {
 	about: string;
 	location: string;
 	activityType: string;
+	notifyOnWeather: string;
 }
 
 interface Schema {
@@ -40,6 +42,7 @@ interface Schema {
 	text_data_type: string;
 	keywords_type: string;
 	url_type: string;
+	description_type: string;
 
 	event?: SchemaEvent;
 }
@@ -53,7 +56,8 @@ export const schema: Schema = {
 	location_type: 'https://schema.org/location',
 	text_data_type: 'https://schema.org/Text',
 	keywords_type: 'https://schema.org/keywords',
-	url_type: 'https://schema.org/URL'
+	url_type: 'https://schema.org/URL',
+	description_type: 'https://schema.org/description'
 };
 
 schema.event = {
@@ -62,13 +66,19 @@ schema.event = {
 	endDate: schema.endDate_type,
 	about: schema.about_type,
 	location: schema.location_type,
-	activityType: schema.keywords_type // this can be replaced by a self-defined type,
+	activityType: schema.description_type,
+	notifyOnWeather: schema.keywords_type
 };
 
 console.log({ schema });
 
 export function thingIdFromUrl(url: string) {
-	return url.substring(url.lastIndexOf('#') + 1);
+	// Reasoning behind the # and / thing, @see thingUrl
+	let delimiter = '#';
+	if (!url.includes(delimiter)) {
+		delimiter = '/';
+	}
+	return url.substring(url.lastIndexOf(delimiter) + 1);
 }
 
 /**
@@ -80,6 +90,12 @@ export function thingIdFromUrl(url: string) {
 
 function DatasetUrl(datasetName: string) {
 	return `${storageLocation}/${datasetName}`;
+}
+
+function thingUrl(datasetName: string, thing: any) {
+	// Sometimes new files return something like https://inrupt.com/.well-known/sdk-local-node/1658841527554
+	// So ensure that the url is the one with dataseturl
+	return asUrl(thing, DatasetUrl(datasetName));
 }
 
 /**
@@ -279,6 +295,10 @@ export async function removeSavedThing(datasetName: string, thingId: any) {
 	return saveSolidDatasetAt(datasetUrl, dataset, { fetch: fetch });
 }
 
+export function eventUrl(thing: any) {
+	return thingUrl('calendar', thing);
+}
+
 /**
  * Gets an Event Thing from the calendar dataset
  *
@@ -330,6 +350,7 @@ export async function saveNewEvent(
 	endDate: Date,
 	location: string = '',
 	activityType: string = '',
+	notifyOnWeather: string = '',
 	id: string = ''
 ) {
 	if (!schema.event) return;
@@ -341,7 +362,8 @@ export async function saveNewEvent(
 			[schema.event.startDate]: startDate,
 			[schema.event.endDate]: endDate,
 			[schema.event.location]: location,
-			[schema.event.activityType]: activityType
+			[schema.event.activityType]: activityType,
+			[schema.event.notifyOnWeather]: notifyOnWeather
 		},
 		id
 	);
