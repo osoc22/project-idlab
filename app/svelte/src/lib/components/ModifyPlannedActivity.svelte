@@ -50,6 +50,7 @@
 
 		submitDisabled = false;
 	}
+	validateSubmit();
 </script>
 
 {#if newActivity && $modifyPlannedActivity}
