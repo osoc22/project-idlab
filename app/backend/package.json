@@ -14,6 +14,6 @@
     "@fastify/cors": "^8.0.0",
     "@rmlio/rmlmapper-java-wrapper": "^2.0.3",
     "dotenv": "^16.0.1",
-    "fastify": "^4.2.1"
+    "fastify": "^4.10.2"
   }
 }
